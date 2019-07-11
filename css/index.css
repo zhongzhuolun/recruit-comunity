@@ -1,0 +1,50 @@
+html, body {
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+	background: #f5f5f5;
+}
+
+#wrap {
+	position: relative;
+}
+
+aside {
+	background: #fbfbfb;
+	width: 272px;
+	position: absolute;
+	left: 10px;
+	top: 10px;
+}
+aside h1 {
+	margin: 10px 0;
+    font-weight: 500;
+    line-height: 1.2;
+    color: #000;
+	margin-left: 10px;
+	font-size: 24px;
+}
+hr {
+	margin: 20px 0;
+    border: 0;
+    border-top: 1px dashed #c5c5c5;
+    border-bottom: 1px dashed #f7f7f7;
+}
+aside h3 {
+	margin: 10px 0;
+    font-weight: 500;
+    line-height: 0.5;
+    color: #000;
+	margin-left: 10px;
+	font-size: 16px;
+
+}
+aside h3 a {
+	color: #b83f45;
+	font-size: 16px;
+	font-weight: normal;
+}
+aside h3 a:hover {
+	text-decoration: underline;
+	color: #858c8c;
+}
