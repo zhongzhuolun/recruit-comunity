@@ -26,33 +26,29 @@
 						<input type="text" class="need" value="" placeholder="What needs to be done?" autofocus="autofocus"/>
 					</header>
 					<section class="main">
-						<label class="check-all"></label>
+						<input type="checkbox" id="toggle-all" class="toggle-all">
+						<label class="check-all" for="toggle-all"></label>
 						<ul class="lists">
-							<li class="item">
+							<!-- <li class="item">
 								<div class="view">
 									<input type="checkbox" class="toggle"/>
 									<label>adadasasdadadad</label>
 									<button type="button" class="destroy"></button>
 								</div>
-							</li>
-							<li class="item">
-								<div class="view">
-									<input type="checkbox" class="toggle"/>
-									<label>adadasasdadadad</label>
-									<button type="button" class="destroy"></button>
-								</div>
-							</li>
+							</li> -->
+							
 						</ul>
 					</section>
-					<footer class="footer">
+					<footer class="footer" style="display: none;">
 						<span class="count">
-							<strong>2</strong> items left
+							<strong>0</strong> items left
 						</span>
 						<ul class="filters">
 							<li><a href="javascript:;" class="selected">All</a></li>
 							<li><a href="javascript:;">Active</a></li>
 							<li><a href="javascript:;">Complete</a></li>
 						</ul>
+						<button type="button" class="clear-complete" style="display: none;">Clear completed</button>
 					</footer>
 				</section>
 				<footer class="info"></footer>
@@ -61,6 +57,7 @@
 			
 			
 	<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+	<script src="js/tools.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript" src="js/index.js"></script>
 	</body>
 

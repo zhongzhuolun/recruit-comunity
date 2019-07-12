@@ -325,3 +325,16 @@ function OnPropChanged(ev) {
 		return ev.srcElement.value;
 	}
 }
+function ifIndex(father, target) {
+				var i,
+					len = father.length;
+				for(i = 0; i < len; i++) {
+					father[i].index = i;
+				}
+				for(i = 0; i < len; i++) {
+					if(father[i].index == target.index) {
+						return father[i].index;
+					}
+				}
+
+			}
