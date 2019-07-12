@@ -6,57 +6,57 @@
      2.evenStr:事件的字符串（不要on）
      3.callback：回调函数
 */
-function bind(obj, evenStr, callback) {
-	if(obj.addEventListener) {
-		obj.addEventListener(evenStr, callback, false);
-	} else {
-		obj.attachEvent("on" + evenStr, function() {
-			callback.call(obj);
-		});
-	}
-}
-//该函数用于向元素中添加class属性，obj代表元素，cn代表class属性名
-function addClass(obj, cn) {
-	if(!hasClass(obj, cn)) {
-		obj.className += " " + cn;
-	}
-}
-//该函数用于判断元素中是否含有对应的class样式名
-function hasClass(obj, cn) {
-	var reg = new RegExp("\\b" + cn + "\\b");
-	return reg.test(obj.className);
-}
-//该函数用于移除对应的class样式名
-function removeClass(obj, cn) {
-	var reg = new RegExp("\\b" + cn + "\\b");
-	obj.className = obj.className.replace(reg, "");
-}
-//该函数用于如果元素中含有对应的样式名，则删除该样式名，如果没有改样式名，则添加
-
-function toggleClass(obj, cn) {
-	if(hasClass(obj, cn)) {
-		removeClass(obj, cn);
-	} else {
-		addClass(obj, cn);
-	}
-}
+// function bind(obj, evenStr, callback) {
+// 	if (obj.addEventListener) {
+// 		obj.addEventListener(evenStr, callback, false);
+// 	} else {
+// 		obj.attachEvent("on" + evenStr, function() {
+// 			callback.call(obj);
+// 		});
+// 	}
+// }
+// //该函数用于向元素中添加class属性，obj代表元素，cn代表class属性名
+// function addClass(obj, cn) {
+// 	if (!hasClass(obj, cn)) {
+// 		obj.className += " " + cn;
+// 	}
+// }
+// //该函数用于判断元素中是否含有对应的class样式名
+// function hasClass(obj, cn) {
+// 	var reg = new RegExp("\\b" + cn + "\\b");
+// 	return reg.test(obj.className);
+// }
+// //该函数用于移除对应的class样式名
+// function removeClass(obj, cn) {
+// 	var reg = new RegExp("\\b" + cn + "\\b");
+// 	obj.className = obj.className.replace(reg, "");
+// }
+// //该函数用于如果元素中含有对应的样式名，则删除该样式名，如果没有改样式名，则添加
+// 
+// function toggleClass(obj, cn) {
+// 	if (hasClass(obj, cn)) {
+// 		removeClass(obj, cn);
+// 	} else {
+// 		addClass(obj, cn);
+// 	}
+// }
 
 // obj对象，attr属性，target目标，speed速度，callback回调函数
 function move(obj, attr, target, speed, callback) {
 	clearTimeout(obj.timer); //关闭指定对象的定时器
 	var current = parseInt(getStyle(obj, attr)); //获取当前对象的属性的值
-	if(current > target) { //判断如果当前的值大于目标值，则将速度取反
+	if (current > target) { //判断如果当前的值大于目标值，则将速度取反
 		speed = -speed;
 	}
 	obj.timer = setInterval(function() { //开启指定对象的定时器
 		var oldValue = parseInt(getStyle(obj, attr)); //获取对象属性开始的值
 		var newValue = oldValue + speed; //将旧值加上变化速度的和赋予新的值
-		if(speed < 0 && newValue < target || speed > 0 && newValue > target) {
+		if (speed < 0 && newValue < target || speed > 0 && newValue > target) {
 			newValue = target;
 		}
 
 		obj.style[attr] = newValue + "px"; //将新值赋予对象的属性
-		if(newValue === target) {
+		if (newValue === target) {
 			clearTimeout(obj.timer); //判断如果新的值完全等于目标值，则关闭定时器
 			callback && callback();
 		}
@@ -64,7 +64,7 @@ function move(obj, attr, target, speed, callback) {
 }
 //该函数用于获取一个元素中对应的CSS属性
 function getStyle(obj, name) {
-	if(window.getComputedStyle) {
+	if (window.getComputedStyle) {
 		return getComputedStyle(obj, null)[name]; //其他浏览器支持的方法
 	} else {
 		return obj.currentStyle[name]; //该方法只有IE浏览器支持
@@ -73,7 +73,7 @@ function getStyle(obj, name) {
 //共享onload事件
 function addLoadEvent(func) {
 	var oldOnload = window.onload;
-	if(typeof window.onload != "function") {
+	if (typeof window.onload != "function") {
 		window.onload = func;
 	} else {
 		window.onload = function() {
@@ -85,7 +85,7 @@ function addLoadEvent(func) {
 //insertAfter函数
 function insertAfter(newElement, targetElement) {
 	var parent = targetElement.parentNode;
-	if(parent.lastChild == targetElement) {
+	if (parent.lastChild == targetElement) {
 		parent.appendChild(newElement);
 	} else {
 		parent.insertBefore(newElement, targetElement.nextSibling);
@@ -93,10 +93,10 @@ function insertAfter(newElement, targetElement) {
 }
 //获取下一个元素节点函数
 function getNextElement(node) {
-	if(node.nodeType == 1) {
+	if (node.nodeType == 1) {
 		return node;
 	}
-	if(node.nextSibling) {
+	if (node.nextSibling) {
 		return getNextElement(node.nextSibling);
 	} else {
 		return null;
@@ -136,7 +136,7 @@ function getChilds(child, oParent) {
 	var childArr = [];
 	var tagsAll = oParent.getElementsByTagName('*');
 	[].map.call(tagsAll, function(current) {
-		if(current.className == child) {
+		if (current.className == child) {
 			childArr.push(current);
 		}
 	});
@@ -144,21 +144,21 @@ function getChilds(child, oParent) {
 }
 //冒泡
 function bubble(arr) {
-	for(var i = 0, rec = arr[0]; i < arr.length; i++) {
+	for (var i = 0, rec = arr[0]; i < arr.length; i++) {
 		rec = Math.min(rec, arr[i]);
 	}
 	return rec;
 }
 //获取数组中最小值对应的index
 function getMinIndex(min, arr) {
-	for(var i in arr) {
-		if(min == arr[i])
+	for (var i in arr) {
+		if (min == arr[i])
 			return i;
 	}
 }
 //该函数用于给多个元素绑定事件 obj：对象名，cn：不加on的事件类型 callback:回调函数
 function bindOfEvent(obj, cn, callback) {
-	for(var i = 0; i < obj.length; i++) {
+	for (var i = 0; i < obj.length; i++) {
 		bind(obj[i], cn, callback);
 	}
 }
@@ -185,7 +185,7 @@ function bindOfEvent(obj, cn, callback) {
 			//参照于视口
 			startPoint.x = ev.clientX;
 			startPoint.y = ev.clientY;
-			if(textNode.setCapture) {
+			if (textNode.setCapture) {
 				textNode.setCapture();
 			}
 
@@ -200,22 +200,22 @@ function bindOfEvent(obj, cn, callback) {
 				nowPoint.y = ev.clientY;
 				var L = elementPoint.x + nowPoint.x - startPoint.x;
 				var T = elementPoint.y + nowPoint.y - startPoint.y;
-				if(L < 0) {
+				if (L < 0) {
 					L = 0;
-				} else if(L > textNode.offsetParent.offsetWidth - textNode.clientWidth) {
+				} else if (L > textNode.offsetParent.offsetWidth - textNode.clientWidth) {
 					L = textNode.offsetParent.offsetWidth - textNode.clientWidth;
 				}
 				//参照于offsetParent
 				textNode.style.left = L + "px";
 				//						textNode.style.top = T + "px";
-				if(callBack && typeof callBack["moving"] === "function") {
+				if (callBack && typeof callBack["moving"] === "function") {
 					callBack["moving"].call(textNode);
 				}
 				document.onmouseup = function() {
 
 					window.valueP = false;
 					document.onmousemove = document.onmouseup = null;
-					if(document.releaseCapture) {
+					if (document.releaseCapture) {
 						document.releaseCapture();
 					}
 					return false;
@@ -243,14 +243,14 @@ function drag2(obj) {
 			//获取鼠标的坐标
 			var left = event.clientX - ol;
 			var top = event.clientY - ot;
-			if(left < 240) {
+			if (left < 240) {
 				left = 240;
-			} else if(left > 1128) {
+			} else if (left > 1128) {
 				left = 1128;
 			}
-			if(top < 210) {
+			if (top < 210) {
 				top = 210;
-			} else if(top > 414) {
+			} else if (top > 414) {
 				top = 414;
 			}
 			//修改box1的位置
@@ -321,20 +321,50 @@ function OnInput(ev) {
 // Internet Explorer
 function OnPropChanged(ev) {
 	ev = ev || event;
-	if(ev.propertyName.toLowerCase() == "value") {
+	if (ev.propertyName.toLowerCase() == "value") {
 		return ev.srcElement.value;
 	}
 }
-function ifIndex(father, target) {
-				var i,
-					len = father.length;
-				for(i = 0; i < len; i++) {
-					father[i].index = i;
-				}
-				for(i = 0; i < len; i++) {
-					if(father[i].index == target.index) {
-						return father[i].index;
-					}
-				}
 
-			}
+function ifIndex(father, target) {
+	var i,
+		len = father.length;
+	for (i = 0; i < len; i++) {
+		father[i].index = i;
+	}
+	for (i = 0; i < len; i++) {
+		if (father[i].index == target.index) {
+			return father[i].index;
+		}
+	}
+
+}
+//该函数用于清除活跃元素的样式
+function clearActive(obj, cn) {
+	for (var i = 0; i < obj.length; i++) {
+		obj[i].className = cn;
+	}
+}
+//该函数用于清除禁用元素
+function clearDisabled(obj) {
+	for (var i = 0; i < obj.length; i++) {
+		obj[i].disabled = false;
+	}
+}
+//时间格式转换函数
+function changeTime(time) {
+	time = parseInt(time);
+	var m = toZero(Math.floor(time % 3600 / 60));
+	var s = toZero(Math.round(time % 60));
+	return m + ':' + s;
+}
+//时间格式转换函数
+function toZero(num) {
+	var val = "";
+	if (num < 10) {
+		val = "0" + num;
+	} else {
+		val = num + val;
+	}
+	return val;
+}
