@@ -321,7 +321,7 @@ button {
 	font-weight: 100;
 }
 .todo .footer .filters {
-	margin-left: 150px;
+	margin-left: 130px;
 	/* overflow: hidden; */
 }
 .todo .footer .filters li {
@@ -338,24 +338,29 @@ button {
     border-radius: 3px;
 	display: block;
 	padding: 5px;
-	box-sizing: border-box;
-	
+	box-sizing: border-box;	
 	width: 100%;
+	position: relative;
+	/* 不懂为什么加了position就可以cursor和点击事件了 */
+	
 }
 .filters li a.selected {
-    border: 1px solid rgba(175, 47, 47, 0.2);
+    border: 1px solid rgba(175, 47, 47, 0.2)!important;
 	width: 15px;
 }
 .todo .footer .filters li a:hover {
 	border-color: rgba(175, 47, 47, 0.1);
 }
 .todo .footer .clear-complete {
-	display: block;
-	padding-left: 28px;
+	display: none;
 	margin-left: 30px;
 	margin-top: 1px;
 	cursor: pointer;
 	font-weight: 400;
+	position: relative;
+}
+.todo .footer .completed {
+	display: inline-block;
 }
 .todo .footer .clear-complete:hover {
 	text-decoration: underline;
