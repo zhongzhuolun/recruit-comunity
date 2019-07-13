@@ -2,7 +2,8 @@ $(function() {
 	// 0 获取需要用到的元素，并且将其设置为全局变量，同时初始化一些需要的数据类型
 	var textValue = "";// 初始化文本框的值
 	var $lists = $(".lists");// 获取填充todo的ul
-	var $count = parseInt($(".todo .footer .count strong").text());// 获取items left的值
+	var $leftItem = $(".todo .footer .count strong")
+	var $count = parseInt($leftItem.text());// 获取items left的值
 	var $footer = $(".todo .footer")[0];// 获取底部的footer元素
 	var $checkAll = $(".check-all");// 获取全选小图标
 	var $clearComplete = $(".clear-complete");// 获取清除所有已完成项的按钮
@@ -175,21 +176,23 @@ $(function() {
 		// console.log(index,$parent)
 		// 4.3 删除掉该元素
 		$parent.remove();
-		// 4.4 让left items的值减一
-		$(".todo .footer .count strong").text(--$count);
-		// 4.5 如果count的值为零，则让footed消失,全选小图标消失，clearcomplete消失
-		if ($count == 0) {
-			$footer.style.display = "none";
-			$checkAll.removeClass("show");
-			$clearComplete.removeClass("completed");		
-		}
-		// 4.6 重置状态数组
+		// 4.4 重置状态数组
 		conditionArray.splice(index,1);
 		if (isHasTrue(conditionArray)) {
 			$clearComplete.addClass("completed");
 		} else {
 			$clearComplete.removeClass("completed");
 		}
+		// 4.5 让left items的值减一
+		$count = getAllFalseIndex(conditionArray).length;
+		$(".todo .footer .count strong").text($count);
+		// 4.6 如果conditionArray的长度为零，则让footed消失,全选小图标消失，clearcomplete消失
+		if (conditionArray.length == 0) {
+			$footer.style.display = "none";
+			$checkAll.removeClass("show");
+			$clearComplete.removeClass("completed");		
+		}
+		
 	});
 	// 5 给clearcomplete按钮绑定点击函数
 	$clearComplete.click(function(){
@@ -206,7 +209,7 @@ $(function() {
 		// 5.1.3 如果列表不全为true
 		
 		// 5.2 让left items的值同步
-		$count -= $allComplete.length
+		$count = getAllFalseIndex(conditionArray).length;
 		$(".todo .footer .count strong").text($count);
 		// 5.3 删除获取到的项目
 		$allComplete.remove();
