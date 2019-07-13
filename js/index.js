@@ -60,33 +60,59 @@ $(function() {
 		var $condition = $(".lists .item .toggle");
 		var flag = true;
 		var count = 0;
-		
+		var $item = $(".item");
 		for (var i = 0; i < len; i++) {
 			if (conditionArray[i] == true) {
 				count++;
 			}
 		}
-		// 2.1.1 当列表项全为false时，点击后应该全为true
-		// 2.1.2 当列表项存在true时，点击应该全为true
+		// 2.2 判断列表的状态，同时判断筛选按钮的状态
+		// 2.2.1 当列表项全为false时，点击后应该全为true，当列表项存在true时，点击应该全为true
 		if (count == 0|| (count > 0 && count < len)) {
 			$condition.prop("checked", true);
 			for (var i = 0; i < len; i++) {
 				conditionArray[i] = true;
 				$control.prop("checked", false);
 			}
-		} else {// 2.1.3 当列表项全为true时，点击后应全为false
+			// 2.2.2 设置left items的值
+			$count = 0;
+			$(".todo .footer .count strong").text($count);
+			// 2.2.2 判断筛选按钮的状态:如果为active
+			if ($activeBtn.prop("class") == "selected") {
+				// 2.2.3 隐藏所有的项目
+				$item.hide(100);
+			// 2.2.4 判断筛选按钮的状态:如果为active	
+			} else if ($completeBtn.prop("class") == "selected") {
+				// 2.2.5 隐藏所有的项目
+				$item.show(100);
+
+			}
+			
+		} else {// 2.3 当列表项全为true时，点击后应全为false
 			$condition.prop("checked", false);
 			for (var i = 0; i < len; i++) {
 				conditionArray[i] = false;
 				$control.prop("checked", true);
 			}
+			// 2.3.1 设置left items的值
+			$count = conditionArray.length;
+			$(".todo .footer .count strong").text($count);
+			// 2.3.2 判断筛选按钮的状态:如果为complete
+			if ($completeBtn.prop("class") == "selected") {		
+				// 2.3.3 隐藏所有项目
+				$item.hide(100);
+			// 2.3.4 判断筛选按钮的状态:如果为active
+			} else if ($activeBtn.prop("class") == "selected") {
+				// 2.3.5 显示所有的项目
+				$item.show(100);
+			}
 		}	
 							
-		// 2.2 点击时切换todo列表的类名
+		// 2.4 点击时切换todo列表的类名
 		$(".lists .item ").toggleClass("completed");
-		// 2.3 点击时切换clearcomplete
+		// 2.5 点击时切换clearcomplete
 		$clearComplete.toggleClass("completed");
-		// 2.4 如果列表项全为true，则应该为todo类名和clearccomplete都加上completed类名
+		// 2.6 如果列表项全为true，则应该为todo类名和clearccomplete都加上completed类名
 		if (isAllTrue(conditionArray)) {
 			$(".lists .item ").addClass("completed");
 			$clearComplete.addClass("completed");
@@ -95,11 +121,12 @@ $(function() {
 	});
 	// 3 给todo列表的CheckBox绑定事件，需要用到事件委托
 	$lists.on("click", "input", function() {
-		// 3.1 拿到被点击元素的序号
+		// 3.1 拿到被点击元素的序号,状态和其祖先元素li
 		var index = $(".lists input").index(this);
-		console.log(this)
+		var condition = $(this).prop("checked");
+		var $item = $(this).parents(".item");
 		// 3.2 将点击后的状态存储在数组中
-		conditionArray[index] = $(this).prop("checked");
+		conditionArray[index] = condition;
 		// 3.3 修改全选小图标和clearcomplete的状态
 		if(!conditionArray[index]) {
 			$control.prop("checked", false);
@@ -115,7 +142,28 @@ $(function() {
 		}
 		// 3.4 点击时切换todo列表的类名
 		$(".lists .item ").eq(index).toggleClass("completed");
-		console.log(conditionArray)
+
+		// 3.5 判断筛选按钮的状态:如果为active
+		if ($activeBtn.prop("class") == "selected") {
+			if (condition) {
+				// 3.5.1 隐藏该项目
+				$item.hide(100);	
+			}
+		}
+		// 3.6 判断筛选按钮的状态:如果为complete
+		if ($completeBtn.prop("class") == "selected") {
+			if (!condition) {
+				// 3.6.1 隐藏该项目
+				$item.hide(100);
+			}
+		}
+		// 3.7 设置left item的值
+		if (condition) {
+			$count -= 1;
+		} else {
+			$count += 1;
+		}
+		$(".todo .footer .count strong").text($count);
 		
 	});
 	// 4 给删除按钮绑定一个点击事件，需要用到事件委托
@@ -177,28 +225,27 @@ $(function() {
 		$(this).siblings().removeClass("selected");
 		
 		// 6.3 显示所有元素
-		$allItems.fadeIn(300);
+		$allItems.show(100);
 		// 6.4 修改count的值
-		$count = conditionArray.length;
-		$(".todo .footer .count strong").text($count);
+		// $count = conditionArray.length;
+		// $(".todo .footer .count strong").text($count);
 	})
 	// 7 给Active按钮绑定单击响应函数
 	$activeBtn.click(function() {	
 		// 7.1 找到所有为true的items
 		var $allComplete = $lists.children(".completed");
-		var flag = false;
 		var $allNoComplete = getAllFalse(conditionArray);
 		// 7.2 排他操作
 		$(this).addClass("selected");
 		$(this).siblings().removeClass("selected");
 		// 7.3 设置left items的值
-		$count = conditionArray.length - getAllTrueItems(conditionArray).length;
-		$(".todo .footer .count strong").text($count);		
+		// $count = conditionArray.length - getAllTrueItems(conditionArray).length;
+		// $(".todo .footer .count strong").text($count);		
 		// 7.4 隐藏所有为true的items
-		$allComplete.fadeOut(300);
-		// 8.5 显示所有为false的items
+		$allComplete.hide(100);
+		// 7.5 显示所有为false的items
 		for (var i = 0; i < $allNoComplete.length; i++) {
-			$allNoComplete[i].fadeIn(300);
+			$allNoComplete[i].show(100);
 		}
 
 	})
@@ -208,17 +255,17 @@ $(function() {
 		var $allNoComplete = getAllFalse(conditionArray);
 		var $allComplete = $lists.children(".completed");
 		for (var i = 0; i < $allNoComplete.length; i++) {
-			$allNoComplete[i].fadeOut(300);
+			$allNoComplete[i].hide(100);
 		}
 		// 8.2 排他操作
 		$(this).addClass("selected");
 		$(this).siblings().removeClass("selected");
 		
 		// 8.3 设置left items的值
-		$count = getAllTrueItems(conditionArray).length;
-		$(".todo .footer .count strong").text($count);
+		// $count = getAllTrueItems(conditionArray).length;
+		// $(".todo .footer .count strong").text($count);
 		// 8.4 显示所有为true的items
-		$allComplete.fadeIn(300);
+		$allComplete.show(100);
 	})
 	// 定义一个专门用来检测列表项是否全为true的函数
 	function isAllTrue(arr) {
