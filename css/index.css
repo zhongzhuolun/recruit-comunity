@@ -344,7 +344,7 @@ button {
 	/* 不懂为什么加了position就可以cursor和点击事件了 */
 	
 }
-.filters li a.selected {
+.filters li.selected a {
     border: 1px solid rgba(175, 47, 47, 0.2)!important;
 	width: 15px;
 }

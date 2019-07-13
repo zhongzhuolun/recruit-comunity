@@ -8,9 +8,9 @@ $(function() {
 	var $clearComplete = $(".clear-complete");// 获取清除所有已完成项的按钮
 	var $control = $("#toggle-all");// 获取控制小图标颜色状态的元素
 	var conditionArray = [];// 创建一个存储todo选中状态的数组
-	var $allBtn = $(".filters li a").eq(0);// 获取All按钮
-	var $activeBtn = $(".filters li a").eq(1);// 获取Active按钮
-	var $completeBtn = $(".filters li a").eq(2);// 获取Complete按钮
+	var $allBtn = $(".filters li").eq(0);// 获取All按钮
+	var $activeBtn = $(".filters li").eq(1);// 获取Active按钮
+	var $completeBtn = $(".filters li").eq(2);// 获取Complete按钮
 	// 1 监听文本框的输入和输出，创建todo，并且将其插入列表中,同时改变items left的值
 	
 	// 1.1 当文本框失去焦点时
@@ -146,7 +146,7 @@ $(function() {
 	// 5 给clearcomplete按钮绑定点击函数
 	$clearComplete.click(function(){
 		// 5.1 获取列表中所有为true的项目
-		var $allComplete = $lists.children(".completed")
+		var $allComplete = $lists.children(".completed");
 
 		// 5.1.1 如果列表全为true,则需要隐藏掉footer和全选小图标
 		if ($allComplete.length == conditionArray.length) {
@@ -168,9 +168,58 @@ $(function() {
 		$clearComplete.removeClass("completed");
 	})
 	// 6 给All按钮绑定单击响应函数
-	
+	$allBtn.click(function() {
+		// 6.1 获取列表中所有的元素
+		var $allItems = $lists.children(".item");
+		console.log($allItems)
+		// 6.2 排他操作
+		$(this).addClass("selected");
+		$(this).siblings().removeClass("selected");
+		
+		// 6.3 显示所有元素
+		$allItems.fadeIn(300);
+		// 6.4 修改count的值
+		$count = conditionArray.length;
+		$(".todo .footer .count strong").text($count);
+	})
 	// 7 给Active按钮绑定单击响应函数
+	$activeBtn.click(function() {	
+		// 7.1 找到所有为true的items
+		var $allComplete = $lists.children(".completed");
+		var flag = false;
+		var $allNoComplete = getAllFalse(conditionArray);
+		// 7.2 排他操作
+		$(this).addClass("selected");
+		$(this).siblings().removeClass("selected");
+		// 7.3 设置left items的值
+		$count = conditionArray.length - getAllTrueItems(conditionArray).length;
+		$(".todo .footer .count strong").text($count);		
+		// 7.4 隐藏所有为true的items
+		$allComplete.fadeOut(300);
+		// 8.5 显示所有为false的items
+		for (var i = 0; i < $allNoComplete.length; i++) {
+			$allNoComplete[i].fadeIn(300);
+		}
+
+	})
 	// 8 给Complete按钮绑定单击响应函数
+	$completeBtn.click(function() {	
+		// 8.1 找到所有为false的items,隐藏所有为false的items
+		var $allNoComplete = getAllFalse(conditionArray);
+		var $allComplete = $lists.children(".completed");
+		for (var i = 0; i < $allNoComplete.length; i++) {
+			$allNoComplete[i].fadeOut(300);
+		}
+		// 8.2 排他操作
+		$(this).addClass("selected");
+		$(this).siblings().removeClass("selected");
+		
+		// 8.3 设置left items的值
+		$count = getAllTrueItems(conditionArray).length;
+		$(".todo .footer .count strong").text($count);
+		// 8.4 显示所有为true的items
+		$allComplete.fadeIn(300);
+	})
 	// 定义一个专门用来检测列表项是否全为true的函数
 	function isAllTrue(arr) {
 		var count = 0;
@@ -212,6 +261,7 @@ $(function() {
 		console.log(itemsArray);
 		return itemsArray;		
 	}
+	// 定义一个函数专门用来重置状态数组
 	function resetArray(arr) {
 		var len = arr.length
 		for (var i = 0; i < len; i++) {
@@ -223,7 +273,24 @@ $(function() {
 			}	
 		}			
 	}
-	// 定义一个函数专门获取列表中所有未false的函数
-	
-	
+	// 定义一个函数专门获取列表中所有为false的序号的函数
+	function getAllFalseIndex(arr) {
+		var itemsArray = [];
+		for (var i = 0; i < arr.length; i++) {
+			if (!arr[i]) {
+				itemsArray.push(i);
+			}
+		}
+		return itemsArray;		
+	}
+	// 定义一个函数专门获取所有为false的items
+	function getAllFalse(arr) {
+		var allFalseArr = [];
+		var allFalseIndex = getAllFalseIndex(arr);
+		var $allItems = $lists.children(".item");
+		for (var i = 0; i < allFalseIndex.length; i++) {
+			allFalseArr[i] = $allItems.eq(allFalseIndex[i]);
+		}
+		return allFalseArr;	
+	}
 })
