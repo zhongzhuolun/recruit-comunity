@@ -2,7 +2,7 @@ $(function() {
 	// 0 获取需要用到的元素，并且将其设置为全局变量，同时初始化一些需要的数据类型
 	var textValue = "";// 初始化文本框的值
 	var $lists = $(".lists");// 获取填充todo的ul
-	var $leftItem = $(".todo .footer .count strong")
+	var $leftItem = $(".todo .footer .count strong")// 获取items left元素
 	var $count = parseInt($leftItem.text());// 获取items left的值
 	var $footer = $(".todo .footer")[0];// 获取底部的footer元素
 	var $checkAll = $(".check-all");// 获取全选小图标
@@ -12,15 +12,15 @@ $(function() {
 	var $allBtn = $(".filters li").eq(0);// 获取All按钮
 	var $activeBtn = $(".filters li").eq(1);// 获取Active按钮
 	var $completeBtn = $(".filters li").eq(2);// 获取Complete按钮
-	// 1 监听文本框的输入和输出，创建todo，并且将其插入列表中,同时改变items left的值
 	
+	// 1 监听文本框的输入和输出，创建todo，并且将其插入列表中,同时改变items left的值	
 	// 1.1 当文本框失去焦点时
 	$(".need").blur(function() {
 		textValue = this.value;
 		if (textValue.length > 0) {//文本框中的值满足条件值调用
 			createTodo(textValue);
 			this.value = "";
-			$(".todo .footer .count strong").text(++$count);
+			$leftItem.text(++$count);
 		}
 		
 	});
@@ -31,7 +31,7 @@ $(function() {
 			if (textValue.length > 0) {
 				createTodo(textValue);
 				$(".need").val("");
-				$(".todo .footer .count strong").text(++$count);
+				$leftItem.text(++$count);
 			}					
 		}
 	
@@ -42,7 +42,7 @@ $(function() {
 		 '<li class="item">' +
 								'<div class="view">' +
 									'<input type="checkbox" class="toggle"/>'+
-									'<label>'+ textValue +'</label>' +
+									'<label class="text">'+ textValue +'</label>' +
 									'<button type="button" class="destroy"></button>' +
 								'</div>' +
 							'</li>';
@@ -77,7 +77,7 @@ $(function() {
 			}
 			// 2.2.2 设置left items的值
 			$count = 0;
-			$(".todo .footer .count strong").text($count);
+			$leftItem.text($count);
 			// 2.2.2 判断筛选按钮的状态:如果为active
 			if ($activeBtn.prop("class") == "selected") {
 				// 2.2.3 隐藏所有的项目
@@ -97,7 +97,7 @@ $(function() {
 			}
 			// 2.3.1 设置left items的值
 			$count = conditionArray.length;
-			$(".todo .footer .count strong").text($count);
+			$leftItem.text($count);
 			// 2.3.2 判断筛选按钮的状态:如果为complete
 			if ($completeBtn.prop("class") == "selected") {		
 				// 2.3.3 隐藏所有项目
@@ -164,7 +164,7 @@ $(function() {
 		} else {
 			$count += 1;
 		}
-		$(".todo .footer .count strong").text($count);
+		$leftItem.text($count);
 		
 	});
 	// 4 给删除按钮绑定一个点击事件，需要用到事件委托
@@ -185,7 +185,7 @@ $(function() {
 		}
 		// 4.5 让left items的值减一
 		$count = getAllFalseIndex(conditionArray).length;
-		$(".todo .footer .count strong").text($count);
+		$leftItem.text($count);
 		// 4.6 如果conditionArray的长度为零，则让footed消失,全选小图标消失，clearcomplete消失
 		if (conditionArray.length == 0) {
 			$footer.style.display = "none";
@@ -203,14 +203,10 @@ $(function() {
 		if ($allComplete.length == conditionArray.length) {
 			$footer.style.display = "none";
 			$checkAll.removeClass("show");
-		}
-		// 5.1.2 获取列表中所有为true的索引
-		// var itemsArray = getAllTrueItems(conditionArray);
-		// 5.1.3 如果列表不全为true
-		
+		}		
 		// 5.2 让left items的值同步
 		$count = getAllFalseIndex(conditionArray).length;
-		$(".todo .footer .count strong").text($count);
+		$leftItem.text($count);
 		// 5.3 删除获取到的项目
 		$allComplete.remove();
 		// 5.4 重置状态数组
@@ -222,16 +218,12 @@ $(function() {
 	$allBtn.click(function() {
 		// 6.1 获取列表中所有的元素
 		var $allItems = $lists.children(".item");
-		console.log($allItems)
 		// 6.2 排他操作
 		$(this).addClass("selected");
-		$(this).siblings().removeClass("selected");
-		
+		$(this).siblings().removeClass("selected");		
 		// 6.3 显示所有元素
 		$allItems.show(100);
-		// 6.4 修改count的值
-		// $count = conditionArray.length;
-		// $(".todo .footer .count strong").text($count);
+
 	})
 	// 7 给Active按钮绑定单击响应函数
 	$activeBtn.click(function() {	
@@ -240,13 +232,10 @@ $(function() {
 		var $allNoComplete = getAllFalse(conditionArray);
 		// 7.2 排他操作
 		$(this).addClass("selected");
-		$(this).siblings().removeClass("selected");
-		// 7.3 设置left items的值
-		// $count = conditionArray.length - getAllTrueItems(conditionArray).length;
-		// $(".todo .footer .count strong").text($count);		
-		// 7.4 隐藏所有为true的items
+		$(this).siblings().removeClass("selected");		
+		// 7.3 隐藏所有为true的items
 		$allComplete.hide(100);
-		// 7.5 显示所有为false的items
+		// 7.4 显示所有为false的items
 		for (var i = 0; i < $allNoComplete.length; i++) {
 			$allNoComplete[i].show(100);
 		}
@@ -264,11 +253,67 @@ $(function() {
 		$(this).addClass("selected");
 		$(this).siblings().removeClass("selected");
 		
-		// 8.3 设置left items的值
-		// $count = getAllTrueItems(conditionArray).length;
-		// $(".todo .footer .count strong").text($count);
-		// 8.4 显示所有为true的items
+		// 8.3 显示所有为true的items
 		$allComplete.show(100);
+	})
+	// 9 监听todo中label的点击事件，需要用到事件委托
+	$lists.delegate(".text", "dblclick", function() {		
+		// 9.1 将点击元素设置为可编辑
+		$(this).prop("contenteditable", true);
+		this.focus();
+		// 9.2 设置边框的样式
+		$(this).parents("li").addClass("editing");
+	})
+	// 10 监听todo中label的失去焦点事件，需要用到事件委托
+	$lists.delegate(".text", "blur", function() {
+		// 10.1 获取label中的值,以及在todo列表中的索引值
+		var value = $(this).html();
+		var index = $(".text").index(this);
+		// 10.2 将边框样式还原
+		$(this).parents("li").removeClass("editing");
+		// 10.3 设置元素不可编辑
+		$(this).prop("contenteditable", false);
+		// 10.4 判断值的内容,如果为空的话
+		if (value.length == 0) {
+			// 10.4.1 将对应的item移除
+			$(this).parents("li").remove();
+			// 10.4.2 将状态数组对应的索引的值删除
+			conditionArray.splice(index, 1);
+			// 10.4.3 重新设置leftitems的值
+			$leftItem.text(conditionArray.length);
+		}
+		// 10.5 判断conditionArray的长度是否为零，若为零，则隐藏对应的按钮
+		if (conditionArray.length == 0) {
+			$footer.style.display = "none";
+			$checkAll.removeClass("show");
+			$clearComplete.removeClass("completed");		
+		}
+		
+		
+	})
+	// 11 监听todo中label的键盘事件，需要用到事件委托
+	$lists.delegate(".text", "keyup", function($event) {
+		// 11.1 获取label中的值,以及在todo列表中的索引值
+		var value = $(this).text();
+		var index = $(".text").index(this);		
+		if (event.keyCode == 13 || event.keyCode == 9) {
+			// 11.2 将边框样式还原
+			$(this).parents("li").removeClass("editing");
+			// 11.3 设置元素不可编辑
+			$(this).prop("contenteditable", false);
+			// 11.4 判断值的内容,如果为空的话
+			if (value.length == 0) {
+				// 11.4.1 将对应的item移除
+				$(this).parents("li").remove();
+				// 11.4.2 将状态数组对应的索引的值删除
+				conditionArray.splice(index, 1);
+				// 11.4.3 重新设置leftitems的值
+				$leftItem.text(conditionArray.length);
+			}
+			$event.preventDefault();
+            return false;
+		}
+		 
 	})
 	// 定义一个专门用来检测列表项是否全为true的函数
 	function isAllTrue(arr) {
