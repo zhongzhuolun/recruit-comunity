@@ -9,6 +9,7 @@ $(function() {
 	var $clearComplete = $(".clear-complete");// 获取清除所有已完成项的按钮
 	var $control = $("#toggle-all");// 获取控制小图标颜色状态的元素
 	var conditionArray = [];// 创建一个存储todo选中状态的数组
+	console.log(conditionArray.length)
 	var $allBtn = $(".filters li").eq(0);// 获取All按钮
 	var $activeBtn = $(".filters li").eq(1);// 获取Active按钮
 	var $completeBtn = $(".filters li").eq(2);// 获取Complete按钮
@@ -23,6 +24,8 @@ $(function() {
 			$leftItem.text(++$count);
 		}
 		
+		
+		
 	});
 	// 1.2 当用户敲回车键或者tab键时
 	$("body").keyup(function(event) {
@@ -36,22 +39,34 @@ $(function() {
 		}
 	
 	});
-	// 1.4 创建一个函数动态生成一条todo,并且将其插入列表中
+	// 1.3 创建一个函数动态生成一条todo,并且将其插入列表中
 	function createTodo(textValue) {
-		var value = "" +
-		 '<li class="item">' +
+		var value = "";
+		// 1.3.1 判断筛选按钮的状态:如果为complete
+		if ($completeBtn.prop("class") == "selected") {
+			// 1.3.2 为item加上hide的class类名，让其隐藏
+			value = "hide";
+		}
+		// 1.3.3 通过字符串形式生成一个item
+		var item = "" +
+		 '<li class="item '+value+'">' +
 								'<div class="view">' +
 									'<input type="checkbox" class="toggle"/>'+
 									'<label class="text">'+ textValue +'</label>' +
 									'<button type="button" class="destroy"></button>' +
 								'</div>' +
 							'</li>';
-		$lists.append(value);
-		conditionArray[conditionArray.length] = false; // 将生成的每一个todo的状态存储在数组中
-		$checkAll.addClass("show");// 显示小图标
-		if ($footer.style.display == "none") { // 显示底部元素
+		// 1.3.4 将item动态添加到ul中	
+		$lists.append(item);
+		// 1.3.5 将生成的每一个todo的状态存储在数组中
+		conditionArray[conditionArray.length] = false; 
+		// 1.3.6 显示全选小图标
+		$checkAll.addClass("show");
+		 // 1.3.7 显示底部元素
+		if ($footer.style.display == "none") {
 			$footer.style.display = "block";
 		}
+		
 	}
 	// 2 给输入框左边的小图标绑定一个点击事件
 	$(".check-all").click(function(){
@@ -82,7 +97,7 @@ $(function() {
 			if ($activeBtn.prop("class") == "selected") {
 				// 2.2.3 隐藏所有的项目
 				$item.hide(100);
-			// 2.2.4 判断筛选按钮的状态:如果为active	
+			// 2.2.4 判断筛选按钮的状态:如果为complete	
 			} else if ($completeBtn.prop("class") == "selected") {
 				// 2.2.5 隐藏所有的项目
 				$item.show(100);
@@ -251,8 +266,7 @@ $(function() {
 		}
 		// 8.2 排他操作
 		$(this).addClass("selected");
-		$(this).siblings().removeClass("selected");
-		
+		$(this).siblings().removeClass("selected");		
 		// 8.3 显示所有为true的items
 		$allComplete.show(100);
 	})
@@ -280,22 +294,43 @@ $(function() {
 			// 10.4.2 将状态数组对应的索引的值删除
 			conditionArray.splice(index, 1);
 			// 10.4.3 重新设置leftitems的值
-			$leftItem.text(conditionArray.length);
+			$leftItem.text(getAllFalseIndex(conditionArray).length);
+			// 10.4.4 重新设置$count的值
+			$count = getAllFalseIndex(conditionArray).length;
 		}
 		// 10.5 判断conditionArray的长度是否为零，若为零，则隐藏对应的按钮
 		if (conditionArray.length == 0) {
 			$footer.style.display = "none";
 			$checkAll.removeClass("show");
 			$clearComplete.removeClass("completed");		
-		}
-		
-		
+		}		
 	})
-	// 11 监听todo中label的键盘事件，需要用到事件委托
-	$lists.delegate(".text", "keyup", function($event) {
+	// 11 监听todo中label的键盘事件，需要用到事件委托 (!!!有bug)
+	$lists.on("keyup", ".text", function($event) {
 		// 11.1 获取label中的值,以及在todo列表中的索引值
 		var value = $(this).text();
-		var index = $(".text").index(this);		
+		var index = $(".text").index(this);
+		// 通过contenteidtable属性会有回车键无法取消其默认行为的bug，即回车自动换行
+		// if (event.keyCode == 13 || event.keyCode == 9) {
+		// 	// 11.2 将边框样式还原
+		// 	$(this).parents("li").removeClass("editing");
+		// 	// 11.3 设置元素不可编辑
+		// 	$(this).prop("contenteditable", false);
+		// 	// 11.4 判断值的内容,如果为空的话
+		// 	if (value.length == 0) {
+		// 		// 11.4.1 将对应的item移除
+		// 		$(this).parents("li").remove();
+		// 		// 11.4.2 将状态数组对应的索引的值删除
+		// 		conditionArray.splice(index, 1);
+		// 		// 11.4.3 重新设置leftitems的值
+		// 		$leftItem.text(getAllFalseIndex(conditionArray).length);
+		// 		// 11.4.4 重新设置$count的值
+		// 		$count = getAllFalseIndex(conditionArray).length;
+		// 	}
+		// 	$event.preventDefault();
+  //           return false;
+		// }
+		// 改用创建一个input框来实现该功能
 		if (event.keyCode == 13 || event.keyCode == 9) {
 			// 11.2 将边框样式还原
 			$(this).parents("li").removeClass("editing");
@@ -308,10 +343,12 @@ $(function() {
 				// 11.4.2 将状态数组对应的索引的值删除
 				conditionArray.splice(index, 1);
 				// 11.4.3 重新设置leftitems的值
-				$leftItem.text(conditionArray.length);
+				$leftItem.text(getAllFalseIndex(conditionArray).length);
+				// 11.4.4 重新设置$count的值
+				$count = getAllFalseIndex(conditionArray).length;
 			}
 			$event.preventDefault();
-            return false;
+		    return false;
 		}
 		 
 	})
