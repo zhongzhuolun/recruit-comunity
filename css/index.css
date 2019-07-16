@@ -395,13 +395,14 @@ button {
 
 /* 登录注册 */
 .registe-login {
+	display: none;
 	position: fixed;
 	width: 350px;
 	height: 330px;
 	background: rgb(250, 250, 250);
 	z-index: 99;
-	left: 50%;
-	top: 50%;
+	left: 59%;
+	top: 61%;
 	transform: translate(-50%, -50%);
 	box-shadow: 0 0 6px gray;
 }
@@ -418,12 +419,14 @@ button {
 .registe-login .head .close {
 	float: right;
 }
-
-.registe-login .head .close .icon-search-close:before {
-	color: rgb(136, 136, 136);
-	font-size: 0.5rem;
+.registe-login .head .close {
+	float: right;
 }
-
+.registe-login .head .close:before {
+	content: "x";
+	color: rgb(136, 136, 136);
+	font-size: 1.5rem;
+}
 .registe-login .bg,
 .registe-login .body,
 .registe-login .foot {
@@ -521,54 +524,6 @@ button {
 	background: rgb(199, 46, 46);
 }
 
-.registe-login .foot {
-	margin-top: 140px;
-	text-align: center;
-}
-
-.registe-login .foot p {
-	display: inline-block;
-	padding: 0 10px;
-	font: 0.5rem "宋体";
-	color: rgb(102, 102, 102);
-}
-
-.registe-login .foot .line {
-	width: 62px;
-	border-bottom: 1px solid rgb(216, 216, 216);
-	margin-bottom: 4px;
-}
-
-.registe-login .foot .ways {
-	width: 100%;
-	padding-top: 10px;
-}
-
-.registe-login .foot .ways a {
-	display: inline-block;
-	width: 20%;
-	padding-left: 10px;
-}
-
-.registe-login .foot .ways a img {
-	width: 40px;
-}
-
-.registe-login .foot .ways span {
-	display: inline-block;
-	width: 60px;
-	text-align: left;
-}
-
-.registe-login .foot .ways a:nth-child(1) span,
-.registe-login .foot .ways a:nth-child(2) span {
-	text-indent: 6px;
-}
-
-.registe-login .foot .ways a:nth-child(3) span,
-.registe-login .foot .ways a:nth-child(4) span {
-	text-indent: -5px;
-}
 
 #login .body button {
 	width: 15px;
@@ -593,7 +548,9 @@ button {
 	cursor: pointer;
 	line-height: 38px;
 }
-
+#login .body .login-btn:hover {
+	background: rgb(199, 46, 46)
+}
 #login .body .login-btn p {
 	font: 1rem "宋体";
 	padding-top: 10px;
