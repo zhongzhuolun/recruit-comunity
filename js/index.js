@@ -9,11 +9,11 @@ $(function() {
 	var $clearComplete = $(".clear-complete");// 获取清除所有已完成项的按钮
 	var $control = $("#toggle-all");// 获取控制小图标颜色状态的元素
 	var conditionArray = [];// 创建一个存储todo选中状态的数组
-	console.log(conditionArray.length)
 	var $allBtn = $(".filters li").eq(0);// 获取All按钮
 	var $activeBtn = $(".filters li").eq(1);// 获取Active按钮
 	var $completeBtn = $(".filters li").eq(2);// 获取Complete按钮
-	
+	var $index;// 创建全局变量$index以便动态修改label中的值使用
+	var $label;// 创建全局变量$label以便动态修改label中的值使用
 	// 1 监听文本框的输入和输出，创建todo，并且将其插入列表中,同时改变items left的值	
 	// 1.1 当文本框失去焦点时
 	$(".need").blur(function() {
@@ -21,7 +21,7 @@ $(function() {
 		if (textValue.length > 0) {//文本框中的值满足条件值调用
 			createTodo(textValue);
 			this.value = "";
-			$leftItem.text(++$count);
+			$leftItem.text(getAllFalseIndex(conditionArray).length);// 修改过 原始为$count++ ->
 		}
 		
 		
@@ -34,7 +34,7 @@ $(function() {
 			if (textValue.length > 0) {
 				createTodo(textValue);
 				$(".need").val("");
-				$leftItem.text(++$count);
+				$leftItem.text(getAllFalseIndex(conditionArray).length);// 修改过 原始为$count++
 			}					
 		}
 	
@@ -136,9 +136,9 @@ $(function() {
 		
 	});
 	// 3 给todo列表的CheckBox绑定事件，需要用到事件委托
-	$lists.on("click", "input", function() {
+	$lists.on("click", ".toggle", function() {
 		// 3.1 拿到被点击元素的序号,状态和其祖先元素li
-		var index = $(".lists input").index(this);
+		var index = $(".lists .toggle").index(this);
 		var condition = $(this).prop("checked");
 		var $item = $(this).parents(".item");
 		// 3.2 将点击后的状态存储在数组中
@@ -157,7 +157,7 @@ $(function() {
 			$clearComplete.addClass("completed");
 		}
 		// 3.4 点击时切换todo列表的类名
-		$(".lists .item ").eq(index).toggleClass("completed");
+		$(".lists .item").eq(index).toggleClass("completed");
 
 		// 3.5 判断筛选按钮的状态:如果为active
 		if ($activeBtn.prop("class") == "selected") {
@@ -173,13 +173,14 @@ $(function() {
 				$item.hide(100);
 			}
 		}
+		console.log(conditionArray)
 		// 3.7 设置left item的值
-		if (condition) {
-			$count -= 1;
-		} else {
-			$count += 1;
-		}
-		$leftItem.text($count);
+		// if (condition) {
+		// 	$count -= 1;
+		// } else {
+		// 	$count += 1;
+		// }
+		$leftItem.text(getAllFalseIndex(conditionArray).length);
 		
 	});
 	// 4 给删除按钮绑定一个点击事件，需要用到事件委托
@@ -271,33 +272,46 @@ $(function() {
 		$allComplete.show(100);
 	})
 	// 9 监听todo中label的点击事件，需要用到事件委托
-	$lists.delegate(".text", "dblclick", function() {		
-		// 9.1 将点击元素设置为可编辑
-		$(this).prop("contenteditable", true);
-		this.focus();
-		// 9.2 设置边框的样式
-		$(this).parents("li").addClass("editing");
-	})
-	// 10 监听todo中label的失去焦点事件，需要用到事件委托
-	$lists.delegate(".text", "blur", function() {
-		// 10.1 获取label中的值,以及在todo列表中的索引值
+	$lists.delegate(".text", "dblclick", function() {			
+		// 9.1 获取label中的值,以及在todo列表中的索引值
 		var value = $(this).html();
-		var index = $(".text").index(this);
+		$label = $(this);
+		$index = $(".text").index(this);
+		//9.2 动态生成一个input框
+		handleDbclick(value);
+		// 9.3 设置边框的样式
+		$(this).parents("li").addClass("editing");
+		// 9.4 隐藏label
+		$(this).hide();
+		
+	})
+	
+	// 10 监听todo中input的失去焦点事件，需要用到事件委托
+	$lists.delegate(".change", "blur", function() {
+		// 10.1 获取input中的值,以及在todo列表中的索引值
+		var value = $(this).val();
 		// 10.2 将边框样式还原
-		$(this).parents("li").removeClass("editing");
-		// 10.3 设置元素不可编辑
-		$(this).prop("contenteditable", false);
+		$label.parents("li").removeClass("editing");
+		
 		// 10.4 判断值的内容,如果为空的话
 		if (value.length == 0) {
 			// 10.4.1 将对应的item移除
-			$(this).parents("li").remove();
+			$label.parents("li").remove();
 			// 10.4.2 将状态数组对应的索引的值删除
-			conditionArray.splice(index, 1);
+			conditionArray.splice($index, 1);
 			// 10.4.3 重新设置leftitems的值
 			$leftItem.text(getAllFalseIndex(conditionArray).length);
 			// 10.4.4 重新设置$count的值
 			$count = getAllFalseIndex(conditionArray).length;
+		} else {
+			// 10.4.5 将value的值设置给label
+			$label.html(value);
+			// 10.4.6 显示label
+			$label.show();
+			
 		}
+		//10.3 将input移除
+		$(this).remove();
 		// 10.5 判断conditionArray的长度是否为零，若为零，则隐藏对应的按钮
 		if (conditionArray.length == 0) {
 			$footer.style.display = "none";
@@ -306,51 +320,53 @@ $(function() {
 		}		
 	})
 	// 11 监听todo中label的键盘事件，需要用到事件委托 (!!!有bug)
-	$lists.on("keyup", ".text", function($event) {
-		// 11.1 获取label中的值,以及在todo列表中的索引值
-		var value = $(this).text();
-		var index = $(".text").index(this);
-		// 通过contenteidtable属性会有回车键无法取消其默认行为的bug，即回车自动换行
-		// if (event.keyCode == 13 || event.keyCode == 9) {
-		// 	// 11.2 将边框样式还原
-		// 	$(this).parents("li").removeClass("editing");
-		// 	// 11.3 设置元素不可编辑
-		// 	$(this).prop("contenteditable", false);
-		// 	// 11.4 判断值的内容,如果为空的话
-		// 	if (value.length == 0) {
-		// 		// 11.4.1 将对应的item移除
-		// 		$(this).parents("li").remove();
-		// 		// 11.4.2 将状态数组对应的索引的值删除
-		// 		conditionArray.splice(index, 1);
-		// 		// 11.4.3 重新设置leftitems的值
-		// 		$leftItem.text(getAllFalseIndex(conditionArray).length);
-		// 		// 11.4.4 重新设置$count的值
-		// 		$count = getAllFalseIndex(conditionArray).length;
-		// 	}
-		// 	$event.preventDefault();
-  //           return false;
-		// }
-		// 改用创建一个input框来实现该功能
+	$lists.on("keyup", ".change", function($event) {
+	// 	// 11.1 获取input中的值,以及在todo列表中的索引值
+		var value = $(this).val();
+		// var index = $(".change").index(this);
 		if (event.keyCode == 13 || event.keyCode == 9) {
-			// 11.2 将边框样式还原
-			$(this).parents("li").removeClass("editing");
-			// 11.3 设置元素不可编辑
-			$(this).prop("contenteditable", false);
-			// 11.4 判断值的内容,如果为空的话
+			//11.2 将边框样式还原
+			$label.parents("li").removeClass("editing");
+			
+			//11.4 判断值的内容,如果为空的话
 			if (value.length == 0) {
-				// 11.4.1 将对应的item移除
-				$(this).parents("li").remove();
-				// 11.4.2 将状态数组对应的索引的值删除
-				conditionArray.splice(index, 1);
-				// 11.4.3 重新设置leftitems的值
+				//11.4.1 将对应的item移除
+				$label.parents("li").remove();
+				//11.4.2 将状态数组对应的索引的值删除
+				conditionArray.splice($index, 1);
+				//11.4.3 重新设置leftitems的值
 				$leftItem.text(getAllFalseIndex(conditionArray).length);
-				// 11.4.4 重新设置$count的值
+				//11.4.4 重新设置$count的值
 				$count = getAllFalseIndex(conditionArray).length;
+			} else {
+				// 11.4.5 将value的值设置给label
+				$label.html(value);
+				// 11.4.6 显示label
+				$label.show();
+				
+			}
+			//11.3 判断是否还有input框，有则将input移除
+			if ($(this)) {
+				console.log($(this))
+				$(this).blur();
+			}
+			
+			// 11.5 判断conditionArray的长度是否为零，若为零，则隐藏对应的按钮
+			if (conditionArray.length == 0) {
+				$footer.style.display = "none";
+				$checkAll.removeClass("show");
+				$clearComplete.removeClass("completed");		
 			}
 			$event.preventDefault();
-		    return false;
+			return false;
+			
 		}
+		
 		 
+	})
+	// 12.监听动态生成的输入框的聚焦事件
+	$lists.delegate(".change", "focus", function($event){
+		$event.target.select();
 	})
 	// 定义一个专门用来检测列表项是否全为true的函数
 	function isAllTrue(arr) {
@@ -425,4 +441,60 @@ $(function() {
 		}
 		return allFalseArr;	
 	}
+	// 定义一个专门用来处理双击label元素时动态修改元素内容的函数
+	function handleDbclick(value) {
+		var $input = $("<input class='change'> tyep='text'");
+		$input.attr("value", value);
+		var resetIndex = $index;
+		var n = $index;
+		// 判断筛选按钮的状态:如果为complete
+		if ($completeBtn.prop("class") == "selected") {	
+			n = 0;
+			for (var i = 0;i < resetIndex; i++) {
+				if (conditionArray[i]) {
+					n++;
+				}
+			}
+			
+		// 判断筛选按钮的状态:如果为active
+		} else if ($activeBtn.prop("class") == "selected") {
+				n = 0;
+			for (var i = 0;i < resetIndex; i++) {
+				if (!conditionArray[i]) {
+					n++;
+				}
+			}
+		}
+		$input.css("top", n*58);   
+		//  判断此时label中的值是否有删除线，即此时状态是否为true
+		if (conditionArray[$index]) {
+			$input.addClass("checked");
+		}
+		$lists.append($input);
+		$input.focus();
+		
+		
+		
+	}
 })
+// 	// 通过contenteidtable属性会有回车键无法取消其默认行为的bug，即回车自动换行
+	// 	if (event.keyCode == 13 || event.keyCode == 9) {
+	// 		// 11.2 将边框样式还原
+	// 		$(this).parents("li").removeClass("editing");
+	// 		// 11.3 设置元素不可编辑
+	// 		$(this).prop("contenteditable", false);
+	// 		// 11.4 判断值的内容,如果为空的话
+	// 		if (value.length == 0) {
+	// 			// 11.4.1 将对应的item移除
+	// 			$(this).parents("li").remove();
+	// 			// 11.4.2 将状态数组对应的索引的值删除
+	// 			conditionArray.splice(index, 1);
+	// 			// 11.4.3 重新设置leftitems的值
+	// 			$leftItem.text(getAllFalseIndex(conditionArray).length);
+	// 			// 11.4.4 重新设置$count的值
+	// 			$count = getAllFalseIndex(conditionArray).length;
+	// 		}
+	// 		$event.preventDefault();
+ //            return false;
+	// 	}
+	// })
