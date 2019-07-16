@@ -352,7 +352,6 @@ button {
 }
 .todo .footer .filters {
 	margin-left: 130px;
-	/* overflow: hidden; */
 }
 .todo .footer .filters li {
 	float: left;
@@ -371,8 +370,6 @@ button {
 	box-sizing: border-box;	
 	width: 100%;
 	position: relative;
-	/* 不懂为什么加了position就可以cursor和点击事件了 */
-	
 }
 .filters li.selected a {
     border: 1px solid rgba(175, 47, 47, 0.2)!important;
@@ -394,4 +391,223 @@ button {
 }
 .todo .footer .clear-complete:hover {
 	text-decoration: underline;
+}
+
+/* 登录注册 */
+.registe-login {
+	position: fixed;
+	width: 350px;
+	height: 330px;
+	background: rgb(250, 250, 250);
+	z-index: 99;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	box-shadow: 0 0 6px gray;
+}
+
+.registe-login .head {
+	width: 93%;
+	margin: 12px auto;
+}
+
+.registe-login .head .return-login {
+	float: left;
+}
+
+.registe-login .head .close {
+	float: right;
+}
+
+.registe-login .head .close .icon-search-close:before {
+	color: rgb(136, 136, 136);
+	font-size: 0.5rem;
+}
+
+.registe-login .bg,
+.registe-login .body,
+.registe-login .foot {
+	margin: 45px auto;
+	width: 77%;
+}
+
+.registe-login .body {
+	height: 78px;
+	border: 1px solid rgb(216, 216, 216);
+	border-radius: 5px 5px;
+	background-color: white;
+}
+
+.registe-login .body .select {
+	display: inline-block;
+	width: 87px;
+	border-right: 1px solid rgb(216, 216, 216);
+	height: 38px;
+	cursor: auto;
+	text-align: center;
+	line-height: 38px;
+	text-indent: 29px;
+	font-size: 0.5rem;
+}
+
+.registe-login .body .select:hover {
+	color: #656567;
+}
+
+.registe-login .body .select .triangular {
+	display: inline-block;
+	border-width: 5px;
+	border-color: rgb(153, 153, 153) transparent transparent transparent;
+	border-style: solid;
+	margin-left: 9px;
+}
+
+.registe-login .body .phone {
+	width: calc(100% - 93px);
+	height: 38px;
+	border: none;
+	outline: none;
+	text-indent: 0.33rem;
+	font-size: 10px;
+}
+
+.registe-login .body .password {
+	width: 176px;
+	height: 38px;
+	border: none;
+	outline: none;
+	font-size: 10px;
+	border-top: 1px solid rgb(216, 216, 216);
+	text-indent: 1.8rem;
+}
+
+.registe-login .body .reset-password {
+	width: 93px;
+	display: inline-block;
+	text-align: right;
+	height: 38px;
+	border-top: 1px solid rgb(225, 225, 225);
+	padding-top: 13px;
+	font-size: 12px;
+}
+
+.registe-login .body .reset-password:hover {
+	color: #656567;
+}
+
+.registe-login .body .reset-password:after {
+	content: "a";
+	visibility: hidden;
+}
+
+.registe-login .body .registe-btn {
+	margin: 40px auto 74px;
+	width: 100%;
+	text-align: center;
+	color: white;
+	background: #c97377;
+	border-radius: 5px 5px;
+	height: 38px;
+	cursor: pointer;
+	line-height: 38px;
+}
+
+.registe-login .body .registe-btn p {
+	padding-top: 10px;
+	font: 1rem "宋体";
+}
+
+.registe-login .body .registe-btn:hover {
+	background: rgb(199, 46, 46);
+}
+
+.registe-login .foot {
+	margin-top: 140px;
+	text-align: center;
+}
+
+.registe-login .foot p {
+	display: inline-block;
+	padding: 0 10px;
+	font: 0.5rem "宋体";
+	color: rgb(102, 102, 102);
+}
+
+.registe-login .foot .line {
+	width: 62px;
+	border-bottom: 1px solid rgb(216, 216, 216);
+	margin-bottom: 4px;
+}
+
+.registe-login .foot .ways {
+	width: 100%;
+	padding-top: 10px;
+}
+
+.registe-login .foot .ways a {
+	display: inline-block;
+	width: 20%;
+	padding-left: 10px;
+}
+
+.registe-login .foot .ways a img {
+	width: 40px;
+}
+
+.registe-login .foot .ways span {
+	display: inline-block;
+	width: 60px;
+	text-align: left;
+}
+
+.registe-login .foot .ways a:nth-child(1) span,
+.registe-login .foot .ways a:nth-child(2) span {
+	text-indent: 6px;
+}
+
+.registe-login .foot .ways a:nth-child(3) span,
+.registe-login .foot .ways a:nth-child(4) span {
+	text-indent: -5px;
+}
+
+#login .body button {
+	width: 15px;
+	height: 15px;
+	background: white;
+	border: 1px solid rgb(225, 225, 225);
+	display: inline-block;
+	margin-top: 19px;
+	outline: none;
+	cursor: auto;
+}
+
+
+#login .body .login-btn {
+	margin: 9px auto 16px;
+	width: 100%;
+	text-align: center;
+	color: white;
+	background: #c97377;
+	border-radius: 5px 5px;
+	height: 38px;
+	cursor: pointer;
+	line-height: 38px;
+}
+
+#login .body .login-btn p {
+	font: 1rem "宋体";
+	padding-top: 10px;
+}
+
+#login .body .login-to-regist {
+	width: 100%;
+	display: inline-block;
+	text-align: center;
+	text-decoration: underline;
+	color: rgb(51, 51, 51);
+	font: 0.7rem "宋体";
+}
+
+#login .body .login-to-regist:hover {
+	color: rgb(17, 17, 17);
 }

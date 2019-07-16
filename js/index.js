@@ -21,11 +21,8 @@ $(function() {
 		if (textValue.length > 0) {//文本框中的值满足条件值调用
 			createTodo(textValue);
 			this.value = "";
-			$leftItem.text(getAllFalseIndex(conditionArray).length);// 修改过 原始为$count++ ->
-		}
-		
-		
-		
+			$leftItem.text(getAllFalseIndex(conditionArray).length);
+		}				
 	});
 	// 1.2 当用户敲回车键或者tab键时
 	$("body").keyup(function(event) {
@@ -34,7 +31,7 @@ $(function() {
 			if (textValue.length > 0) {
 				createTodo(textValue);
 				$(".need").val("");
-				$leftItem.text(getAllFalseIndex(conditionArray).length);// 修改过 原始为$count++
+				$leftItem.text(getAllFalseIndex(conditionArray).length);
 			}					
 		}
 	
@@ -175,11 +172,6 @@ $(function() {
 		}
 		console.log(conditionArray)
 		// 3.7 设置left item的值
-		// if (condition) {
-		// 	$count -= 1;
-		// } else {
-		// 	$count += 1;
-		// }
 		$leftItem.text(getAllFalseIndex(conditionArray).length);
 		
 	});
@@ -319,7 +311,7 @@ $(function() {
 			$clearComplete.removeClass("completed");		
 		}		
 	})
-	// 11 监听todo中label的键盘事件，需要用到事件委托 (!!!有bug)
+	// 11 监听todo中label的键盘事件，需要用到事件委托
 	$lists.on("keyup", ".change", function($event) {
 	// 	// 11.1 获取input中的值,以及在todo列表中的索引值
 		var value = $(this).val();
@@ -328,30 +320,11 @@ $(function() {
 			//11.2 将边框样式还原
 			$label.parents("li").removeClass("editing");
 			
-			//11.4 判断值的内容,如果为空的话
-			if (value.length == 0) {
-				//11.4.1 将对应的item移除
-				$label.parents("li").remove();
-				//11.4.2 将状态数组对应的索引的值删除
-				conditionArray.splice($index, 1);
-				//11.4.3 重新设置leftitems的值
-				$leftItem.text(getAllFalseIndex(conditionArray).length);
-				//11.4.4 重新设置$count的值
-				$count = getAllFalseIndex(conditionArray).length;
-			} else {
-				// 11.4.5 将value的值设置给label
-				$label.html(value);
-				// 11.4.6 显示label
-				$label.show();
-				
-			}
-			//11.3 判断是否还有input框，有则将input移除
+			//11.3 判断是否还有input框，有则调用失去焦点的方法
 			if ($(this)) {
-				console.log($(this))
 				$(this).blur();
 			}
-			
-			// 11.5 判断conditionArray的长度是否为零，若为零，则隐藏对应的按钮
+			// 11.4 判断conditionArray的长度是否为零，若为零，则隐藏对应的按钮
 			if (conditionArray.length == 0) {
 				$footer.style.display = "none";
 				$checkAll.removeClass("show");
@@ -360,11 +333,9 @@ $(function() {
 			$event.preventDefault();
 			return false;
 			
-		}
-		
-		 
+		}		 
 	})
-	// 12.监听动态生成的输入框的聚焦事件
+	// 12.监听动态生成的输入框的聚焦事件，将其中的内容选中
 	$lists.delegate(".change", "focus", function($event){
 		$event.target.select();
 	})
@@ -471,10 +442,7 @@ $(function() {
 			$input.addClass("checked");
 		}
 		$lists.append($input);
-		$input.focus();
-		
-		
-		
+		$input.focus();					
 	}
 })
 // 	// 通过contenteidtable属性会有回车键无法取消其默认行为的bug，即回车自动换行
