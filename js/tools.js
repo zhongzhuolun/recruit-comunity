@@ -368,3 +368,157 @@ function toZero(num) {
 	}
 	return val;
 }
+function outputAttributes(element) {
+	var pairs = new Array(),
+		attrName,
+		attrValue,
+		i,
+		len;
+	for (i = 0, len = element.attributes.length; i < len; i++) {
+		attrName = element.attributes[i].nodeName;
+		attrValue = element.attributes[i].nodeValue;
+		if (element.attributes[i].specified) {
+			pairs.push(attrName + "=\"" + attrValue + "\"");
+		}
+	}
+	return pairs.join(" ");
+}
+function loadScriptString(code) {
+	var script = document.createElement("script");
+	script.type = "text/jscript";
+	try {
+		script.appendChild(document.createTextNode(code));
+	} catch (ex) {
+		script.text = code;
+	}
+	document.body.appendChild(script);
+}
+function loadStyleString(css) {
+	var style = document.createElement("style");
+	style.type = "text/css";
+	try {
+		style.appendChild(document.createTextNode(css));
+	} catch (ex) {
+		style.styleSheet.cssText = css;
+	}
+	var head = document.getElementsByTagName("head")[0];
+	head.appendChild(style);
+}
+function contains(refNode, otherNode) {
+	if (typeof refNode.contains == "function"
+		&& (!client,engine.webkit || client.engine.webkit >= 522)) {
+			return refNode.contains(otherNode);
+		} else if (typeof refNode.compareDocumentPosition == "function") {
+			return !!(refNode.compareDocumentPosition(otherNode) & 16);
+		} else {
+			var node = otherNode.parentNode;
+			do {
+				if (node === refNode) {
+					return true;
+				} else {
+					node = node.parentNode;
+				}
+			} while (node !== null);
+			return false;
+		}
+}
+// 跨浏览器事件对象
+var eventUtil = {
+	addHandler: function(ele, type, handle) {
+			if (ele.addEventListener) {
+				ele.addEventListener(type, handler, false);
+			} else if (ele.attachEvent) {
+				ele.attachEvent("on" + type, handle);
+			} else {
+				ele["on" + type] = null;
+			}
+	},
+	removeHandler: function(ele, type, handle) {
+			if (ele.emoveEventListener) {
+				ele.emoveEventListener(type, handler, false);
+			} else if (ele.detachEvent) {
+				ele.detachEvent("on" + type, handle);
+			} else {
+				ele["on" + type] = null;
+			}
+	},
+	getEvent: function(event) {
+		return event ? event: window.event;
+	},
+	getTarget: function(event) {
+		return event.target || event.srcElement;
+	},
+	preventDefault: function(event) {
+		if (event.preventDefault) {
+			event.preventDefault();
+		} else {
+			event.returnValue = false;
+		}
+	},
+	stopPropagation: function(event) {
+		if (event.stopPropagation) {
+			event.stopPropagation();
+		} else {
+			event.cancelBubble = true;
+		}
+	},
+	getRelatedTarget: function(event) {
+		if (event.relatedTarget) {
+			return event.relatedTarget;
+		} else if (event.toElement) {
+			return event.toElement;
+		} else if (event.fromElement) {
+			return event.fromElement;
+		} else {
+			return null;
+		}
+	},
+	getButton: function(event) {
+		if (document.implementation.hasFeature("MouseEvent", "2.0")) {
+			return event.button;
+		} else {
+			switch (event.button) {
+				case 0:
+				case 1:
+				case 3:
+				case 5:
+				case 7:
+					return 0;
+				case 2:
+				case 6:
+					return 2;
+				case 4:
+					return 1;
+					
+			}
+		}
+	},
+	getWheelDelta: function(event) {
+		if (event.wheelData) {
+			return (client.engine.opera && client.engine.opera < 9.5 ? -event.wheelData : event.wheelData);
+		} else {
+			return -event.detail * 40;
+		}
+	},
+	getCharCode: function(event) {
+		if (typeof event.charCode == "number") {
+			return event.charCode;
+		} else {
+			return event.keyCode;
+		}
+	}
+	
+}
+// 文本选中函数
+function selectText(textbox, startIndex, stopIndex) {
+	if (textbox.setSelectionRange) {
+		textbox.setSelectionRange(startIndex, stopIndex);
+	} else if (textbox.createTextRange) {
+		var range = textbox.createTextRange();
+		range.collapse(true);
+		range.moveStart("character", stratIndex);
+		range.moveEnd("character", stopIndex - startIndex);
+		range.select();
+	}
+	textbox.focus();
+}
