@@ -15,6 +15,7 @@ $(function() {
 	var $index; // 创建全局变量$index以便动态修改label中的值使用
 	var $label; // 创建全局变量$label以便动态修改label中的值使用
 	var dataArray = []; // 创建一个专门用来将数据存储在localstorage中的数组
+	var $height;
 	handleLocal(); // 调用初始化数据函数
 	// 1 监听文本框的输入和输出，创建todo，并且将其插入列表中,同时改变items left的值	
 	// 1.1 当文本框失去焦点时
@@ -309,6 +310,7 @@ $(function() {
 	$lists.delegate(".text", "dblclick", function() {
 		// 9.1 获取label中的值,以及在todo列表中的索引值
 		var value = $(this).html();
+		$height = parseInt($(this).parents("li").css("height"));
 		$label = $(this);
 		$index = $(".text").index(this);
 		//9.2 动态生成一个input框
@@ -359,6 +361,7 @@ $(function() {
 			$control.prop("checked", true);
 			$clearComplete.addClass("completed");
 		}
+		$label.parents("li").css("height", $height);
 	})
 	// 11 监听todo中label的键盘事件，需要用到事件委托
 	$lists.on("keyup", ".change", function($event) {
@@ -485,7 +488,7 @@ $(function() {
 		var $input = $("<input class='change'> tyep='text'");
 		var height = $label.parent().css("height");
 		$input.attr("value", value);
-		$input.css("height", height);
+		$input.css("height", 58);
 		var resetIndex = $index;
 		var n = $index;
 		// 判断筛选按钮的状态:如果为complete
@@ -506,8 +509,8 @@ $(function() {
 				}
 			}
 		}
-		$label.parents("li").css("height", height);
-		$input.css("top", countTop($lists, n));
+		$label.parents("li").css("height", 58);
+		$input.css("top", n * 59);
 		//  判断此时label中的值是否有删除线，即此时状态是否为true
 		if (conditionArray[$index]) {
 			$input.addClass("checked");
@@ -529,7 +532,7 @@ $(function() {
 		var top = 0;
 		var children = $lists.children();
 		for (var i = 0; i < n; i++) {
-			top += parseInt(children.eq(i).css("height"));
+			top += parseInt(children.eq(i).css("height") + 2);
 		}
 		return top;
 		console.log(top)
