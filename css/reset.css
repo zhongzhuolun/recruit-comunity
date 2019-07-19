@@ -29,7 +29,7 @@ time, mark, audio, video, input, button, textarea,select{
     vertical-align: baseline; 
 }
  
-body{ line-height: 1; }
+body{ line-height: 1; 	-webkit-font-smoothing: antialiased;}
 ul,ol{ list-style: none; }
 input,button,textarea,select,input:focus,textarea:focus{ background:none; outline:none; }
 textarea{ resize: none; overflow: auto;}

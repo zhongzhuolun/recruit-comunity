@@ -204,10 +204,8 @@ $(function() {
 				$item.hide(100);
 			}
 		}
-		console.log(conditionArray)
 		// 3.7 设置left item的值
 		$leftItem.text(getAllFalseIndex(conditionArray).length);
-		// event.preventDefault()
 
 	});
 	// 4 给删除按钮绑定一个点击事件，需要用到事件委托
@@ -306,13 +304,14 @@ $(function() {
 		// 8.3 显示所有为true的items
 		$allComplete.show(100);
 	})
-	// 9 监听todo中label的点击事件，需要用到事件委托
+	// 9 监听todo中label的双击事件，需要用到事件委托
 	$lists.delegate(".text", "dblclick", function() {
 		// 9.1 获取label中的值,以及在todo列表中的索引值
 		var value = $(this).html();
 		$height = parseInt($(this).parents("li").css("height"));
 		$label = $(this);
 		$index = $(".text").index(this);
+		
 		//9.2 动态生成一个input框
 		handleDbclick(value);
 		// 9.3 设置边框的样式
@@ -488,7 +487,10 @@ $(function() {
 		var $input = $("<input class='change'> tyep='text'");
 		var height = $label.parent().css("height");
 		$input.attr("value", value);
-		$input.css("height", 58);
+		$input.css({
+			"height": 58,
+			"text-decoration": "none"
+		});
 		var resetIndex = $index;
 		var n = $index;
 		// 判断筛选按钮的状态:如果为complete
