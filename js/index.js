@@ -63,7 +63,7 @@ $(function() {
 			'<li class="item ' + value + '">' +
 			'<div class="view">' +
 			'<input type="checkbox" class="toggle"/>' +
-			'<label class="text">' + changeText(textValue) + '</label>' +
+			'<label class="text">' + textValue + '</label>' +
 			'<button type="button" class="destroy"></button>' +
 			'</div>' +
 			'</li>';
@@ -88,6 +88,7 @@ $(function() {
 		dataArray.push(data);
 		// 1.3.8 将数据数组存储在localStorage中
 		localStorage.datas = JSON.stringify(dataArray);
+		console.log(textValue)
 	}
 	// 2 给输入框左边的全选小图标绑定一个点击事件
 	$(".check-all").click(function() {
@@ -386,6 +387,8 @@ $(function() {
 	// 12.监听动态生成的输入框的聚焦事件，将其中的内容选中
 	$lists.delegate(".change", "focus", function($event) {
 		// $event.target.select();//内容全选
+		// var height = $label.css("height")
+		// this.css("height", height);
 		selectText($event.target,this.value.length,this.value.length)// 光标移动到最后一个
 	})
 
@@ -475,12 +478,14 @@ $(function() {
 		}
 		return allFalseArr;
 	}
+	
 	// 定义一个专门用来处理双击label元素时动态修改元素内容的函数
 	function handleDbclick(value) {
-		console.log(codeText(value))
-		console.log(value)
+		value = HTMLDecode(value);
 		var $input = $("<input class='change'> tyep='text'");
+		var height = $label.parent().css("height");
 		$input.attr("value", value);
+		$input.css("height", height);
 		var resetIndex = $index;
 		var n = $index;
 		// 判断筛选按钮的状态:如果为complete
@@ -501,7 +506,8 @@ $(function() {
 				}
 			}
 		}
-		$input.css("top", n * 58);
+		$label.parents("li").css("height", height);
+		$input.css("top", countTop($lists, n));
 		//  判断此时label中的值是否有删除线，即此时状态是否为true
 		if (conditionArray[$index]) {
 			$input.addClass("checked");
@@ -517,14 +523,18 @@ $(function() {
 		span.appendChild(value);
 		return span.innerText;
 	}
-	// function codeText(val) {
-	// 	var span = document.createElement("span");
-	// 	span.innerHTML = val;
-	// 	console.log(span.innerHTML)
-	// 	// var value = document.createTextNode(val);	
-	// 	// span.appendChild(value);
-	// 	return span.innerHTML;
-	// }
+
+	// 定义一个函数用于计算input元素的top值
+	function countTop($lists, n) {
+		var top = 0;
+		var children = $lists.children();
+		for (var i = 0; i < n; i++) {
+			top += parseInt(children.eq(i).css("height"));
+		}
+		return top;
+		console.log(top)
+	}
+	
 	// 定义一个函数专门用来处理localstorage中的数据
 	function handleLocal() {
 		// 获取localstorage中的每一条todo数据

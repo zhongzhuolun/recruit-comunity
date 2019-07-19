@@ -220,7 +220,7 @@ aside em a:hover {
 	position: relative;
     font-size: 24px;
     border-bottom: 1px solid #ededed;
-	height: 58px;
+	/* height: 58px; */
 }
 .lists .item.hide {
 	display: none;
@@ -257,7 +257,7 @@ aside em a:hover {
 }
 .lists .change {
 	width: 490px;
-	height: 58px;
+	/* height: 58px; */
 	font-size: 24px;
 	font-family: helvetica;
 	color: #4D4D4D;
