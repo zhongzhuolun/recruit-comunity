@@ -16,6 +16,7 @@ $(function() {
 	var $label; // 创建全局变量$label以便动态修改label中的值使用
 	var dataArray = []; // 创建一个专门用来将数据存储在localstorage中的数组
 	var $height;
+	var hash = window.location.hash;
 	handleLocal(); // 调用初始化数据函数
 	// 1 监听文本框的输入和输出，创建todo，并且将其插入列表中,同时改变items left的值	
 	// 1.1 当文本框失去焦点时
@@ -272,6 +273,8 @@ $(function() {
 		$(this).siblings().removeClass("selected");
 		// 6.3 显示所有元素
 		$allItems.show(100);
+		hash = window.location.hash = "";
+
 
 	})
 	// 7 给Active按钮绑定单击响应函数
@@ -288,6 +291,7 @@ $(function() {
 		for (var i = 0; i < $allNoComplete.length; i++) {
 			$allNoComplete[i].show(100);
 		}
+		hash = window.location.hash = "active";
 
 	})
 	// 8 给Complete按钮绑定单击响应函数
@@ -303,6 +307,8 @@ $(function() {
 		$(this).siblings().removeClass("selected");
 		// 8.3 显示所有为true的items
 		$allComplete.show(100);
+		hash = window.location.hash = "complete";
+
 	})
 	// 9 监听todo中label的双击事件，需要用到事件委托
 	$lists.delegate(".text", "dblclick", function() {
@@ -543,7 +549,6 @@ $(function() {
 	// 定义一个函数专门用来处理localstorage中的数据
 	function handleLocal() {
 		// 获取localstorage中的每一条todo数据
-
 		if (localStorage.datas) {
 			var value = "";
 			var condition = "";
@@ -559,13 +564,17 @@ $(function() {
 					completed = "";
 				}					
 				// active状态
-				if ($activeBtn.prop("class") == "selected") {
+				if (hash == "#active") {
+					$activeBtn.addClass("selected");
+					$activeBtn.siblings().removeClass("selected");
 					if (element.condition) {
-						value = "hide";
+						value = "hide ";
 					} else {
 						value = "";
 					}
-				} else if ($completeBtn.prop("class") == "selected") {
+				} else if (hash == "#complete") {
+					$completeBtn.addClass("selected");
+					$completeBtn.siblings().removeClass("selected");
 					// complete状态
 					if (element.condition) {
 						value = "";
