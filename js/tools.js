@@ -538,3 +538,27 @@ function HTMLEncode(html) {
 	temp = null;
 	return output;
 }
+// 检测目标数据类型
+function checkedType(target) {
+	return Object.prototype.toString.call(target).slice(8, -1);
+}
+// 深度克隆函数
+function deepClone(target) {
+	let result, targetType = checkedType(target);
+	if (targetType === 'Object') {
+		result = {};
+	} else if (targetType === 'Array') {
+		result = [];
+	} else {
+		return target;
+	}
+	for (let i in target) {
+		let value = target[i];
+		if (checkedType(value) === 'Object' || checkedType(value) === 'Array') {
+			result[i] = deepClone(value);
+		} else {
+			result[i] = value
+		}
+	}
+	return result;
+}

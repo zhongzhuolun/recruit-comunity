@@ -229,6 +229,11 @@ aside em a:hover {
 	border-bottom: none;
 	padding: 0;
 }
+.lists .item.top {
+	border-color: #cc9a9a;
+    border-width: 1px;
+    border-style: solid;
+}
 .lists .item .view .toggle {
 	text-align: center;
     width: 60px;
@@ -302,6 +307,17 @@ aside em a:hover {
 }
 .lists .item:hover .destroy{
 	display: block;
+}
+.lists .item .view .topping {
+	position: absolute;
+	top: 22px;
+    right: 70px;
+}
+.lists .item .view .topping.hide {
+	display: none;
+}
+.lists .item .view .togglecolor i {
+	    color: #cc9a9a;
 }
 button {
 	margin: 0;
