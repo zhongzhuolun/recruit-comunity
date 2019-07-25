@@ -190,6 +190,7 @@ $(function() {
 	$lists.on("click", ".toggle", function(event) {
 		// 3.1 拿到被点击元素的序号,状态和其祖先元素li
 		var index = $(".lists .toggle").index(this);
+		// console.log(ev.target);
 		var condition = $(this).prop("checked");
 		var $item = $(this).parents(".item");
 		var $posEle;
