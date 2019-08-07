@@ -1,0 +1,259 @@
+#zzl-page {
+    .container-fluid {
+        background: linear-gradient(45deg, #69667d, #938693, #4d4365);
+        #zzl-head {
+            .my-head {
+                color: #449D88;
+                font-size: 20px;
+                margin-top: 31px;
+            }
+
+            .menu {
+                font-size: 26px;
+                padding-top: 15px;
+
+                .menu-btn {
+                    float: left;
+                    margin-top: 10px;
+                    margin-right: 10px;
+                }
+
+                .breadcrumb {
+                    li {
+                        font-size: 16px;
+                    }
+                }
+            }
+
+            .admin-img {
+                img {
+                    width: 15%;
+                    float: left;
+                    padding-top: 13px;
+                    padding-bottom: 8px;
+                }
+            }
+
+            .dropdown {
+                float: left;
+                padding-top: 12px;
+                padding-left: 10px;
+
+                .btn {
+                    border: none;
+                    font-size: 16px;
+                }
+            }
+
+            .breadcrumb {
+                padding: 0;
+                margin-bottom: 0;
+                list-style: none;
+                background-color: transparent;
+                border-radius: 4px;
+            }
+            // 实现列高度相同
+            &.row [class*="same-height"] {
+
+                margin-bottom: -899px;
+
+                padding-bottom: 899px;
+
+            }
+
+            &.row {
+                overflow: hidden;
+            }
+        }
+
+        #zzl-body {
+            .manage {
+                background: linear-gradient(45deg, #69667d, #938693, #4d4365);
+            }
+            .my-list-wrap {
+                background: #1A2531;
+
+                a {
+                    border: none;
+                }
+
+                .list-group {
+                    .list-group-item {
+                        background: transparent;
+                        color: #ccc;
+                        padding: 10px 10px 10px 12px;
+
+                        &:first-child {
+                            border-top-left-radius: 0;
+                            border-top-right-radius: 0;
+                        } 
+
+                        .badge {
+                            position: relative;
+                            background: rgba(225, 0, 0, .7);
+                        }
+                        
+                        &.active {
+                            color: white;
+                            background: #449D88;
+                            .glyphicon {
+                                color: white;
+                            }
+                            .badge {
+                                display: none;
+                            }
+                            
+                        }
+                    }
+                }
+            }
+
+            // 实现列高度相同
+            &.row [class*="same-height"] {
+
+                margin-bottom: -1899px;
+
+                padding-bottom: 1899px;
+
+            }
+
+            &.row {
+                overflow: hidden;
+            }
+
+            td {
+                vertical-align: middle;
+                text-align: center;
+                color: #fff;
+            }
+            #my-home {
+                // background: url(../img/16sucai_p565c146_765.jpg) no-repeat; /* 标准语法 */
+                background: linear-gradient(45deg, #69667d, #938693, #4d4365); /* 标准语法 */
+                background-size: cover;
+                .home-datas {
+                    margin-top: 100px;
+                    // margin-left: 10px;
+                
+                    .home-data {
+                        position: relative;
+                        float: left;
+                        width: 11.2vw;
+                        height: 100px;
+                        background: #449D88;
+                        margin: 0 1.2vw;
+                        color: white;
+                        overflow: hidden;
+                        &:nth-child(1) {
+                            background: #449D88;
+                        }
+                        &:nth-child(2) {
+                            background: #406cb8;
+                        }
+                        &:nth-child(3) {
+                            background: #c0444c;
+                        }
+                        &:nth-child(4) {
+                            background: #4c4c4c;
+                        }
+                        .total {
+                            margin: 20px 0 0 45px; 
+                            font-size: 16px;
+                            p {
+                                text-align: center;
+                            }
+                        }
+                        .glyphicon {
+                            position: absolute;
+                            top: 35%;
+                            left: 10%;
+                            font-size: 32px;
+                        }
+                    
+                    }
+                    
+                } 
+                
+                .sector {
+                    background: #39455e82;
+                    margin-top: 50px;
+                    margin-bottom: 50px;
+                }
+            }
+            #banner-manage{
+                .img-zoom {
+                    position: absolute;
+                    z-index: 1;
+                     display: none;
+                }
+                .img-container {
+                   background: #cecbcb; 
+                   top: 30px; 
+                   z-index: 1;
+                   height: 800px;
+                   display: none;
+                   overflow-y: auto;
+                   overflow-x: hidden;
+                   .close-img-container {
+                    opacity: .8;
+                    z-index: 2;
+                    position: absolute;
+                    right: 20px;
+                   }
+                }
+                 .mybtn {
+                    width: 50px;
+                    height: 50px;
+                    line-height: 50px;
+                    background: radial-gradient(#5ac0de, #7b7083);
+                    color: white;
+                    font-size: 16px;
+                    position: relative;
+                    float: right;
+                    text-align: center;
+                    overflow: hidden;
+                    margin: 20px 170px 10px 0;
+                    border-radius: 50% 50%;
+                    cursor: pointer;
+                    // top: 550px;
+                    .box {
+                        width: 4px;
+                        height: 4px;
+                        background: radial-gradient(red, black);
+                        position: absolute;
+                        border-radius: 50%;
+                        animation: mybtn 1s;
+                        opacity: 0;
+                        transform: scale(100);
+                    }
+                }
+                
+                
+                
+                @keyframes mybtn {
+                    from {
+                        opacity: 0.5;
+                        transform: scale(0);
+                    }
+                
+                    to {
+                        opacity: 0;
+                        transform: scale(100);
+                    }
+                }
+            }
+            .table {
+                .btn {
+                    margin-left: 10px;
+                }
+            }
+
+        }
+    }
+
+    button {
+        outline: 0;
+    }
+    .table-hover>tbody>tr:hover {
+        background-color: #595cc3;
+    }
+}

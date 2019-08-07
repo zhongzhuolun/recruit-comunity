@@ -1,0 +1,205 @@
+#zzl-page .container-fluid {
+  background: linear-gradient(45deg, #69667d, #938693, #4d4365);
+}
+#zzl-page .container-fluid #zzl-head .my-head {
+  color: #449D88;
+  font-size: 20px;
+  margin-top: 31px;
+}
+#zzl-page .container-fluid #zzl-head .menu {
+  font-size: 26px;
+  padding-top: 15px;
+}
+#zzl-page .container-fluid #zzl-head .menu .menu-btn {
+  float: left;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+#zzl-page .container-fluid #zzl-head .menu .breadcrumb li {
+  font-size: 16px;
+}
+#zzl-page .container-fluid #zzl-head .admin-img img {
+  width: 15%;
+  float: left;
+  padding-top: 13px;
+  padding-bottom: 8px;
+}
+#zzl-page .container-fluid #zzl-head .dropdown {
+  float: left;
+  padding-top: 12px;
+  padding-left: 10px;
+}
+#zzl-page .container-fluid #zzl-head .dropdown .btn {
+  border: none;
+  font-size: 16px;
+}
+#zzl-page .container-fluid #zzl-head .breadcrumb {
+  padding: 0;
+  margin-bottom: 0;
+  list-style: none;
+  background-color: transparent;
+  border-radius: 4px;
+}
+#zzl-page .container-fluid #zzl-head.row [class*="same-height"] {
+  margin-bottom: -899px;
+  padding-bottom: 899px;
+}
+#zzl-page .container-fluid #zzl-head.row {
+  overflow: hidden;
+}
+#zzl-page .container-fluid #zzl-body .manage {
+  background: linear-gradient(45deg, #69667d, #938693, #4d4365);
+}
+#zzl-page .container-fluid #zzl-body .my-list-wrap {
+  background: #1A2531;
+}
+#zzl-page .container-fluid #zzl-body .my-list-wrap a {
+  border: none;
+}
+#zzl-page .container-fluid #zzl-body .my-list-wrap .list-group .list-group-item {
+  background: transparent;
+  color: #ccc;
+  padding: 10px 10px 10px 12px;
+}
+#zzl-page .container-fluid #zzl-body .my-list-wrap .list-group .list-group-item:first-child {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+#zzl-page .container-fluid #zzl-body .my-list-wrap .list-group .list-group-item .badge {
+  position: relative;
+  background: rgba(225, 0, 0, 0.7);
+}
+#zzl-page .container-fluid #zzl-body .my-list-wrap .list-group .list-group-item.active {
+  color: white;
+  background: #449D88;
+}
+#zzl-page .container-fluid #zzl-body .my-list-wrap .list-group .list-group-item.active .glyphicon {
+  color: white;
+}
+#zzl-page .container-fluid #zzl-body .my-list-wrap .list-group .list-group-item.active .badge {
+  display: none;
+}
+#zzl-page .container-fluid #zzl-body.row [class*="same-height"] {
+  margin-bottom: -1899px;
+  padding-bottom: 1899px;
+}
+#zzl-page .container-fluid #zzl-body.row {
+  overflow: hidden;
+}
+#zzl-page .container-fluid #zzl-body td {
+  vertical-align: middle;
+  text-align: center;
+  color: #fff;
+}
+#zzl-page .container-fluid #zzl-body #my-home {
+  background: linear-gradient(45deg, #69667d, #938693, #4d4365);
+  /* 标准语法 */
+  background-size: cover;
+}
+#zzl-page .container-fluid #zzl-body #my-home .home-datas {
+  margin-top: 100px;
+}
+#zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data {
+  position: relative;
+  float: left;
+  width: 11.2vw;
+  height: 100px;
+  background: #449D88;
+  margin: 0 1.2vw;
+  color: white;
+  overflow: hidden;
+}
+#zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data:nth-child(1) {
+  background: #449D88;
+}
+#zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data:nth-child(2) {
+  background: #406cb8;
+}
+#zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data:nth-child(3) {
+  background: #c0444c;
+}
+#zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data:nth-child(4) {
+  background: #4c4c4c;
+}
+#zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data .total {
+  margin: 20px 0 0 45px;
+  font-size: 16px;
+}
+#zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data .total p {
+  text-align: center;
+}
+#zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data .glyphicon {
+  position: absolute;
+  top: 35%;
+  left: 10%;
+  font-size: 32px;
+}
+#zzl-page .container-fluid #zzl-body #my-home .sector {
+  background: #39455e82;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+#zzl-page .container-fluid #zzl-body #banner-manage .img-zoom {
+  position: absolute;
+  z-index: 1;
+  display: none;
+}
+#zzl-page .container-fluid #zzl-body #banner-manage .img-container {
+  background: #cecbcb;
+  top: 30px;
+  z-index: 1;
+  height: 800px;
+  display: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+#zzl-page .container-fluid #zzl-body #banner-manage .img-container .close-img-container {
+  opacity: .8;
+  z-index: 2;
+  position: absolute;
+  right: 20px;
+}
+#zzl-page .container-fluid #zzl-body #banner-manage .mybtn {
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  background: radial-gradient(#5ac0de, #7b7083);
+  color: white;
+  font-size: 16px;
+  position: relative;
+  float: right;
+  text-align: center;
+  overflow: hidden;
+  margin: 20px 170px 10px 0;
+  border-radius: 50% 50%;
+  cursor: pointer;
+}
+#zzl-page .container-fluid #zzl-body #banner-manage .mybtn .box {
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(red, black);
+  position: absolute;
+  border-radius: 50%;
+  animation: mybtn 1s;
+  opacity: 0;
+  transform: scale(100);
+}
+@keyframes mybtn {
+  from {
+    opacity: 0.5;
+    transform: scale(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(100);
+  }
+}
+#zzl-page .container-fluid #zzl-body .table .btn {
+  margin-left: 10px;
+}
+#zzl-page button {
+  outline: 0;
+}
+#zzl-page .table-hover > tbody > tr:hover {
+  background-color: #595cc3;
+}
