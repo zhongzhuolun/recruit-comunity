@@ -315,6 +315,8 @@ $(function () {
             $obj.find('.badge').hide();
             $obj.siblings().removeClass('active');
             $obj.siblings().find('.toggle').removeClass('glyphicon-minus');
+            // $breadcrumb.eq(1).removeClass('active').html('<a href="javascript:;">'+  $obj.parents('.side').find('.active').find('.text').text() +'</a>' );
+            // $breadcrumb.eq(2).addClass('active').show().html($obj.find('.text').text());
         },
         // 生成轮播图管理界面的初始化数据
         initBannerManagePage: (url, $tbody) => {
@@ -557,11 +559,8 @@ $(function () {
         // 控制侧边栏社团管理下拉
         controlSlide: ($nav, $obj) => {
             $nav.slideToggle().siblings('.row').slideUp();
-            if ($breadcrumb.eq(2).hasClass('active')) {
-                $breadcrumb.eq(1).removeClass('active').html('<a href="javascript:;">'+  $obj.find('.text').text() +'</a>' );
-            } else {
+            if (!$breadcrumb.eq(2).hasClass('active')) {
                 $breadcrumb.eq(1).addClass('active').show().html($obj.find('.text').text());
-
             }
         }
     };
