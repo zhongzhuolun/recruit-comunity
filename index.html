@@ -18,7 +18,7 @@
   <main id="zzl-page">
     <section class="container-fluid">
 
-      <section class="row" id="zzl-head">
+      <section class="row" id="zzl-head" style="height: 84px">
         <!-- <section class="hidden-xs hidden-sm col-md-1  col-lg-1"></section> -->
         <section class="col-xs-4 col-sm-3 col-md-3 col-lg-2 same-height" style="background: #505064;">
           <h1 class="my-head">社团管理系统</h1>
@@ -39,21 +39,23 @@
               <img src="./src/img/WechatIMG1.png" class="img-circle" alt="管理员头像">
             </a>
           </section>
-
           <section class="dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"
+            <button class="btn btn-primary btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="true">
               超级管理员
               <span class="caret"></span>
             </button>
-
+            <ul class="dropdown-menu">
+                <li ><a href="javascript:;">退出登录</a></li>
+              </ul>
           </section>
+        <section class="skin"><button type="button" class="btn btn-primary">夜间模式</button></section>
+
         </section>
-        <!-- <section class="hidden-xs  hidden-sm col-md-1 col-lg-1"></section> -->
+
 
       </section>
       <section class="row main-content" id="zzl-body">
-        <!-- <section class="hidden-xs hidden-sm col-md-1  col-lg-1" style="border: 1px solid transparent;"></section> -->
         <!-- 侧边栏 -->
         <section class="col-xs-4 col-sm-3 col-md-3 col-lg-2 same-height" style="background: #1A2531;">
           <section class="my-list-wrap side" style="height: 100vh;">
@@ -80,10 +82,9 @@
 
               </div>
               <a href="javascript:;" class="list-group-item nav-apply">
-                <span class="glyphicon glyphicon-check" aria-hidden="true"></span><span class="badge">5</span>
+                <span class="glyphicon glyphicon-check" aria-hidden="true"></span><span class="badge">27</span>
                 审核管理
                 <span class="glyphicon glyphicon-plus  toggle" aria-hidden="true"></span>
-                <!-- <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>  -->
               </a>
               <div class="row banner-fold-nav" style="display: none;">
                 <div class="col-xs-3 col-sm-3 col-md-2 col-lg-2"></div>
@@ -91,11 +92,13 @@
                   <section class="list-group">
                     <a href="javascript:;" class="list-group-item user-apply detail">
                       <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
-                      用户注册审核
+                        用户注册审核
+                     <span class="badge">13</span>
                     </a>
                     <a href="javascript:;" class="list-group-item banner-apply detail">
                       <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
                       轮播图审核
+                    <span class="badge">14</span>
                     </a>
                   </section>
                 </div>
@@ -106,6 +109,22 @@
                 内容管理
                 <span class="glyphicon glyphicon-plus toggle" aria-hidden="true"></span>
               </a>
+              <div class="row content-fold-nav" style="display: none;">
+                  <div class="col-xs-3 col-sm-3 col-md-2 col-lg-2"></div>
+                  <div class="col-xs-9 col-sm-9 col-md-10 col-lg-10">
+                    <!-- <section class="list-group">
+                      <a href="javascript:;" class="list-group-item user-apply detail">
+                        <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+                        用户注册审核
+                      </a>
+                      <a href="javascript:;" class="list-group-item banner-apply detail">
+                        <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+                        轮播图审核
+                      </a>
+                    </section> -->
+                  </div>
+  
+                </div>
 
             </section>
           </section>
@@ -199,7 +218,6 @@
               </tr>
             </thead>
             <tbody>
-              
             </tbody>
             <tfoot>
 
@@ -229,15 +247,12 @@
             </section>
             <section style="overflow: hidden;padding-right: 50%;">
               <button type="button" class="close close-preview" aria-label="Close"><span aria-hidden="true"
-                  style="font-size: 48px; color: red">&times;</span></button>
-
+                  style="font-size: 48px; background: white;">&times;</span></button>
             </section>
           </section>
           <div class="page-header">
               <h1>正在展示的轮播图信息</h1>
-              <!-- <button type="button" class="btn btn-success">添加</button> -->
 				     	<div class="mybtn add">添加</div>
-
             </div>
             <table class="table table-bordered table-hover table-condensed">
   
@@ -246,6 +261,7 @@
                   <td>序号</td>
                   <td>社团名称</td>
                   <td>社团管理员</td>
+                  <td>学号</td>
                   <td>手机号</td>
                   <td>社团ID</td>
                   <td>展示中</td>
@@ -253,78 +269,6 @@
                 </tr>
               </thead>
               <tbody>
-                <tr class="showing">
-                  <td class="serial-num">1</td>
-                  <td class="showing-commuity-name">信息工程学院学生会</td>
-                  <td class="showing-username">xxx</td>
-                  <td class="showing-userphone">177188xxxx</td>
-                  <td class="showing-id"> 1</td>
-                  <td><a href="javascript:;" class="thumbnail">
-                      <img class="img-scale displaying" style="width: 8vw;" src="src/img/timg.jpeg" alt="...">
-                    </a></td>
-                  <td>
-                    <button type="button" class="btn btn-info preview">预览</button>
-                    <button type="button" class="btn btn-primary replace">替换</button>
-                    <button type="button" class="btn btn-danger delete-showing">删除</button>
-                  </td>
-                </tr>
-                <tr class="showing">
-                  <td class="serial-num">2</td>
-                  <td class="showing-commuity-name">信息工程学院团委</td>
-                  <td class="showing-username">xxx</td>
-                  <td class="showing-userphone">177188xxxx</td>
-                  <td class="showing-id"> 2</td>
-                  <td><a href="javascript:;" class="thumbnail">
-                      <img class="img-scale displaying" style="width: 8vw;" src="src/img/timg (1).jpeg" alt="...">
-                    </a></td>
-                  <td>
-                    <button type="button" class="btn btn-info preview">预览</button>
-                    <button type="button" class="btn btn-primary replace">替换</button>
-                    <button type="button" class="btn btn-danger delete-showing">删除</button></td>
-                </tr>
-                <tr class="showing">
-                  <td class="serial-num">3</td>
-                  <td class="showing-commuity-name">科技创新协会</td>
-                  <td class="showing-username">xxx</td>
-                  <td class="showing-userphone">177188xxxx</td>
-                  <td class="showing-id"> 3</td>
-                  <td><a href="javascript:;" class="thumbnail">
-                      <img class="img-scale displaying" style="width: 8vw;" src="src/img/timg (2).jpeg" alt="...">
-                    </a></td>
-                  <td>
-                    <button type="button" class="btn btn-info preview">预览</button>
-                    <button type="button" class="btn btn-primary replace">替换</button>
-                    <button type="button" class="btn btn-danger delete-showing">删除</button></td>
-                </tr>
-                <tr class="showing">
-                  <td class="serial-num">4</td>
-                  <td class="showing-commuity-name">广播台</td>
-                  <td class="showing-username">xxx</td>
-                  <td class="showing-userphone">177188xxxx</td>
-                  <td class="showing-id"> 4</td>
-                  <td><a href="javascript:;" class="thumbnail">
-                      <img class="img-scale displaying" style="width: 8vw;" src="src/img/timg (3).jpeg" alt="...">
-                    </a></td>
-                  <td>
-                    <button type="button" class="btn btn-info preview">预览</button>
-                    <button type="button" class="btn btn-primary replace">替换</button>
-                    <button type="button" class="btn btn-danger delete-showing">删除</button></td>
-                </tr>
-                <tr class="showing">
-                  <td class="serial-num">5</td>
-                  <td class="showing-commuity-name">蛋协</td>
-                  <td class="showing-username">xxx</td>
-                  <td class="showing-userphone">177188xxxx</td>
-                  <td class="showing-id"> 5</td>
-                  <td><a href="javascript:;" class="thumbnail">
-                      <img class="img-scale displaying" style="width: 8vw;" src="src/img/timg (4).jpeg" alt="...">
-                    </a></td>
-                  <td>
-                    <button type="button" class="btn btn-info preview">预览</button>
-                    <button type="button" class="btn btn-primary replace">替换</button>
-                    <button type="button" class="btn btn-danger delete-showing">删除</button></td>
-                </tr>
-  
               </tbody>
               <tfoot>
  
@@ -332,129 +276,19 @@
   
   
             </table>
-          <section class="img-container">
-            <div class="row" style="padding-right: 22px">
+          <section class="img-container" id="skip">
+            <div class="row" style="padding-right: 22px; text-align: center;">
               <div class="col-sm-8 col-md-8">
                 <h2><small>审核通过的轮播图片</small></h2>
               </div>
               <div class="col-sm-4 col-md-4" style="margin-top: 20px;">
                 <button type="button" class="close close-img-container" aria-label="Close"><span aria-hidden="true"
                     style="font-size: 34px;  color: brown;">&times;</span></button>
-
               </div>
             </div>
-            <div class="row">
-              <div class="col-sm-6 col-md-4 temp">
-                <div class="thumbnail">
-                  <img src="src/img/timg (1).jpeg" alt="...">
-                  <div class="caption">
-                    <h3 class="commuity-name">科技创新协会</h3>
-                    <p class="username">zarek</p>
-                    <p><a href="javascript:;" class="btn btn-primary comfirm-replace" role="button">替换</a> <a
-                        href="javascript:;" class="btn btn-success comfirm-add" role="button">添加</a></p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-4 temp">
-                <div class="thumbnail">
-                  <img src="src/img/timg (2).jpeg" alt="...">
-                  <div class="caption">
-                    <h3 class="commuity-name">信息工程学院青年志愿者协会</h3>
-                    <p class="username">lzn</p>
-                    <p><a href="javascript:;" class="btn btn-primary comfirm-replace" role="button">替换</a> <a
-                        href="javascript:;" class="btn btn-success comfirm-add" role="button">添加</a></p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-4 temp">
-                <div class="thumbnail">
-                  <img src="src/img/timg (3).jpeg" alt="...">
-                  <div class="caption">
-                    <h3 class="commuity-name">广播台</h3>
-                    <p class="username">zarek</p>
-                    <p><a href="javascript:;" class="btn btn-primary comfirm-replace" role="button">替换</a>
-                      <a href="javascript:;" class="btn btn-success comfirm-add" role="button">添加</a></p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-4 temp">
-                <div class="thumbnail">
-                  <img src="src/img/timg (4).jpeg" alt="...">
-                  <div class="caption">
-                    <h3 class="commuity-name">蛋协</h3>
-                    <p class="username">zarek</p>
-                    <p><a href="javascript:;" class="btn btn-primary comfirm-replace" role="button">替换</a>
-                      <a href="javascript:;" class="btn btn-success comfirm-add" role="button">添加</a></p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-4 temp">
-                <div class="thumbnail">
-                  <img src="src/img/timg (6).jpeg" alt="...">
-                  <div class="caption">
-                    <h3 class="commuity-name">ACM</h3>
-                    <p class="username">ljx</p>
-                    <p>
-                      <a href="javascript:;" class="btn btn-primary comfirm-replace" role="button">替换</a>
-                      <a href="javascript:;" class="btn btn-success comfirm-add" role="button">添加</a>
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-4 temp">
-                <div class="thumbnail">
-                  <img src="src/img/timg (6).jpeg" alt="...">
-                  <div class="caption">
-                    <h3 class="commuity-name">蛋协</h3>
-                    <p class="username">zxx</p>
-                    <p>
-                      <a href="javascript:;" class="btn btn-primary comfirm-replace" role="button">替换</a>
-                      <a href="javascript:;" class="btn btn-success comfirm-add" role="button">添加</a>
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-4 temp">
-                <div class="thumbnail">
-                  <img src="src/img/timg (6).jpeg" alt="...">
-                  <div class="caption">
-                    <h3 class="commuity-name">广播台</h3>
-                    <p class="username">ht</p>
-                    <p>
-                      <a href="javascript:;" class="btn btn-primary comfirm-replace" role="button">替换</a>
-                      <a href="javascript:;" class="btn btn-success comfirm-add" role="button">添加</a>
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-4 temp">
-                <div class="thumbnail">
-                  <img src="src/img/timg (6).jpeg" alt="...">
-                  <div class="caption">
-                    <h3 class="commuity-name">信息工程学生会</h3>
-                    <p class="username">zarek</p>
-                    <p>
-                      <a href="javascript:;" class="btn btn-primary comfirm-replace" role="button">替换</a>
-                      <a href="javascript:;" class="btn btn-success comfirm-add" role="button">添加</a>
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-
+            <div class="container">         
             </div>
-
-
           </section>
-          
-
-          <!-- <nav aria-label="...">
-            <ul class="pager">
-              <li class="disabled"><a href="javascript:;">上一页</a></li>
-              <p style="display: inline;"><span>1</span>/<span>5</span></p>
-              <li><a href="javascript:;">下一页</a></li>
-            </ul>
-          </nav> -->
         </section>
         <!-- 审核社团管理员注册管理界面 -->
         <section class="col-xs-8 col-sm-9 col-md-9 col-lg-10 same-height manage" id="user-apply" style="display: none;">
@@ -466,6 +300,7 @@
                 <td>序号</td>
                 <td>社团名称</td>
                 <td>社团管理员</td>
+                <td>学号</td>
                 <td>手机号</td>
                 <td>社团ID</td>
                 <td>操作</td>
@@ -514,6 +349,7 @@
                 <td>序号</td>
                 <td>社团名称</td>
                 <td>社团管理员</td>
+                <td>学号</td>
                 <td>手机号</td>
                 <td>社团ID</td>
                 <td>申请图片</td>
@@ -521,51 +357,6 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>
-                  <div class="checkbox">
-                    <label>
-                      <input type="checkbox">
-                    </label>
-                  </div>
-                </td>
-                <td>1</td>
-                <td>信息工程学院学生会</td>
-                <td>xxx</td>
-                <td>177188xxxx</td>
-                <td> 1
-                </td>
-                <td><a href="javascript:;" class="thumbnail">
-                    <img class="img-scale" style="width: 8vw;" src="src/img/timg (7).jpeg" alt="...">
-                  </a></td>
-                <td>
-                  <button type="button" class="btn btn-info preview">预览</button>&nbsp;&nbsp;&nbsp;
-                  <button type="button" class="btn btn-success ">通过</button>&nbsp;&nbsp;&nbsp;<button type="button"
-                    class="btn btn-danger ">删除</button></td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="checkbox">
-                    <label>
-                      <input type="checkbox">
-                    </label>
-                  </div>
-                </td>
-                <td>1</td>
-                <td>信息工程学院学生会</td>
-                <td>xxx</td>
-                <td>177188xxxx</td>
-                <td> 1
-                </td>
-                <td><a href="javascript:;" class="thumbnail">
-                    <img class="img-scale" style="width: 8vw;" src="src/img/timg.jpeg" alt="...">
-                  </a></td>
-                <td>
-                  <button type="button" class="btn btn-info preview">预览</button>&nbsp;&nbsp;&nbsp;
-                  <button type="button" class="btn btn-success ">通过</button>&nbsp;&nbsp;&nbsp;<button type="button"
-                    class="btn btn-danger ">删除</button></td>
-              </tr>
-
             </tbody>
             <tfoot>
 
@@ -573,12 +364,12 @@
 
 
           </table>
-          <div class="checkbox" style="color: white">
+          <div class="checkbox check-all" style="color: white">
             <label>
               <input type="checkbox"> 全选
             </label>
-            <button class="btn btn-success pass-all">通过</button>
-            <button class="btn btn-danger delete-all">删除</button>
+            <button class="btn btn-success pass-all-checked">通过</button>
+            <button class="btn btn-danger delete-all-checked">删除</button>
           </div>
           <nav aria-label="...">
             <ul class="pager">
@@ -588,9 +379,6 @@
             </ul>
           </nav>
         </section>
-
-        <!-- <section class="hidden-xs  hidden-sm col-md-1 col-lg-1" style="border: 1px transparent; border-top: 1px solid;">
-        </section> -->
 
       </section>
     </section>
