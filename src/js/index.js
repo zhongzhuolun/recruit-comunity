@@ -1,7 +1,7 @@
 $(function () {
-
     // 定义全局变量
-    const $breadcrumb = $('.breadcrumb') // 路径导航条
+    const $myPage = $('#zzl-page'); // 页面包裹元素
+    const $breadcrumb = $('.breadcrumb li') // 路径导航条
     const $navCommuity = $('.nav-commuity'); // 侧边栏社团管理
     const $userInformation = $('.user-information') // 侧边栏用户管理
     const $bannerManage = $('.banner-manage') // 侧边栏轮播图管理
@@ -16,6 +16,8 @@ $(function () {
     const $userApplyPage = $('#user-apply'); // 审核社团管理员注册管理界面
     const $bannerApplyPage = $('#banner-apply'); // 轮播图审核管理界面
     const $homeBtn = $('.home-btn'); // 获取返回超级管理员首页的按钮
+    const $skinBtn = $('.skin .btn'); // 获取换肤按钮
+    const $pageBtns = $('.home-data'); // 获取主页的四个按钮
     // 定义一个对象，专门用于存储处理数据的函数
     const handleData = {
         // 序列化函数
@@ -27,6 +29,15 @@ $(function () {
                 item.innerHTML = key + 1;
             })
 
+        },
+        // 一键换肤功能
+        switchingSkin: () => {
+            $myPage.toggleClass('normal')
+            if ($skinBtn.text() == '夜间模式') {
+                $skinBtn.text('日间模式');
+            } else {
+                $skinBtn.text('夜间模式');
+            }
         },
         // 首页扇形图表
         echartStr: (names, brower) => {
@@ -83,41 +94,129 @@ $(function () {
         // 侧边栏颜色控制
         resetColor: ($obj) => {
             $obj.parents('.list-group').eq(1).find('.detail').css({
-                color: "#ccc"
+                color: "rgb(120, 117, 117)"
             });
             $obj.css({
                 color: "#25a7ab"
             });
         },
         // 生成首页图表数据
-        sector: (that) => {
+        sector: () => {
+            // 定义两个数组，分别存储数目和名称，用于扇形图表
             let brower = [],
-                names = [];
-            let index = $(that).data('index');
-            $.ajax({
-                type: 'get',
-                url: './echartOne.json',
-                dataType: "json",
-                success: function (result) {
-                    $.each(eval('result.list' + index), function (index, item) {
-                        names.push(item.name);
-                        brower.push({
-                            name: item.name,
-                            value: item.value
-                        });
+                names = ["用户人数", "轮播图数目", "待审核社团", "待审核轮播图"];
+            // 存储待审核总数目
+            let applyNum = 0;
+            // 利用promise对象，完成异步操作
+            const loadData = (url) => {
+                return new Promise((resolve, reject) => {
+                    $.ajax({
+                        type: 'get',
+                        url,
+                        dataType: "json",
+                        success: function (result) {
+                            $pageBtns.eq(0).find('.num').html(result.object.length);
+                            brower.push({
+                                name: names[0],
+                                value: result.object.length
+                            });
+                            resolve();
+                        },
+                        error: function (errorMsg) {
+                            alert("请求数据失败!");
+                            reject();
+                        }
                     });
-                    handleData.echartStr(names, brower);
-                },
-                error: function (errorMsg) {
-                    alert("图表请求数据失败!");
-                }
-            });
+                })
+            };
+            loadData("./exist-comunity.json")
+                .then(() => {
+                    $.ajax({
+                        type: 'get',
+                        url: "./showing-banner.json",
+                        dataType: "json",
+                        success: function (result) {
+
+                            $pageBtns.eq(1).find('.banner-num').html(result.object.length);
+                            brower.push({
+                                name: names[1],
+                                value: result.object.length
+                            });
+                        },
+                        error: function (errorMsg) {
+                            alert("请求数据失败!");
+                        }
+                    });
+                }, () => {
+
+                })
+                .then(() => {
+                    $.ajax({
+                        type: 'get',
+                        url: "./register.json",
+                        dataType: "json",
+                        success: function (result) {
+                            let registerLen = result.object.length;
+                            applyNum = registerLen;
+                            if (registerLen > 0) {
+                                $userApply.find('.badge').html(registerLen)
+                            } else {
+                                $userApply.find('.badge').hide();
+                            }
+                            $pageBtns.eq(2).find('.user-apply-num').html(registerLen);
+                            brower.push({
+                                name: names[2],
+                                value: registerLen
+                            });
+                        },
+                        error: function (errorMsg) {
+                            alert("请求数据失败!");
+                        }
+                    });
+                }, () => {
+
+                })
+                .then(() => {
+                    $.ajax({
+                        type: 'get',
+                        url: "./temp-banners.json",
+                        dataType: "json",
+                        success: function (result) {
+                            let tempBannersLen = result.object.length;
+                            applyNum += tempBannersLen;
+                            if (tempBannersLen > 0) {
+                                $bannerApply.find('.badge').html(tempBannersLen);
+                            } else {
+                                $bannerApply.find('.badge').hide();
+                            }
+                            if (applyNum > 0) {
+                                $navApply.find('.badge').html(applyNum)
+                            } else {
+                                $navApply.find('.badge').hide();
+                            }
+                            $pageBtns.eq(3).find('.banner-apply-num').html(tempBannersLen);
+                            brower.push({
+                                name: names[3],
+                                value: tempBannersLen
+                            });
+                            handleData.echartStr(names, brower);
+                        },
+                        error: function (errorMsg) {
+                            alert("请求数据失败!");
+                        }
+                    });
+                }, () => {});
         },
         // 主页切换页面
         changePage: ($nav, $pageBtn, $page) => {
             $nav.slideDown().siblings('.row').slideUp();
+            $nav.prev().siblings('.list-group-item').find('.toggle').removeClass('glyphicon-minus');
+            $nav.prev().find('.toggle').addClass('glyphicon-minus');
             handleData.sideControl($pageBtn, $page);
             $pageBtn.trigger('click');
+            $pageBtn.parents('.row').eq(0).prev().addClass('active').siblings().removeClass('active');
+            $breadcrumb.eq(1).removeClass('active').html('<a href="javascript:;">'+  $pageBtn.parents('.side').find('.active').find('.text').text() +'</a>' ).show();
+            $breadcrumb.eq(2).addClass('active').show().html($pageBtn.find('.text').text());
         },
         // 生成用户管理界面初始化数据
         initUserInformation: ($tbody, url) => {
@@ -167,7 +266,7 @@ $(function () {
             }
             $delegate.find('.radio input').each((key, item) => {
                 if (!$(item).prop('checked')) {
-                    flag =false;
+                    flag = false;
                 }
             });
             $checkAll.children().prop('checked', flag);
@@ -206,6 +305,8 @@ $(function () {
             handleData.resetColor($obj)
             $page.siblings('.manage').fadeOut();
             $page.fadeIn();
+            $breadcrumb.eq(1).removeClass('active').html('<a href="javascript:;">'+  $obj.parents('.side').find('.active').find('.text').text() +'</a>' );
+            $breadcrumb.eq(2).addClass('active').show().html($obj.find('.text').text());
         },
         // 侧边栏主管理(不切换界面)
         mianControl: ($obj) => {
@@ -217,37 +318,37 @@ $(function () {
         },
         // 生成轮播图管理界面的初始化数据
         initBannerManagePage: (url, $tbody) => {
-                $.ajax({
-                    type: 'get',
-                    url,
-                    dataType: "json",
-                    success: function (result) {
-                            $(result.object).each((key, item) => {
-                                let $item = '<tr class="showing">' +
-                                            '<td class="serial-num">' + (key + 1) + '</td>' +
-                                            '<td class="showing-commuity-name">' + item.comunity + '</td>' +
-                                            '<td class="showing-username">' + item.manage + '</td>' +
-                                            '<td class="showing-student-num">' + item.studentNum + '</td>' +
-                                            '<td class="showing-userphone">' + item.phoneNum + '</td>' +
-                                            '<td class="showing-id">' + item['comunity-id'] + '</td>' +
-                                            '<td><a href="javascript:;" class="thumbnail">' +
-                                            '<img class="img-scale displaying" style="width: 8vw;" src="' + item.src + '" alt="...">' +
-                                            '</a></td>' +
-                                            '<td>' +
-                                            '<button type="button" class="btn btn-info preview">预览</button>' +
-                                            '<button type="button" class="btn btn-primary replace">替换</button>' +
-                                            '<button type="button" class="btn btn-danger delete-showing">删除</button>' +
-                                            '</td>' +
-                                            '</tr>';
-                                            $tbody.append($item);
-                            });
-                    },
-                    error: function (errorMsg) {
-                        alert("请求数据失败!");
-                    }
-                });
+            $.ajax({
+                type: 'get',
+                url,
+                dataType: "json",
+                success: function (result) {
+                    $(result.object).each((key, item) => {
+                        let $item = '<tr class="showing">' +
+                            '<td class="serial-num">' + (key + 1) + '</td>' +
+                            '<td class="showing-commuity-name">' + item.comunity + '</td>' +
+                            '<td class="showing-username">' + item.manage + '</td>' +
+                            '<td class="showing-student-num">' + item.studentNum + '</td>' +
+                            '<td class="showing-userphone">' + item.phoneNum + '</td>' +
+                            '<td class="showing-id">' + item['comunity-id'] + '</td>' +
+                            '<td><a href="javascript:;" class="thumbnail">' +
+                            '<img class="img-scale displaying" style="width: 8vw;" src="' + item.src + '" alt="...">' +
+                            '</a></td>' +
+                            '<td>' +
+                            '<button type="button" class="btn btn-info preview">预览</button>' +
+                            '<button type="button" class="btn btn-primary replace">替换</button>' +
+                            '<button type="button" class="btn btn-danger delete-showing">删除</button>' +
+                            '</td>' +
+                            '</tr>';
+                        $tbody.append($item);
+                    });
+                },
+                error: function (errorMsg) {
+                    alert("请求数据失败!");
+                }
+            });
         },
-         // 轮播图容器函数：参数一：触发事件的对象；参数二：最外层包裹容器；参数三：内部图片容器；参数四：点击的正在展示的那一张轮播图元素
+        // 轮播图容器函数：参数一：触发事件的对象；参数二：最外层包裹容器；参数三：内部图片容器；参数四：点击的正在展示的那一张轮播图元素
         showTempBannerWindow: ($obj, $wrapContainer, $rightContainer, $currentItem) => {
             $wrapContainer.fadeIn();
             $currentItem = $obj.parents('tr');
@@ -256,30 +357,30 @@ $(function () {
                 url: './temp-banners.json',
                 dataType: "json",
                 success: function (result) {
-                        $(result.object).each((key, item) => {
-                            let $item =  '<div class="col-sm-6 col-md-4 temp">'+
-                            '<div class="thumbnail">'+
-                              '<img src="'+ item.src +'" alt="...">'+
-                              '<div class="caption">'+
-                                '<h3 class="commuity-name">'+ item.comunity +'</h3>'+
-                                '<p class="username">'+ item.manage +'</p>'+
-                                '<p class="student-num hide">'+ item.studentNum +'</p>'+
-                                '<p class="phone-num hide">'+ item.phoneNum +'</p>'+
-                                '<p class="comunity-id hide">'+ item["comunity-id"] +'</p>'+
-                                '<p><a href="javascript:;" class="btn btn-primary comfirm-replace" role="button">替换</a>'+
-                                '<a href="javascript:;" class="btn btn-success comfirm-add" role="button">添加</a></p>'+
-                              '</div>'+
-                            '</div>'+
-                          '</div>';
-                          $rightContainer.append($item);
-                        });
-                        if ($obj.hasClass('replace')) {
-                            $('.comfirm-add').hide();
-                            $('.comfirm-replace').show();
-                        } else {
-                            $('.comfirm-add').show();
-                            $('.comfirm-replace').hide();
-                        }
+                    $(result.object).each((key, item) => {
+                        let $item = '<div class="col-sm-6 col-md-4 temp">' +
+                            '<div class="thumbnail">' +
+                            '<img src="' + item.src + '" alt="...">' +
+                            '<div class="caption">' +
+                            '<h3 class="commuity-name">' + item.comunity + '</h3>' +
+                            '<p class="username">' + item.manage + '</p>' +
+                            '<p class="student-num hide">' + item.studentNum + '</p>' +
+                            '<p class="phone-num hide">' + item.phoneNum + '</p>' +
+                            '<p class="comunity-id hide">' + item["comunity-id"] + '</p>' +
+                            '<p><a href="javascript:;" class="btn btn-primary comfirm-replace" role="button">替换</a>' +
+                            '<a href="javascript:;" class="btn btn-success comfirm-add" role="button">添加</a></p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>';
+                        $rightContainer.append($item);
+                    });
+                    if ($obj.hasClass('replace')) {
+                        $('.comfirm-add').hide();
+                        $('.comfirm-replace').show();
+                    } else {
+                        $('.comfirm-add').show();
+                        $('.comfirm-replace').hide();
+                    }
                 },
                 error: function (errorMsg) {
                     alert("请求数据失败!");
@@ -288,14 +389,14 @@ $(function () {
             return $currentItem;
         },
         // 轮播图控制函数
-        bannerControl : ($tempItem, $current, tempBannerData, showingBannerData, bool, $tbody) => {
+        bannerControl: ($tempItem, $current, tempBannerData, showingBannerData, bool, $tbody) => {
             // 获取容器中被点击的元素的信息
             let commuityName = $tempItem.find('.commuity-name'),
-                  username = $tempItem.find('.username'),
-                  studentNum = $tempItem.find('.student-num'),
-                  phoneNum = $tempItem.find('.phone-num'),
-                  comunityId = $tempItem.find('.comunity-id'),
-                  url = $tempItem.find('img');
+                username = $tempItem.find('.username'),
+                studentNum = $tempItem.find('.student-num'),
+                phoneNum = $tempItem.find('.phone-num'),
+                comunityId = $tempItem.find('.comunity-id'),
+                url = $tempItem.find('img');
             tempBannerData = {
                 commuityName: commuityName.text(),
                 username: username.text(),
@@ -305,26 +406,26 @@ $(function () {
                 url: url.attr('src')
             };
             // 获取展示中的轮播图的信息
-            const showingSerialNum = $bannerManagePage.find('tr').length;    
+            const showingSerialNum = $bannerManagePage.find('tr').length;
             // 代表添加
             if (bool) {
                 // 动态添加数据
-            let $item = '<tr class="showing">' +
-            '<td class="serial-num">' + (showingSerialNum) + '</td>' +
-            '<td class="showing-commuity-name">' + tempBannerData.commuityName + '</td>' +
-            '<td class="showing-username">' + tempBannerData.username + '</td>' +
-            '<td class="showing-student-num">' + tempBannerData.studentNum + '</td>' +
-            '<td class="showing-userphone">' + tempBannerData.phoneNum + '</td>' +
-            '<td class="showing-id">' + tempBannerData.comunityId + '</td>' +
-            '<td><a href="javascript:;" class="thumbnail">' +
-            '<img class="img-scale displaying" style="width: 8vw;" src="' + tempBannerData.url + '" alt="...">' +
-            '</a></td>' +
-            '<td>' +
-            '<button type="button" class="btn btn-info preview">预览</button>' +
-            '<button type="button" class="btn btn-primary replace">替换</button>' +
-            '<button type="button" class="btn btn-danger delete-showing">删除</button>' +
-            '</td>' +
-            '</tr>';
+                let $item = '<tr class="showing">' +
+                    '<td class="serial-num">' + (showingSerialNum) + '</td>' +
+                    '<td class="showing-commuity-name">' + tempBannerData.commuityName + '</td>' +
+                    '<td class="showing-username">' + tempBannerData.username + '</td>' +
+                    '<td class="showing-student-num">' + tempBannerData.studentNum + '</td>' +
+                    '<td class="showing-userphone">' + tempBannerData.phoneNum + '</td>' +
+                    '<td class="showing-id">' + tempBannerData.comunityId + '</td>' +
+                    '<td><a href="javascript:;" class="thumbnail">' +
+                    '<img class="img-scale displaying" style="width: 8vw;" src="' + tempBannerData.url + '" alt="...">' +
+                    '</a></td>' +
+                    '<td>' +
+                    '<button type="button" class="btn btn-info preview">预览</button>' +
+                    '<button type="button" class="btn btn-primary replace">替换</button>' +
+                    '<button type="button" class="btn btn-danger delete-showing">删除</button>' +
+                    '</td>' +
+                    '</tr>';
                 if (showingSerialNum <= 8) {
                     $tbody.append($item);
                     $tempItem.remove();
@@ -335,11 +436,11 @@ $(function () {
             } else {
                 //代表替换
                 let showingCommuityName = $current.find('.showing-commuity-name'),
-                showingUsername = $current.find('.showing-username'),
-                showingStudentNum = $current.find('.showing-student-num'),
-                showingUserphone = $current.find('.showing-userphone'),
-                showingId = $current.find('.showing-id'),
-                showingUrl = $current.find('img');
+                    showingUsername = $current.find('.showing-username'),
+                    showingStudentNum = $current.find('.showing-student-num'),
+                    showingUserphone = $current.find('.showing-userphone'),
+                    showingId = $current.find('.showing-id'),
+                    showingUrl = $current.find('img');
                 showingBannerData = {
                     showingCommuityName: showingCommuityName.text(),
                     showingUsername: showingUsername.text(),
@@ -361,40 +462,41 @@ $(function () {
                 showingId.text(tempBannerData.comunityId);
                 showingUrl.text('src', tempBannerData.url);
             }
-           
-       },
-       // 初始化用户审核界面数据
-       initUserApply: (url, $tbody) => {
-        $.ajax({
-            type: 'get',
-            url,
-            dataType: "json",
-            success: function (result) {
-                $(result.object).each((key, item) => {
-                    let $item = '<tr>' +
-                        '<td>' +
-                        '<div class="checkbox radio">' +
-                        '<label>' +
-                        '<input type="checkbox">' +
-                        '</label>' +
-                        '</div>' +
-                        '</td>' +
-                        '<td class="serial-num">' + (key + 1) + '</td>' +
-                        '<td class="comunity-name">' + item.comunity + '</td>' +
-                        '<td class="username">' + item.manage + '</td>' +
-                        '<td class="userphone">' + item.phoneNum + '</td>' +
-                        '<td class="student-num">' + item.studentNum + '</td>' +
-                        '<td class="student-id">' + item["comunity-id"] + '</td>' +
-                        '<td><button type="button" class="btn btn-success ">通过</button>&nbsp;&nbsp;&nbsp;<button type="button"' +
-                        'class="btn btn-danger ">删除</button></td>' +
-                        '</tr>';
-                    $tbody.append($item);
-                })
-            },
-            error: function (errorMsg) {
-                alert('请求数据失败，请检查网络情况');
-            }
-        });
+
+        },
+        // 初始化用户审核界面数据
+        initUserApply: (url, $tbody) => {
+            $.ajax({
+                type: 'get',
+                url,
+                dataType: "json",
+                success: function (result) {
+                    $(result.object).each((key, item) => {
+                        let $item = '<tr>' +
+                            '<td>' +
+                            '<div class="checkbox radio">' +
+                            '<label>' +
+                            '<input type="checkbox">' +
+                            '</label>' +
+                            '</div>' +
+                            '</td>' +
+                            '<td class="serial-num">' + (key + 1) + '</td>' +
+                            '<td class="comunity-name">' + item.comunity + '</td>' +
+                            '<td class="username">' + item.manage + '</td>' +
+                            '<td class="userphone">' + item.phoneNum + '</td>' +
+                            '<td class="student-num">' + item.studentNum + '</td>' +
+                            '<td class="student-id">' + item["comunity-id"] + '</td>' +
+                            '<td><button type="button" class="btn btn-success ">通过</button>&nbsp;&nbsp;&nbsp;<button type="button"' +
+                            'class="btn btn-danger ">删除</button></td>' +
+                            '</tr>';
+                        $tbody.append($item);
+                        $navApply.find('.badge').html('');
+                    })
+                },
+                error: function (errorMsg) {
+                    alert('请求数据失败，请检查网络情况');
+                }
+            });
         },
         // 初始化轮播图审核界面数据
         initBannerApply: (url, $tbody) => {
@@ -403,58 +505,81 @@ $(function () {
                 url,
                 dataType: "json",
                 success: function (result) {
-                        $(result.object).each((key, item) => {
-                            let $item = '<tr class="auditing">' +
-                                        '<td>' +
-                                        '<div class="checkbox radio">' +
-                                        '<label>' +
-                                        '<input type="checkbox">' +
-                                        '</label>' +
-                                        '</div>' +
-                                        '</td>' +
-                                        '<td class="serial-num">' + (key + 1) + '</td>' +
-                                        '<td class="auditing-commuity-name">' + item.comunity + '</td>' +
-                                        '<td class="auditing-username">' + item.manage + '</td>' +
-                                        '<td class="auditing-student-num">' + item.studentNum + '</td>' +
-                                        '<td class="auditing-userphone">' + item.phoneNum + '</td>' +
-                                        '<td class="auditing-id">' + item['comunity-id'] + '</td>' +
-                                        '<td><a href="javascript:;" class="thumbnail">' +
-                                        '<img class="img-scale auditing" style="width: 8vw;" src="' + item.src + '" alt="...">' +
-                                        '</a></td>' +
-                                        '<td>' +
-                                        '<button type="button" class="btn btn-info preview">预览</button>' +
-                                        '<button type="button" class="btn btn-primary success">通过</button>' +
-                                        '<button type="button" class="btn btn-danger delete">删除</button>' +
-                                        '</td>' +
-                                        '</tr>';
-                                        $tbody.append($item);
-                        });
+                    $(result.object).each((key, item) => {
+                        let $item = '<tr class="auditing">' +
+                            '<td>' +
+                            '<div class="checkbox radio">' +
+                            '<label>' +
+                            '<input type="checkbox">' +
+                            '</label>' +
+                            '</div>' +
+                            '</td>' +
+                            '<td class="serial-num">' + (key + 1) + '</td>' +
+                            '<td class="auditing-commuity-name">' + item.comunity + '</td>' +
+                            '<td class="auditing-username">' + item.manage + '</td>' +
+                            '<td class="auditing-student-num">' + item.studentNum + '</td>' +
+                            '<td class="auditing-userphone">' + item.phoneNum + '</td>' +
+                            '<td class="auditing-id">' + item['comunity-id'] + '</td>' +
+                            '<td><a href="javascript:;" class="thumbnail">' +
+                            '<img class="img-scale auditing" style="width: 8vw;" src="' + item.src + '" alt="...">' +
+                            '</a></td>' +
+                            '<td>' +
+                            '<button type="button" class="btn btn-info preview">预览</button>' +
+                            '<button type="button" class="btn btn-primary success">通过</button>' +
+                            '<button type="button" class="btn btn-danger delete">删除</button>' +
+                            '</td>' +
+                            '</tr>';
+                        $tbody.append($item);
+                        $navApply.find('.badge').html('');
+
+                    });
                 },
                 error: function (errorMsg) {
                     alert("请求数据失败!");
                 }
             });
+        },
+        // 自定义添加按钮
+        customBtn: (e, $obj) => {
+            let $ball = $('<span class="box"></span>');
+            let left = e.pageX - $obj.get(0).offsetLeft;
+            let top = e.pageY - $obj.get(0).offsetTop;
+            $ball.css({
+                'left': 57 + 'px',
+                'top': top + 'px'
+            });
+            $obj.append($ball);
+            $ball.on('animationend', function () {
+                //每次在执行完动画把“水波”从文档中移出；
+                $ball.remove();
+            });
+        },
+        // 控制侧边栏社团管理下拉
+        controlSlide: ($nav, $obj) => {
+            $nav.slideToggle().siblings('.row').slideUp();
+            if ($breadcrumb.eq(2).hasClass('active')) {
+                $breadcrumb.eq(1).removeClass('active').html('<a href="javascript:;">'+  $obj.find('.text').text() +'</a>' );
+            } else {
+                $breadcrumb.eq(1).addClass('active').show().html($obj.find('.text').text());
+
+            }
         }
-
-
-
     };
     // 头部
     (() => {
-        // 获取换肤按钮
-        const $skinBtn = $('.skin .btn');
-        // 一键换肤功能
-        $skinBtn.on('click', function() {
-            if ($skinBtn.text() == '夜间模式') {
-                $skinBtn.text('白天模式');
-            } else {
-                $skinBtn.text('夜间模式');
-            }
-        })
+        // 一键换肤
+        const {
+            switchingSkin
+        } = handleData;
+        $skinBtn.on('click', switchingSkin);
     })();
     // 侧边栏
     (() => {
-        const {sideControl,mianControl} = handleData;
+        const {
+            sideControl,
+            mianControl,
+            controlSlide
+        } = handleData;
         // 侧边栏用户信息管理
         $userInformation.on('click', function () {
             sideControl($(this), $userInformationPage);
@@ -472,62 +597,74 @@ $(function () {
             sideControl($(this), $userApplyPage);
         });
         // 侧边栏主管理按钮
-        $listGroup.on('click', '.list-group-item', function() {
+        $listGroup.on('click', '.list-group-item', function () {
             mianControl($(this));
-        })
+        });
+        
         // 侧边栏社团管理下拉按钮
         $navCommuity.on('click', function () {
-            $('.commuity-fold-nav').slideToggle().siblings('.row').slideUp();
+            controlSlide($('.commuity-fold-nav'), $(this));
         });
         // 侧边栏审核管理下拉按钮
         $navApply.on('click', function () {
-            $('.banner-fold-nav').slideToggle().siblings('.row').slideUp();
+            controlSlide($('.banner-fold-nav'), $(this));
         });
         // 侧边栏内容管理下拉按钮
         $navContent.on('click', function () {
-            $('.content-fold-nav').slideToggle().siblings('.row').slideUp();
+            controlSlide($('.content-fold-nav'), $(this));
         });
     })();
     // 首页
     (() => {
         // 获取处理数据对象中的函数
-        const {sector, changePage} = handleData;
-        // 获取四个按钮
-        const $pageBtns = $('.home-data');
+        const {
+            sector,
+            changePage
+        } = handleData;
         // 分别给四个按钮绑定单击切换页面的事件
-        $pageBtns.eq(0).click(function() {
+        $pageBtns.eq(0).click(function () {
             changePage($('.commuity-fold-nav'), $userInformation, $userInformationPage);
+            // $userInformation.parents('.row').eq(0).prev().addClass('active');
+          
         });
-        $pageBtns.eq(1).click(function() {
+        $pageBtns.eq(1).click(function () {
             changePage($('.commuity-fold-nav'), $bannerManage, $bannerManagePage);
         });
-        $pageBtns.eq(2).click(function() {
+        $pageBtns.eq(2).click(function () {
             changePage($('.banner-fold-nav'), $userApply, $userApplyPage);
         });
-        $pageBtns.eq(3).click(function() {
+        $pageBtns.eq(3).click(function () {
             changePage($('.banner-fold-nav'), $bannerApply, $bannerApplyPage);
         });
         // 返回首页按钮
         $homeBtn.on('click', function () {
             $(this).parents('.container-fluid').find('.detail').css({
-                color: "#ccc"
+                color: "rgb(120, 117, 117)"
             });
             $myHomePage.siblings('.manage').fadeOut();
             $myHomePage.fadeIn();
-        })
+            $breadcrumb.eq(1).fadeOut();
+            $breadcrumb.eq(2).fadeOut();
+
+        });
         // 扇形图
         sector('#sector');
         $("#sector").click(function () {
-            sector(this);
-        })
-
+            sector($pageBtns);
+        });
     })();
     // 用户信息管理界面
     (() => {
         // 定义一个用来存储选中状态的列表项
         let deleteArr;
         // 获取处理数据对象中的函数
-        const {initUserInformation, deleteOneItem, changeItemState,deleteAllCheckedItems,checkAllItems} = handleData;
+        const {
+            initUserInformation,
+            deleteOneItem,
+            changeItemState,
+            deleteAllCheckedItems,
+            checkAllItems
+        } = handleData;
         // 获取全选按钮
         const $checkAll = $userInformationPage.find('.check-all label');
         // 获取表单元素，获取输入框，获取搜索按钮，获取上下页分页按钮，上下页数
@@ -548,7 +685,7 @@ $(function () {
         });
         // 点击选中按钮，改变单选框和全选框的状态，事件委托
         $userInformationPage.on('click', '.radio label', function () {
-            changeItemState($(this),$checkAll, $userInformationPage);
+            changeItemState($(this), $checkAll, $userInformationPage);
         });
         // 点击删除多个的按钮，删除已选中的元素，事件委托
         $userInformationPage.find('.delete-all-checked').click(function () {
@@ -565,36 +702,40 @@ $(function () {
     })();
     // 轮播图管理界面
     (() => {
-       // 获取表格的容器，轮播图的容器，真正存放轮播图的容器，添加按钮
+        // 获取表格的容器，轮播图的容器，真正存放轮播图的容器，添加按钮
         const $tbody = $('#banner-manage .table tbody');
         const $tempImgContainer = $('.img-container');
         const $container = $tempImgContainer.find('.container');
         const $addBtn = $('.add');
         // 获取处理数据对象中的函数
-        const {showTempBannerWindow, deleteOneItem, bannerControl, initBannerManagePage} = handleData;
-         // 定义一个用来保存当前点击的正在展示的那一张轮播图的列表的元素的变量
+        const {
+            showTempBannerWindow,
+            deleteOneItem,
+            bannerControl,
+            initBannerManagePage,
+            customBtn
+        } = handleData;
+        // 定义一个用来保存当前点击的正在展示的那一张轮播图的列表的元素的变量
         let $current;
         // 定义存储容器中轮播图数据和展示中的轮播图数据的对象
         let tempBannerData = {};
         let showingBannerData = {};
         // 初始化数据
         let url = './showing-banner.json';
-        
-        $bannerManage.one('click', function() {
+        $bannerManage.one('click', function () {
             initBannerManagePage(url, $tbody);
         })
         // 替换按钮，事件委托，点击跳出替换窗口,此时需要发送请求，得到审核完成的轮播图数据
         $bannerManagePage.on('click', '.replace', function () {
-                $container.html("");
-                $current = showTempBannerWindow($(this), $tempImgContainer, $container, $current);
+            $container.html("");
+            $current = showTempBannerWindow($(this), $tempImgContainer, $container, $current);
         });
-        // 确定替换按钮，事件委托，需要发送数据给后台，告诉它们我替换的是哪一张  （bug）
+        // 确定替换按钮，事件委托，需要发送数据给后台，告诉它们我替换的是哪一张
         $bannerManagePage.on('click', '.comfirm-replace', function () {
-            bannerControl($(this).parents('.temp'), $current, tempBannerData, showingBannerData, false);    
+            bannerControl($(this).parents('.temp'), $current, tempBannerData, showingBannerData, false);
             $tempImgContainer.fadeOut();
             $container.html("");
         })
-
         // 关闭按钮
         $('.close-img-container').click(function () {
             $tempImgContainer.fadeOut();
@@ -610,7 +751,7 @@ $(function () {
         });
         // 确定添加按钮 事件委托
         $bannerManagePage.on('click', '.comfirm-add', function () {
-            bannerControl($(this).parents('.temp'), $current, tempBannerData, showingBannerData, true, $tbody);    
+            bannerControl($(this).parents('.temp'), $current, tempBannerData, showingBannerData, true, $tbody);
             // 隐藏轮播图容器，同时清空里面的内容
             $tempImgContainer.fadeOut();
             $container.html("");
@@ -618,18 +759,7 @@ $(function () {
         // 自定义添加按钮
         $('.mybtn').on('mouseenter', function (e) {
             e = e || window.event;
-            let ball = $('<span class="box"></span>');
-            let left = e.pageX - $('.mybtn').get(0).offsetLeft;
-            let top = e.pageY - $('.mybtn').get(0).offsetTop;
-            ball.css({
-                'left': 57 + 'px',
-                'top': top + 'px'
-            });
-            $('.mybtn').append(ball);
-            ball.on('animationend', function () {
-                //每次在执行完动画把“水波”从文档中移出；
-                ball.remove();
-            }); 
+            customBtn(e, $(this));
         });
     })();
     // 用户注册审核界面
@@ -640,8 +770,12 @@ $(function () {
         const $checkAll = $userApplyPage.find('.check-all label');
         // 获取处理数据对象中的函数
         const {
-            initUserApply,deleteOneItem,changeItemState,deleteAllCheckedItems,checkAllItems
-        } = handleData; 
+            initUserApply,
+            deleteOneItem,
+            changeItemState,
+            deleteAllCheckedItems,
+            checkAllItems
+        } = handleData;
         // 获取上下页分页按钮，上下页数
         const $prePageBtn = $userApplyPage.find('.prepage');
         const $nextPageBtn = $userApplyPage.find('.nextpage');
@@ -657,13 +791,13 @@ $(function () {
         })
         // 2. 点击通过按钮，将该项目的数据储存起来，然后发送请求修改状态，并且添加到后台服务器中，最后再把对应的项目删除掉
         // 事件委托
-        $userApplyPage.on('click', '.btn-success', function () { 
-            deleteOneItem($(this),$userApplyPage);
+        $userApplyPage.on('click', '.btn-success', function () {
+            deleteOneItem($(this), $userApplyPage);
         })
         // 3. 点击删除单个项目的按钮，发送请求修改状态，将其从后台服务器中删除，最后再把对应的项目删除
         // 点击删除单个的按钮，删除单个元素，事件委托
         $userApplyPage.on('click', '.btn-danger', function () {
-            deleteOneItem($(this),$userApplyPage);
+            deleteOneItem($(this), $userApplyPage);
         });
         // 4. 单选按钮，全选按钮，选中时，点击表格最底下的删除按钮，即可删除所有被选项，同时循环触发流程3
         // 点击选中按钮，改变单选框的其状态，事件委托
@@ -699,81 +833,78 @@ $(function () {
         const $previewImg = $('.img-zoom');
         // 获取处理数据对象中的函数
         const {
-            initBannerApply,deleteOneItem,changeItemState,deleteAllCheckedItems,checkAllItems
+            initBannerApply,
+            deleteOneItem,
+            changeItemState,
+            deleteAllCheckedItems,
+            checkAllItems
         } = handleData;
         // 获取上下页分页按钮，上下页数
         const $prePageBtn = $bannerApplyPage.find('.prepage');
         const $nextPageBtn = $bannerApplyPage.find('.nextpage');
         const $currentPage = $bannerApplyPage.find('.current-page');
         const $allPage = $bannerApplyPage.find('.all-page');
-         // 1. 初始化数据，点击该界面时，应该发送请求，获取到状态为正在审核中的轮播图，并且将其渲染出来
-         const url = './temp-banners.json';
-         const $tbody = $('#banner-apply tbody');
-         $bannerApply.one('click', function () {
-             initBannerApply(url, $tbody);
-         });
-         // 2. 点击通过按钮，将该项目的数据储存起来，然后发送请求修改状态，并且添加到后台服务器中，最后再把对应的项目删除掉
-         // 事件委托
-         $bannerApplyPage.on('click', '.success', function () { 
-             deleteOneItem($(this),$bannerApplyPage);
-         });
-         // 3. 点击删除单个项目的按钮，发送请求修改状态，将其从后台服务器中删除，最后再把对应的项目删除
-         // 点击删除单个的按钮，删除单个元素，事件委托
-         $bannerApplyPage.on('click', '.delete', function () {
-             deleteOneItem($(this),$bannerApplyPage);
-         });
-         // 4. 单选按钮，全选按钮，选中时，点击表格最底下的删除按钮，即可删除所有被选项，同时循环触发流程3
-         // 点击选中按钮，改变单选框的其状态，事件委托
-         $bannerApplyPage.on('click', '.radio label', function () {
-             changeItemState($(this), $checkAll, $bannerApplyPage);
-         });
-         // 点击删除已选按钮，删除已选项
-         $bannerApplyPage.find('.delete-all-checked').click(function () {
-             deleteArr = $bannerApplyPage.find('table .active').parents('tr');
-             deleteAllCheckedItems(deleteArr, $checkAll, $bannerApplyPage);
-         })
-         // 点击全选按钮，选中该页所有项
-         $checkAll.click(function () {
-             checkAllItems($(this), $bannerApplyPage);
-         })
-         // 5. 单选按钮，全选按钮，选中时，点击表格最底下的通过按钮，即可通过所有被选项，同时循环触发流程2
-         $bannerApplyPage.find('.pass-all-checked').click(function () {
-             deleteArr = $bannerApplyPage.find('table .active').parents('tr');
-             deleteAllCheckedItems(deleteArr, $checkAll, $bannerApplyPage);
-         })
-         // 6. 分页按钮，点击上一页或者下一页的时候，会发送请求，每次请求一页数据，重新渲染界面
-
-
-
-
-         // 7. 缩略图逻辑
+        // 1. 初始化数据，点击该界面时，应该发送请求，获取到状态为正在审核中的轮播图，并且将其渲染出来
+        const url = './temp-banners.json';
+        const $tbody = $('#banner-apply tbody');
+        $bannerApply.one('click', function () {
+            initBannerApply(url, $tbody);
+        });
+        // 2. 点击通过按钮，将该项目的数据储存起来，然后发送请求修改状态，并且添加到后台服务器中，最后再把对应的项目删除掉
+        // 事件委托
+        $bannerApplyPage.on('click', '.success', function () {
+            deleteOneItem($(this), $bannerApplyPage);
+        });
+        // 3. 点击删除单个项目的按钮，发送请求修改状态，将其从后台服务器中删除，最后再把对应的项目删除
+        // 点击删除单个的按钮，删除单个元素，事件委托
+        $bannerApplyPage.on('click', '.delete', function () {
+            deleteOneItem($(this), $bannerApplyPage);
+        });
+        // 4. 单选按钮，全选按钮，选中时，点击表格最底下的删除按钮，即可删除所有被选项，同时循环触发流程3
+        // 点击选中按钮，改变单选框的其状态，事件委托
+        $bannerApplyPage.on('click', '.radio label', function () {
+            changeItemState($(this), $checkAll, $bannerApplyPage);
+        });
+        // 点击删除已选按钮，删除已选项
+        $bannerApplyPage.find('.delete-all-checked').click(function () {
+            deleteArr = $bannerApplyPage.find('table .active').parents('tr');
+            deleteAllCheckedItems(deleteArr, $checkAll, $bannerApplyPage);
+        });
+        // 点击全选按钮，选中该页所有项
+        $checkAll.click(function () {
+            checkAllItems($(this), $bannerApplyPage);
+        });
+        // 5. 单选按钮，全选按钮，选中时，点击表格最底下的通过按钮，即可通过所有被选项，同时循环触发流程2
+        $bannerApplyPage.find('.pass-all-checked').click(function () {
+            deleteArr = $bannerApplyPage.find('table .active').parents('tr');
+            deleteAllCheckedItems(deleteArr, $checkAll, $bannerApplyPage);
+        });
+        // 6. 分页按钮，点击上一页或者下一页的时候，会发送请求，每次请求一页数据，重新渲染界面
+        // 7. 缩略图逻辑
         // 点击缩略图，打开大图, 事件委托
-        $bannerApplyPage.on('click', '.img-scale', function(event) {
-            $('.img-zoom-wrap').html('<img class="img-lg" style="width:60vw;" src="' + this.src + '">')
+        $myPage.on('click', '.img-scale', function (event) {
+            $('.img-zoom-wrap').html('<img class="img-lg" style="width:60vw;" src="' + this.src + '">');
             $previewImg.fadeIn();
             event.stopPropagation();
-        })
+        });
         // 事件委托，点击预览按钮，打开大图
-        $bannerApplyPage.on('click', '.preview', function (event) {
-            $('.img-zoom-wrap').html('<img class="img-lg" style="width:60vw;" src="' + $(this).parents('tr').find('.img-scale').attr('src') + '">')
+        $myPage.on('click', '.preview', function (event) {
+            $('.img-zoom-wrap').html('<img class="img-lg" style="width:60vw;" src="' + $(this).parents('tr').find('.img-scale').attr('src') + '">');
             $previewImg.fadeIn();
             event.stopPropagation();
-        })
+        });
         // 点击除了大图的区域，隐藏大图
         $(document).on('click', function () {
-            $previewImg.fadeOut()
-        })
+            $previewImg.fadeOut();
+        });
         // 事件委托，点击关闭按钮，关闭大图
         $previewImg.on('click', '.close-preview', function (event) {
             $previewImg.fadeOut();
-        })
+        });
         // 阻止事件冒泡
         $previewImg.on('click', function (event) {
             event.stopPropagation();
-        })
+        });
 
     })();
-
-
-
 })

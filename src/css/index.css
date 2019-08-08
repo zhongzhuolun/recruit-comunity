@@ -1,5 +1,9 @@
+#zzl-page {
+  transition: color 1s, background-color 1s;
+}
 #zzl-page .container-fluid {
   background: linear-gradient(45deg, #69667d, #938693, #4d4365);
+  transition: color 1s, background-color 1s;
 }
 #zzl-page .container-fluid #zzl-head .my-head {
   color: #449D88;
@@ -56,6 +60,10 @@
 }
 #zzl-page .container-fluid #zzl-body .manage {
   background: linear-gradient(45deg, #69667d, #938693, #4d4365);
+  transition: color 1s, background-color 1s;
+}
+#zzl-page .container-fluid #zzl-body .manage .check-all label {
+  margin-left: 24px;
 }
 #zzl-page .container-fluid #zzl-body .my-list-wrap {
   background: #1A2531;
@@ -65,8 +73,9 @@
 }
 #zzl-page .container-fluid #zzl-body .my-list-wrap .list-group .list-group-item {
   background: transparent;
-  color: #ccc;
+  color: #787575;
   padding: 10px 10px 10px 12px;
+  transition: color 1s, background-color 1s;
 }
 #zzl-page .container-fluid #zzl-body .my-list-wrap .list-group .list-group-item:first-child {
   border-top-left-radius: 0;
@@ -75,10 +84,12 @@
 #zzl-page .container-fluid #zzl-body .my-list-wrap .list-group .list-group-item .badge {
   position: relative;
   background: rgba(225, 0, 0, 0.7);
+  transition: color 1s, background-color 1s;
 }
 #zzl-page .container-fluid #zzl-body .my-list-wrap .list-group .list-group-item.active {
   color: white;
   background: #449D88;
+  transition: color 1s, background-color 1s;
 }
 #zzl-page .container-fluid #zzl-body .my-list-wrap .list-group .list-group-item.active .glyphicon {
   color: white;
@@ -100,7 +111,7 @@
 }
 #zzl-page .container-fluid #zzl-body #my-home {
   background: linear-gradient(45deg, #69667d, #938693, #4d4365);
-  /* 标准语法 */
+  transition: color 1s, background-color 1s;
   background-size: cover;
 }
 #zzl-page .container-fluid #zzl-body #my-home .home-datas {
@@ -118,18 +129,23 @@
   cursor: pointer;
   border-radius: 5px 5px;
   box-shadow: #1A2531 0 0 2px;
+  transition: color 1s, background-color 1s;
 }
 #zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data:nth-child(1) {
   background: #449D88;
+  transition: color 1s, background-color 1s;
 }
 #zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data:nth-child(2) {
   background: #406cb8;
+  transition: color 1s, background-color 1s;
 }
 #zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data:nth-child(3) {
   background: #c0444c;
+  transition: color 1s, background-color 1s;
 }
 #zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data:nth-child(4) {
   background: #4c4c4c;
+  transition: color 1s, background-color 1s;
 }
 #zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data:hover {
   box-shadow: #1A2531 1px 1px 5px;
@@ -149,11 +165,12 @@
 }
 #zzl-page .container-fluid #zzl-body #my-home .sector {
   background: #39455e82;
+  transition: color 1s, background-color 1s;
   margin-top: 50px;
   margin-bottom: 50px;
 }
 #zzl-page .container-fluid #zzl-body #banner-manage .img-zoom {
-  position: absolute;
+  position: fixed;
   z-index: 6;
   display: none;
 }
@@ -167,6 +184,7 @@
   display: none;
   overflow-y: auto;
   overflow-x: hidden;
+  transition: color 1s, background-color 1s;
 }
 #zzl-page .container-fluid #zzl-body #banner-manage .img-container .close-img-container {
   opacity: .8;
@@ -188,6 +206,7 @@
   margin: 20px 170px 10px 0;
   border-radius: 50% 50%;
   cursor: pointer;
+  transition: color 1s, background-color 1s;
 }
 #zzl-page .container-fluid #zzl-body #banner-manage .mybtn .box {
   width: 4px;
@@ -198,6 +217,7 @@
   animation: mybtn 1s;
   opacity: 0;
   transform: scale(100);
+  transition: color 1s, background-color 1s;
 }
 @keyframes mybtn {
   from {
@@ -220,4 +240,52 @@
 }
 #zzl-page .table-hover > tbody > tr:hover {
   background-color: #595cc3;
+  transition: color 1s, background-color 1s;
+}
+.normal .container-fluid {
+  background: white !important;
+  transition: color 1s, background-color 1s;
+}
+.normal .container-fluid #zzl-head {
+  border-bottom: 1px solid #00a164;
+  transition: color 1s, background-color 1s;
+}
+.normal .container-fluid #zzl-head .head-1 {
+  background: #00a164 !important;
+  transition: color 1s, background-color 1s;
+}
+.normal .container-fluid #zzl-head .head-1 .my-head {
+  color: white !important;
+  transition: color 1s, background-color 1s;
+}
+.normal .container-fluid #zzl-head .head-2 {
+  background: white !important;
+  transition: color 1s, background-color 1s;
+}
+.normal .container-fluid #zzl-head .head-3 {
+  background: white !important;
+  transition: color 1s, background-color 1s;
+}
+.normal .container-fluid #zzl-body .same-height {
+  background: white !important;
+  transition: color 1s, background-color 1s;
+}
+.normal .container-fluid #zzl-body .same-height:nth-child(1) {
+  border-right: 1px solid #00a164 !important;
+  transition: color 1s, background-color 1s;
+}
+.normal .container-fluid #zzl-body .same-height .pager p {
+  color: #1A2531 !important;
+}
+.normal .container-fluid #zzl-body .my-list-wrap {
+  background: white !important;
+  transition: color 1s, background-color 1s;
+}
+.normal .container-fluid #zzl-body td {
+  color: black !important;
+  transition: color 1s, background-color 1s;
+}
+.normal .container-fluid #zzl-body .table-hover > tbody > tr:hover {
+  background-color: #e7ffe2 !important;
+  transition: color 1s, background-color 1s;
 }

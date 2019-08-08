@@ -15,25 +15,25 @@
 </head>
 
 <body>
-  <main id="zzl-page">
+  <main id="zzl-page" class="normal">
     <section class="container-fluid">
 
       <section class="row" id="zzl-head" style="height: 84px">
         <!-- <section class="hidden-xs hidden-sm col-md-1  col-lg-1"></section> -->
-        <section class="col-xs-4 col-sm-3 col-md-3 col-lg-2 same-height" style="background: #505064;">
+        <section class="col-xs-4 col-sm-3 col-md-3 col-lg-2 same-height head-1" style="background: #505064;">
           <h1 class="my-head">社团管理系统</h1>
         </section>
-        <section class="col-xs-3 col-sm-6 col-md-6 col-lg-8 menu same-height" style="background: #17212b;">
+        <section class="col-xs-3 col-sm-6 col-md-6 col-lg-8 menu same-height head-2" style="background: #17212b;">
           <section class="menu-btn"><span class="glyphicon glyphicon-menu-hamburger"></span></section>
           <section style="margin-top: 3px;">
             <ol class="breadcrumb">
               <li class="home-btn"><a href="javascript:;">首页</a></li>
-              <!-- <li><a href="javascript:;">社团管理</a></li>
-              <li class="active">用户信息管理</li> -->
+              <li class="manage-group" style="display: none"><a href="javascript:;">社团管理</a></li>
+              <li class="manage-detail" style="display: none">用户信息管理</li>
             </ol>
           </section>
         </section>
-        <section class="col-xs-5  col-sm-3 col-md-3 col-lg-2 same-height" style="background: #17212b;">
+        <section class="col-xs-5  col-sm-3 col-md-3 col-lg-2 same-height head-3" style="background: #17212b;">
           <section class="admin-img">
             <a href="javascript:;">
               <img src="./src/img/WechatIMG1.png" class="img-circle" alt="管理员头像">
@@ -49,7 +49,7 @@
                 <li ><a href="javascript:;">退出登录</a></li>
               </ul>
           </section>
-        <section class="skin"><button type="button" class="btn btn-primary">夜间模式</button></section>
+        <section class="skin"><button type="button" class="btn btn-primary">日间模式</button></section>
 
         </section>
 
@@ -62,7 +62,7 @@
             <section class="list-group">
               <a href="javascript:;" class="list-group-item nav-commuity">
                 <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                社团管理
+                <span class="text">社团管理</span> 
                 <span class="glyphicon glyphicon-plus toggle" aria-hidden="true"></span>
               </a>
               <div class="row commuity-fold-nav" style="display: none;">
@@ -71,11 +71,11 @@
                   <section class="list-group">
                     <a href="javascript:;" class="list-group-item user-information detail">
                       <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
-                      用户信息管理
+                      <span class="text">用户信息管理</span>
                     </a>
                     <a href="javascript:;" class="list-group-item banner-manage detail">
                       <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
-                      轮播图管理
+                      <span class="text">轮播图管理</span> 
                     </a>
                   </section>
                 </div>
@@ -83,7 +83,7 @@
               </div>
               <a href="javascript:;" class="list-group-item nav-apply">
                 <span class="glyphicon glyphicon-check" aria-hidden="true"></span><span class="badge">27</span>
-                审核管理
+                <span class="text">审核管理</span> 
                 <span class="glyphicon glyphicon-plus  toggle" aria-hidden="true"></span>
               </a>
               <div class="row banner-fold-nav" style="display: none;">
@@ -92,12 +92,12 @@
                   <section class="list-group">
                     <a href="javascript:;" class="list-group-item user-apply detail">
                       <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
-                        用户注册审核
+                      <span class="text">用户注册审核</span> 
                      <span class="badge">13</span>
                     </a>
                     <a href="javascript:;" class="list-group-item banner-apply detail">
                       <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
-                      轮播图审核
+                      <span class="text">轮播图审核</span> 
                     <span class="badge">14</span>
                     </a>
                   </section>
@@ -106,7 +106,7 @@
               </div>
               <a href="javascript:;" class="list-group-item nav-content">
                 <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
-                内容管理
+                <span class="text">内容管理</span> 
                 <span class="glyphicon glyphicon-plus toggle" aria-hidden="true"></span>
               </a>
               <div class="row content-fold-nav" style="display: none;">
@@ -332,7 +332,7 @@
         <!-- 轮播图审核管理界面 -->
         <section class="col-xs-8 col-sm-9 col-md-9 col-lg-10 same-height manage" id="banner-apply"
           style="display: none;">
-          <section class="img-zoom" style="position: absolute;z-index: 1; display: none;">
+          <section class="img-zoom" style="position: fixed;z-index: 1; display: none;">
             <section class="img-zoom-wrap">
             </section>
             <section style="overflow: hidden;padding-right: 50%;">
