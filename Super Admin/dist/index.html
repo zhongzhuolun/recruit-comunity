@@ -12,18 +12,28 @@
     <![endif]-->
     <link rel="stylesheet" href="../src/css/index.css">
 </head>
-<body>
+<body class="my-body">
   <section class="loading">
       <section class="pic">
           <span></span>
           <b>0%</b>
       </section>
   </section>
+  <div class="alert alert-danger alert-dismissible fade in" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+      <p>确定删除吗？</p>
+      <p>
+        <button type="button" class="btn btn-default cancel">取消</button>
+        <button type="button" class="btn btn-danger comfirm">确定</button>
+      </p>
+    </div>
+  
   <main id="zzl-page" class="normal">
     <section class="container-fluid">
       <section class="row" id="zzl-head" style="height: 84px">
         <section class="col-xs-4 col-sm-3 col-md-3 col-lg-2 same-height head-1" style="background: #505064;">
           <h1 class="my-head">社团管理系统</h1>
+          <a href="../../Community Admin/dist/index.html">跳转</a>
         </section>
         <section class="col-xs-3 col-sm-6 col-md-6 col-lg-8 menu same-height head-2" style="background: #17212b;">
           <section class="menu-btn"><span class="glyphicon glyphicon-menu-hamburger"></span></section>

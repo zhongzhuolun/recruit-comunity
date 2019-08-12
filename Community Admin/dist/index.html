@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>社团管理员系统</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="../css/CommunityAdministrator.css">
+</head>
+
+<body>
+  <div class="container-fluid community-administrator">
+    <!-- 上方栏目 -->
+    <header class="community-header row">
+      <span class="header-span col-xs-5 col-sm-3 col-md-3 col-lg-2"><img src="../img/管理员.png">社团管理员系统</span>
+      <span class="header-community-name col-xs-7 col-sm-7 col-md-7 col-lg-9"><span class="hidden-xs">社团名称 |
+        </span><span>计算机学院团委</span></span>
+      <ul class="menu" style="padding:0;">
+        <li class="account-operate" title="我的账号"><i class="iconfont">&#xe611;</i></li>
+        <ul class="inner-menu">
+          <li class="modify-password" title="修改密码"><i class="iconfont">&#xe635;</i>修改密码</li>
+          <li class="login-out" title="退出登陆"><i class="iconfont">&#xe609;</i>退出登录</li>
+        </ul>
+      </ul>
+    </header>
+    <!-- 主体 -->
+    <section class="main-body row">
+      <!-- 左边导航栏 -->
+      <section class="left-nav-container col-sm-1 col-xs-1 col-md-3 col-lg-2">
+        <ul class="left-nav row">
+          <li class="nav-seleted"><i class="iconfont">&#xe64c;</i><span class="hidden-xs hidden-sm">查看报名人员信息</span></li>
+          <li><i class="iconfont">&#xe603;</i><span class="hidden-xs hidden-sm">编辑我的部门 </span></li>
+          <li><i class="iconfont">&#xe6c2;</i><span class="hidden-xs hidden-sm">自定义社团详情页</span></li>
+          <li><i class="iconfont">&#xe696;</i><span class="hidden-xs hidden-sm">申请主页轮播图 </span></li>
+        </ul>
+        <!-- 编辑操作/粘贴板 -->
+        <section class="customize-operating" style="display: none">
+          <div class="btns">
+            <div class="operate-btn btn1">
+              <div class="span-left"></div>
+              <span><i class="iconfont">&#xe937;</i>开始自定义</span>
+              <div class="span-right"></div>
+            </div>
+            <div class="operate-btn btn2">
+              <div class="span-left"></div>
+              <span><i class="iconfont">&#xe660;</i>完成编辑</span>
+              <div class="span-right"></div>
+            </div>
+            <div class="operate-btn btn3">
+              <div class="span-left"></div>
+              <span><i class="iconfont">&#xe710;</i>点我上传</span>
+              <div class="span-right"></div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- 第一板块 -->
+      <section class="manage-nav applicant-information col-xs-11 col-sm-11 col-md-9 col-lg-10 scale-out">
+        <!-- 筛选栏/功能栏 -->
+        <section class="function-bar col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding:0;">
+          <ul class="filter-department filter-student" style="margin-bottom: 6px;">
+            <li style="padding:0" class="li-header">筛选学生部门：</li>
+            <li class="filter-selected ">所有部门<span class="underline"></span></li>
+            <li>宣采部<span class="underline"></span></li>
+            <li>部门2<span class="underline"></span></li>
+            <li>部门3<span class="underline"></span></li>
+            <li>部门4<span class="underline"></span></li>
+            <li>部门5<span class="underline"></span></li>
+          </ul>
+          <ul class="filter-status filter-student" style="margin-bottom: 4px;">
+            <li style="padding:0" class="li-header">筛选学生考核状态：</li>
+            <li class="filter-selected">已参与报名<span class="underline"></span></li>
+            <li>第一阶段<span class="underline"></span></li>
+            <li>第二阶段<span class="underline"></span></li>
+          </ul>
+          <div class="search-container">
+            <div class="search-left"></div>
+            <i class="iconfont search-icon" title="搜索学生">&#xe626;</i>
+            <input type="text" class="search-student-bar" placeholder="请输入要搜索的学生名">
+            <div class="search-right"></div>
+          </div>
+          <div class="add-assessment-container" title="新建一轮考核">
+            <div class="search-left"></div>
+            <i class="iconfont">&#xe64f;</i>
+            <span>新建一轮考核</span>
+            <div class="search-right"></div>
+          </div>
+          <!-- <section class="xs-function-bar visible-xs hidden-sm hidden-md hidden-lg" style="width:100%;">
+            <div class="xs-search-container">
+              <div class="search-left"></div>
+              <i class="iconfont search-icon" title="搜索学生">&#xe626;</i>
+              <input type="text" class="search-student-bar" placeholder="请输入要搜索的学生名">
+              <div class="search-right"></div>
+            </div>
+            <div class="xs-add-assessment-container" title="新建一轮考核">
+              <div class="search-left"></div>
+              <i class="iconfont">&#xe64f;</i>
+              <span>新建一轮考核</span>
+              <div class="search-right"></div>
+            </div>
+          </section> -->
+        </section>
+        <!-- 人员表格 -->
+        <div class="table-container col-xs-10 col-sm-10 col-md-10 col-lg-10">
+          <table class="table table-bordered table-hover table-responsive">
+            <tr class="thead">
+              <td>序号</td>
+              <td>姓名</td>
+              <td>性别</td>
+              <td>学号</td>
+              <td>学院</td>
+              <td>专业班级</td>
+              <td>手机号码</td>
+              <td>宿舍</td>
+              <td>所报部门</td>
+              <td>考核状态</td>
+              <td>相关操作</td>
+            </tr>
+            <tr>
+              <!-- <td>
+                <label for="checkbox">
+                  <input type="checkbox" name="checkbox" class="checkbox" disabled>
+                  <i class="iconfont">&#xe601;</i>
+                </label>
+              </td> -->
+              <td class="cannot-edit">1</td>
+              <td class="can-edit student-name">陈锐基</td>
+              <td class="cannot-edit"><i class="iconfont male">&#xe600;</i></td>
+              <td class="can-edit student-number">3118005044</td>
+              <td class="can-edit student-academy">计算机学院</td>
+              <td class="can-edit student-major-class">软工三班</td>
+              <td class="can-edit student-phone">15992501238</td>
+              <td class="can-edit student-dormitory">西三707</td>
+              <td class="cannot-edit">宣采部</td>
+              <td class="cannot-edit">已参与报名</td>
+              <td class="td-operater"><button class="td-edit-btn btn btn-warning" title="编辑该学生信息"><i
+                    class="iconfont">&#xe60d;</i><span class="inner-text">编辑</span></button><button
+                  class="td-delete-btn btn btn-danger" title="删除该学生信息"><i class="iconfont">&#xe7d7;</i><span
+                    class="inner-text">删除</span></button><button class="td-delete-btn btn btn-info" title="添加该学生"
+                  style="display:none"><i class="iconfont">&#xe64f;</i><span class="inner-text">添加</span></button></td>
+              <!-- <td class="add-student"><i class="iconfont">&#xe64f;</i></td> -->
+            </tr>
+            <tr>
+              <td class="cannot-edit">2</td>
+              <td class="can-edit student-name">陈锐基</td>
+              <td class="cannot-edit"><i class="iconfont female">&#xe669;</i></td>
+              <td class="can-edit student-number">3118005044</td>
+              <td class="can-edit student-academy">计算机学院</td>
+              <td class="can-edit student-major-class">软工三班</td>
+              <td class="can-edit student-phone">15992501238</td>
+              <td class="can-edit student-dormitory">西三707</td>
+              <td class="cannot-edit">宣采部</td>
+              <td class="cannot-edit">已参与报名</td>
+              <td class="td-operater"><button class="td-edit-btn btn btn-warning" title="编辑该学生信息"><i
+                    class="iconfont">&#xe60d;</i><span class="inner-text">编辑</span></button><button
+                  class="td-delete-btn btn btn-danger" title="删除该学生信息"><i class="iconfont">&#xe7d7;</i><span
+                    class="inner-text">删除</span></button><button class="td-delete-btn btn btn-info" title="添加该学生"
+                  style="display:none"><i class="iconfont">&#xe64f;</i><span class="inner-text">添加</span></button></td>
+            </tr>
+            <tr>
+              <td class="cannot-edit">2</td>
+              <td class="can-edit student-name">陈锐基</td>
+              <td class="cannot-edit"><i class="iconfont female">&#xe669;</i></td>
+              <td class="can-edit student-number">3118005044</td>
+              <td class="can-edit student-academy">计算机学院</td>
+              <td class="can-edit student-major-class">软工三班</td>
+              <td class="can-edit student-phone">15992501238</td>
+              <td class="can-edit student-dormitory">西三707</td>
+              <td class="cannot-edit">宣采部</td>
+              <td class="cannot-edit">已参与报名</td>
+              <td class="td-operater"><button class="td-edit-btn btn btn-warning" title="编辑该学生信息"><i
+                    class="iconfont">&#xe60d;</i><span class="inner-text">编辑</span></button><button
+                  class="td-delete-btn btn btn-danger" title="删除该学生信息"><i class="iconfont">&#xe7d7;</i><span
+                    class="inner-text">删除</span></button><button class="td-delete-btn btn btn-info" title="添加该学生"
+                  style="display:none"><i class="iconfont">&#xe64f;</i><span class="inner-text">添加</span></button></td>
+            </tr>
+            <tr>
+              <td class="cannot-edit">2</td>
+              <td class="can-edit student-name">陈锐基</td>
+              <td class="cannot-edit"><i class="iconfont female">&#xe669;</i></td>
+              <td class="can-edit student-number">3118005044</td>
+              <td class="can-edit student-academy">计算机学院</td>
+              <td class="can-edit student-major-class">软工三班</td>
+              <td class="can-edit student-phone">15992501238</td>
+              <td class="can-edit student-dormitory">西三707</td>
+              <td class="cannot-edit">宣采部</td>
+              <td class="cannot-edit">已参与报名</td>
+              <td class="td-operater"><button class="td-edit-btn btn btn-warning" title="编辑该学生信息"><i
+                    class="iconfont">&#xe60d;</i><span class="inner-text">编辑</span></button><button
+                  class="td-delete-btn btn btn-danger" title="删除该学生信息"><i class="iconfont">&#xe7d7;</i><span
+                    class="inner-text">删除</span></button><button class="td-delete-btn btn btn-info" title="添加该学生"
+                  style="display:none"><i class="iconfont">&#xe64f;</i><span class="inner-text">添加</span></button></td>
+            </tr>
+            <tr>
+              <td class="cannot-edit">2</td>
+              <td class="can-edit student-name">陈锐基</td>
+              <td class="cannot-edit"><i class="iconfont female">&#xe669;</i></td>
+              <td class="can-edit student-number">3118005044</td>
+              <td class="can-edit student-academy">计算机学院</td>
+              <td class="can-edit student-major-class">软工三班</td>
+              <td class="can-edit student-phone">15992501238</td>
+              <td class="can-edit student-dormitory">西三707</td>
+              <td class="cannot-edit">宣采部</td>
+              <td class="cannot-edit">已参与报名</td>
+              <td class="td-operater"><button class="td-edit-btn btn btn-warning" title="编辑该学生信息"><i
+                    class="iconfont">&#xe60d;</i><span class="inner-text">编辑</span></button><button
+                  class="td-delete-btn btn btn-danger" title="删除该学生信息"><i class="iconfont">&#xe7d7;</i><span
+                    class="inner-text">删除</span></button><button class="td-delete-btn btn btn-info" title="添加该学生"
+                  style="display:none"><i class="iconfont">&#xe64f;</i><span class="inner-text">添加</span></button></td>
+            </tr>
+            <tr>
+              <td class="cannot-edit">2</td>
+              <td class="can-edit student-name">陈锐基</td>
+              <td class="cannot-edit"><i class="iconfont female">&#xe669;</i></td>
+              <td class="can-edit student-number">3118005044</td>
+              <td class="can-edit student-academy">计算机学院</td>
+              <td class="can-edit student-major-class">软工三班</td>
+              <td class="can-edit student-phone">15992501238</td>
+              <td class="can-edit student-dormitory">西三707</td>
+              <td class="cannot-edit">宣采部</td>
+              <td class="cannot-edit">已参与报名</td>
+              <td class="td-operater"><button class="td-edit-btn btn btn-warning" title="编辑该学生信息"><i
+                    class="iconfont">&#xe60d;</i><span class="inner-text">编辑</span></button><button
+                  class="td-delete-btn btn btn-danger" title="删除该学生信息"><i class="iconfont">&#xe7d7;</i><span
+                    class="inner-text">删除</span></button><button class="td-delete-btn btn btn-info" title="添加该学生"
+                  style="display:none"><i class="iconfont">&#xe64f;</i><span class="inner-text">添加</span></button></td>
+            </tr>
+            <tr>
+              <td class="cannot-edit">2</td>
+              <td class="can-edit student-name">陈锐基</td>
+              <td class="cannot-edit"><i class="iconfont female">&#xe669;</i></td>
+              <td class="can-edit student-number">3118005044</td>
+              <td class="can-edit student-academy">计算机学院</td>
+              <td class="can-edit student-major-class">软工三班</td>
+              <td class="can-edit student-phone">15992501238</td>
+              <td class="can-edit student-dormitory">西三707</td>
+              <td class="cannot-edit">宣采部</td>
+              <td class="cannot-edit">已参与报名</td>
+              <td class="td-operater"><button class="td-edit-btn btn btn-warning" title="编辑该学生信息"><i
+                    class="iconfont">&#xe60d;</i><span class="inner-text">编辑</span></button><button
+                  class="td-delete-btn btn btn-danger" title="删除该学生信息"><i class="iconfont">&#xe7d7;</i><span
+                    class="inner-text">删除</span></button><button class="td-delete-btn btn btn-info" title="添加该学生"
+                  style="display:none"><i class="iconfont">&#xe64f;</i><span class="inner-text">添加</span></button></td>
+            </tr>
+            <tr>
+              <td class="cannot-edit">2</td>
+              <td class="can-edit student-name">陈锐基</td>
+              <td class="cannot-edit"><i class="iconfont female">&#xe669;</i></td>
+              <td class="can-edit student-number">3118005044</td>
+              <td class="can-edit student-academy">计算机学院</td>
+              <td class="can-edit student-major-class">软工三班</td>
+              <td class="can-edit student-phone">15992501238</td>
+              <td class="can-edit student-dormitory">西三707</td>
+              <td class="cannot-edit">宣采部</td>
+              <td class="cannot-edit">已参与报名</td>
+              <td class="td-operater"><button class="td-edit-btn btn btn-warning" title="编辑该学生信息"><i
+                    class="iconfont">&#xe60d;</i><span class="inner-text">编辑</span></button><button
+                  class="td-delete-btn btn btn-danger" title="删除该学生信息"><i class="iconfont">&#xe7d7;</i><span
+                    class="inner-text">删除</span></button><button class="td-delete-btn btn btn-info" title="添加该学生"
+                  style="display:none"><i class="iconfont">&#xe64f;</i><span class="inner-text">添加</span></button></td>
+            </tr>
+            <tr>
+              <td class="cannot-edit">2</td>
+              <td class="can-edit student-name">陈锐基</td>
+              <td class="cannot-edit"><i class="iconfont female">&#xe669;</i></td>
+              <td class="can-edit student-number">3118005044</td>
+              <td class="can-edit student-academy">计算机学院</td>
+              <td class="can-edit student-major-class">软工三班</td>
+              <td class="can-edit student-phone">15992501238</td>
+              <td class="can-edit student-dormitory">西三707</td>
+              <td class="cannot-edit">宣采部</td>
+              <td class="cannot-edit">已参与报名</td>
+              <td class="td-operater"><button class="td-edit-btn btn btn-warning" title="编辑该学生信息"><i
+                    class="iconfont">&#xe60d;</i><span class="inner-text">编辑</span></button><button
+                  class="td-delete-btn btn btn-danger" title="删除该学生信息"><i class="iconfont">&#xe7d7;</i><span
+                    class="inner-text">删除</span></button><button class="td-delete-btn btn btn-info" title="添加该学生"
+                  style="display:none"><i class="iconfont">&#xe64f;</i><span class="inner-text">添加</span></button></td>
+            </tr>
+            <tr>
+              <td class="cannot-edit">2</td>
+              <td class="can-edit student-name">陈锐基</td>
+              <td class="cannot-edit"><i class="iconfont female">&#xe669;</i></td>
+              <td class="can-edit student-number">3118005044</td>
+              <td class="can-edit student-academy">计算机学院</td>
+              <td class="can-edit student-major-class">软工三班</td>
+              <td class="can-edit student-phone">15992501238</td>
+              <td class="can-edit student-dormitory">西三707</td>
+              <td class="cannot-edit">宣采部</td>
+              <td class="cannot-edit">已参与报名</td>
+              <td class="td-operater"><button class="td-edit-btn btn btn-warning" title="编辑该学生信息"><i
+                    class="iconfont">&#xe60d;</i><span class="inner-text">编辑</span></button><button
+                  class="td-delete-btn btn btn-danger" title="删除该学生信息"><i class="iconfont">&#xe7d7;</i><span
+                    class="inner-text">删除</span></button><button class="td-delete-btn btn btn-info" title="添加该学生"
+                  style="display:none"><i class="iconfont">&#xe64f;</i><span class="inner-text">添加</span></button></td>
+            </tr>
+            <tr>
+              <td class="cannot-edit">2</td>
+              <td class="can-edit student-name">陈锐基</td>
+              <td class="cannot-edit"><i class="iconfont female">&#xe669;</i></td>
+              <td class="can-edit student-number">3118005044</td>
+              <td class="can-edit student-academy">计算机学院</td>
+              <td class="can-edit student-major-class">软工三班</td>
+              <td class="can-edit student-phone">15992501238</td>
+              <td class="can-edit student-dormitory">西三707</td>
+              <td class="cannot-edit">宣采部</td>
+              <td class="cannot-edit">已参与报名</td>
+              <td class="td-operater"><button class="td-edit-btn btn btn-warning" title="编辑该学生信息"><i
+                    class="iconfont">&#xe60d;</i><span class="inner-text">编辑</span></button><button
+                  class="td-delete-btn btn btn-danger" title="删除该学生信息"><i class="iconfont">&#xe7d7;</i><span
+                    class="inner-text">删除</span></button><button class="td-delete-btn btn btn-info" title="添加该学生"
+                  style="display:none"><i class="iconfont">&#xe64f;</i><span class="inner-text">添加</span></button></td>
+            </tr>
+            <tr>
+              <td class="cannot-edit">2</td>
+              <td class="can-edit student-name">陈锐基</td>
+              <td class="cannot-edit"><i class="iconfont female">&#xe669;</i></td>
+              <td class="can-edit student-number">3118005044</td>
+              <td class="can-edit student-academy">计算机学院</td>
+              <td class="can-edit student-major-class">软工三班</td>
+              <td class="can-edit student-phone">15992501238</td>
+              <td class="can-edit student-dormitory">西三707</td>
+              <td class="cannot-edit">宣采部</td>
+              <td class="cannot-edit">已参与报名</td>
+              <td class="td-operater"><button class="td-edit-btn btn btn-warning" title="编辑该学生信息"><i
+                    class="iconfont">&#xe60d;</i><span class="inner-text">编辑</span></button><button
+                  class="td-delete-btn btn btn-danger" title="删除该学生信息"><i class="iconfont">&#xe7d7;</i><span
+                    class="inner-text">删除</span></button><button class="td-delete-btn btn btn-info" title="添加该学生"
+                  style="display:none"><i class="iconfont">&#xe64f;</i><span class="inner-text">添加</span></button></td>
+            </tr>
+
+          </table>
+        </div>
+        <section class="pagination-bar">
+          <i class="iconfont pre-page" title="上一页">&#xe7d8;</i>
+          <ul class="pagination-nav" style="margin-bottom: 0;">
+          </ul>
+          <i class="iconfont next-page" title="下一页">&#xe602;</i>
+          <div class="to-page">到第<input type="text" class="form-control">页<button class="btn btn-success">确定</button>
+          </div>
+        </section>
+      </section>
+
+      <!-- 新一轮考核模块 -->
+      <section class="add-student-bar" style="display: none">
+        <header><span class="department-name">财务处</span>预添加列表</header>
+        <div class="table-container">
+          <table class="table table-bordered table-hover table-responsive">
+            <thead>
+              <td style="width: 30%">序号</td>
+              <td>姓名</td>
+              <td style="width: 30%">操作</td>
+            </thead>
+            <tr>
+              <td class="list-num">1</td>
+              <td><span class="student-name">陈锐基</span></td>
+              <td><i class="iconfont" title="移除该学生">&#xe610;</i></td>
+            </tr>
+          </table>
+        </div>
+        <footer><button class="btn btn-success determine-add-btn" title="添加以上人员到新一轮">确定添加</button><button
+            class="btn btn-danger cancel-add" title="取消并返回">取消</button></footer>
+      </section>
+      <!-- 第二板块 -->
+      <section class="manage-nav edit-my-department col-xs-11 col-sm-11 col-md-9 col-lg-10 scale-in">
+        <div class="edit-btns">
+          <button class="btn" title="添加新的部门"><i class="iconfont">&#xe64f;</i> 添加部门</button>
+        </div>
+        <section class="department-msg">
+          <header class="department-name h3"><span class="can-edit">宣采部</span><i class="iconfont edit-icon"
+              title="修改部门信息">&#xe858;</i><i class="iconfont determine-edit" title="确定修改"
+              style="display: none">&#xe60c;</i></header>
+          <section class="flex-container">
+            <section class="brief-introdution">
+              <header>部门简介:</header><span class="header-line"></span><span
+                class="introdution-txt can-edit">宣采部宣采部宣部宣采部宣采部宣采部宣采部宣采部宣采部宣采部宣采部宣采部宣采部宣采部宣采部部宣采部
+              </span>
+            </section>
+            <section class="department-account">
+              <header>部门账号信息:</header><span class="header-line"></span>
+              <div>
+                <span class="field-header">管理员：</span>
+                <span class="student-name field-txt can-edit">陈锐基</span></span>
+              </div>
+              <div>
+                <span class="field-header">手机账号：</span>
+                <span class="account-phone field-txt can-edit">15992501238</span></span>
+              </div>
+              <div>
+                <span class="field-header">学号账号：</span>
+                <span class="account-student-num field-txt can-edit">3118005044</span></span>
+              </div>
+              <div>
+                <span class="field-header">密码：</span>
+                <span class="password field-txt can-edit">CHENruiJI10180jh</span>
+              </div>
+            </section>
+          </section>
+        </section>
+        <section class="department-msg">
+          <header class="department-name h3"><span class="can-edit">宣采部</span><i class="iconfont edit-icon"
+              title="修改部门信息">&#xe858;</i><i class="iconfont determine-edit" title="确定修改"
+              style="display: none">&#xe60c;</i></header>
+          <section class="flex-container">
+            <section class="brief-introdution">
+              <header>部门简介:</header><span class="header-line"></span><span
+                class="introdution-txt can-edit">宣采部宣采部宣部宣采部宣采部宣采部宣采部宣采部宣采部宣采部宣采部宣采部宣采部宣采部宣采部部宣采部
+              </span>
+            </section>
+            <section class="department-account">
+              <header>部门账号信息:</header><span class="header-line"></span>
+              <div>
+                <span class="field-header">管理员：</span>
+                <span class="student-name field-txt can-edit">陈锐基</span>
+              </div>
+              <div>
+                <span class="field-header">手机账号：</span>
+                <span class="account-phone field-txt can-edit">15992501238</span>
+              </div>
+              <div>
+                <span class="field-header">学号账号：</span>
+                <span class="account-student-num field-txt can-edit">3118005044</span>
+              </div>
+              <div>
+                <span class="field-header">密码：</span>
+                <span class="password field-txt can-edit">CHENruiJI10180jh</span>
+              </div>
+            </section>
+          </section>
+        </section>
+
+      </section>
+
+      <!-- 第三板块 -->
+      <section class="customize-detail-page manage-nav col-xs-11 col-sm-11 col-md-9 col-lg-10 scale-in">
+        <section class="edit-main-body">
+          <section class="template-1 template scale-out">
+            <section class="main-txt-container">
+              <header>Community&Introdution</header>
+              <span class="title"><span class="can-edit">计算机学院团委</span><span class="underline"></span></span>
+              <p class="main-txt can-edit">安徽中医药大学大学生英语协会（简称“英协”），成立于2000年5月，是我校最大的语言类学习兴趣社团，年均会员增长量达400余人。在校团委的指导下，英语协会对内积极举办各类英语特色的活动，获得广大安中人的支持与肯定；对外积极开展交流会，与外校同类社团保持紧密联系。
+                自成立以来，英语协会一直以提高同学们的英语学习兴趣和学习水平为己任，以“培养同学们对英语的兴趣、锻炼英语口语、展示英语风采、提升英语水平”为宗旨，以“享受自我、突破自我”为目标。</p>
+              <div class="img-container img-container-1">
+                <div class="mask" title="点击替换图片"><i class="iconfont">&#xe627;</i>点击替换</div>
+                <img src="../img/test-images2.jpg" alt="" class="img_1 img">
+              </div>
+            </section>
+            <section class="additional-sections">
+              <section class="additional-section additional-section-header-left">
+                  <i class="iconfont delete" title="删除">&#xe610;</i>
+                <span class="additional-section-header"><span class="can-edit">财务处</span><span
+                    class="dividing-line"></span><span class="bottom-line"></span></span>
+                <p class="additional-section-txt can-edit">财务处是学校财务工作的职能部门，在校党委、行政的领导下，全面负责学校财务管理和会计核算工作，下设预算管理科、科研经费管理科、收费管理科、稽核科、财务信息科、会计核算科、会计服务中心、会计委派科、综合科等九个科室，现有财会人员50人，其中硕士以上学历22人，中高级职称32人</p>
+              </section>
+              <section class="additional-section  additional-section-header-right">
+                  <i class="iconfont delete" title="删除">&#xe610;</i>
+                <span class="additional-section-header"><span class="can-edit">财务处</span><span
+                    class="dividing-line"></span><span class="bottom-line"></span></span>
+                <p class="additional-section-txt can-edit">财务处是学校财务工作的职能部门，在校党委、行政的领导下，全面负责学校财务管理和会计核算工作，下设预算管理科、科研经费管理科、收费管理科、稽核科、财务信息科、会计核算科、会计服务中心、会计委派科、综合科等九个科室，现有财会人员50人，其中硕士以上学历22人，中高级职称32人</p>
+              </section>
+              <div class="img-container img-container-2">
+                <div class="mask" title="点击替换图片"><i class="iconfont">&#xe627;</i>点击替换</div>
+                <img src="../img/test-images3.jpg" alt="" class="img_2 img">
+                <div class="add-another" title="点击添加部门">
+                  <i class="iconfont">&#xe64f;</i>
+                </div>
+              </div>
+              <section class="header-top-container">
+                <section class="additional-section additional-section-header-top">
+                  <span class="additional-section-header"><span class="can-edit">财务处</span><span
+                      class="dividing-line"></span></span>
+                      <p class="additional-section-txt can-edit">财务处是学校财务工作的职能部门，在校党委、行政的领导下，全面负责学校财务管理和会计核算工作，下设预算管理科、科研经费管理科、收费管理科、稽核科、财务信息科、会计核算科、会计服务中心、会计委派科、综合科等九个科室，现有财会人员50人，其中硕士以上学历22人，中高级职称32人</p>
+                </section>
+                <section class="additional-section additional-section-header-top">
+                  <span class="additional-section-header"><span class="can-edit">财务处</span><span
+                      class="dividing-line"></span></span>
+                      <p class="additional-section-txt can-edit">财务处是学校财务工作的职能部门，在校党委、行政的领导下，全面负责学校财务管理和会计核算工作，下设预算管理科、科研经费管理科、收费管理科、稽核科、财务信息科、会计核算科、会计服务中心、会计委派科、综合科等九个科室，现有财会人员50人，其中硕士以上学历22人，中高级职称32人</p>
+                </section>
+                <section class="additional-section additional-section-header-top">
+                  <span class="additional-section-header"><span class="can-edit">财务处</span><span
+                      class="dividing-line"></span></span>
+                      <p class="additional-section-txt can-edit">财务处是学校财务工作的职能部门，在校党委、行政的领导下，全面负责学校财务管理和会计核算工作，下设预算管理科、科研经费管理科、收费管理科、稽核科、财务信息科、会计核算科、会计服务中心、会计委派科、综合科等九个科室，现有财会人员50人，其中硕士以上学历22人，中高级职称32人</p>
+                </section>
+              </section>
+            </section>
+            <section class="sign-up-bar">
+              <p class="additional-section-txt can-edit">财务处是学校财务工作的职能部门，在校党委、行政的领导下，全面负责学校财务管理和会计核算工作，下设预算管理科、科研经费管理科、收费管理科、稽核科、财务信息科、会计核算科、会计服务中心、会计委派科、综合科等九个科室，现有财会人员50人，其中硕士以上学历22人，中高级职称32人</p>
+              <button class="btn sign-up-btn"><i class="iconfont">&#xe65a;</i>点我报名</button>
+            </section>
+            <img src="../img/dividing-line1.png" alt="" class="footer">
+          </section>
+          <section class="template-2 template scale-in">
+            <section class="main-txt-container">
+              <header>Community&Introdution</header>
+              <span class="title">计算机学院团委</span>
+              <img src="../img/test-images2.jpg" alt="" class="main-bg">
+              <span class="side-span">详情请下滑<i class="iconfont">&#xe60a;</i></span>
+              <div class="mask-up-triangle"></div>
+            </section>
+            <section class="main-section">
+              <div class="fonts-container">
+                <div class="fonts">
+                  <span class="font font-1">社</span>
+                  <span class="font font-2">团</span>
+                  <span class="font font-3">简</span>
+                  <span class="font font-4">介：</span>
+                </div>
+              </div>
+              <p class="main-txt">
+                安徽中医药大学大学生英语协会（简称“英协”），成立于2000年5月，是我校最大的语言类学习兴趣社团，年均会员增长量达400余人。在校团委的指导下，英语协会对内积极举办各类英语特色的活动，获得广大安中人的支持与肯定；对外积极开展交流会，与外校同类社团保持紧密联系。
+                自成立以来，英语协会一直以提高同学们的英语学习兴趣和学习水平为己任，以“培养同学们对英语的兴趣、锻炼英语口语、展示英语风采、提升英语水平”为宗旨，以“享受自我、突破自我”为目标。</p>
+            </section>
+            <section class="additional-sections">
+              <span class="guide-span"><i class="iconfont">&#xe60b;</i>部门简介在这里</span>
+              <div class="mask-down-triangle"></div>
+              <section class="organ-map-container">
+                <div class="organ-map organ-1">
+                  <header class="vertical">财务处</header>
+                  <div class="inner-txt">
+                    <p>
+                      财务处是学校财务工作的职能部门，在校党委、行政的领导下，全面负责学校财务管理和会计核算工作，下设预算管理科、科研经费管理科、收费管理科、稽核科、财务信息科、会计核算科、会计服务中心、会计委派科、综合科等九个科室，现有财会人员50人，其中硕士以上学历22人，中高级职称32人
+                    </p>
+                  </div>
+                  <img class="orgin-bg" src="../img/风琴图1.jpg" alt="">
+                </div>
+                <div class="organ-map organ-2">
+                  <header class="vertical">财务处</header>
+                  <div class="inner-txt">
+                    <p>
+                      财务处是学校财务工作的职能部门，在校党委、行政的领导下，全面负责学校财务管理和会计核算工作，下设预算管理科、科研经费管理科、收费管理科、稽核科、财务信息科、会计核算科、会计服务中心、会计委派科、综合科等九个科室，现有财会人员50人，其中硕士以上学历22人，中高级职称32人
+                    </p>
+                  </div>
+                  <img class="orgin-bg" src="../img/风琴图2.jpg" alt="">
+                </div>
+                <div class="organ-map organ-3">
+                  <header class="vertical">财务处</header>
+                  <div class="inner-txt">
+                    <p>
+                      财务处是学校财务工作的职能部门，在校党委、行政的领导下，全面负责学校财务管理和会计核算工作，下设预算管理科、科研经费管理科、收费管理科、稽核科、财务信息科、会计核算科、会计服务中心、会计委派科、综合科等九个科室，现有财会人员50人，其中硕士以上学历22人，中高级职称32人
+                    </p>
+                  </div>
+                  <img class="orgin-bg" src="../img/风琴图3.jpg" alt="">
+                </div>
+                <div class="organ-map organ-4">
+                  <header class="vertical">财务处</header>
+                  <div class="inner-txt">
+                    <p>
+                      财务处是学校财务工作的职能部门，在校党委、行政的领导下，全面负责学校财务管理和会计核算工作，下设预算管理科、科研经费管理科、收费管理科、稽核科、财务信息科、会计核算科、会计服务中心、会计委派科、综合科等九个科室，现有财会人员50人，其中硕士以上学历22人，中高级职称32人
+                    </p>
+                  </div>
+                  <img class="orgin-bg" src="../img/风琴图4.jpg" alt="">
+                </div>
+                <div class="organ-map organ-5">
+                  <header class="vertical">财务处</header>
+                  <div class="inner-txt">
+                    <p>
+                      财务处是学校财务工作的职能部门，在校党委、行政的领导下，全面负责学校财务管理和会计核算工作，下设预算管理科、科研经费管理科、收费管理科、稽核科、财务信息科、会计核算科、会计服务中心、会计委派科、综合科等九个科室，现有财会人员50人，其中硕士以上学历22人，中高级职称32人
+                    </p>
+                  </div>
+                  <img class="orgin-bg" src="../img/风琴图5.jpg" alt="">
+                </div>
+              </section>
+              <div class="mask-up-triangle">
+              </div>
+            </section>
+            <section class="sign-up-bar">
+              <p class="additional-section-txt">
+                财务处是学校财务工作的职能部门，在校党委、行政的领导下，全面负责学校财务管理和会计核算工作，下设预算管理科、科研经费管理科、收费管理科、稽核科、财务信息科、会计核算科、会计服务中心、会计委派科、综合科等九个科室，现有财会人员50人，其中硕士以上学历22人，中高级职称32人，快来加入我们吧！！！
+              </p>
+              <button class="btn sign-up-btn"><i class="iconfont">&#xe65a;</i>点我报名</button>
+            </section>
+            <img src="../img/dividing-line1.png" alt="" class="footer">
+          </section>
+
+        </section>
+        <div class="edit-side-bar">
+          <header>选择网页模板</header>
+          <div class="edit-btns">
+            <button class="btn template-btn template-seleted" title="模板1"><i class="iconfont">&#xe608;</i>模板1</button>
+            <button class="btn template-btn" title="模板2"><i class="iconfont">&#xe608;</i>模板2</button>
+          </div>
+          <header>复制社团简介</header>
+          <div class="edit-btns">
+            <button class="btn" title="复制社团简介"><i class="iconfont">&#xe60f;</i>社团简介</button>
+          </div>
+          <header>复制部门简介</header>
+          <div class="edit-btns">
+            <button class="btn" title="复制宣采部部门简介"><i class="iconfont">&#xe60f;</i>宣采部</button>
+            <button class="btn" title="复制宣采部部门简介"><i class="iconfont">&#xe60f;</i>宣采部</button>
+            <button class="btn" title="复制宣采部部门简介"><i class="iconfont">&#xe60f;</i>宣采部</button>
+            <button class="btn" title="复制宣采部部门简介"><i class="iconfont">&#xe60f;</i>宣采部</button>
+            <button class="btn" title="复制宣采部部门简介"><i class="iconfont">&#xe60f;</i>宣采部</button>
+          </div>
+        </div>
+      </section>
+      <!-- 第四板块 -->
+      <section class="banner-apply manage-nav col-xs-11 col-sm-11 col-md-9 col-lg-10 scale-in">
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <td>序号</td>
+              <td>图片</td>
+              <td>审核状态</td>
+              <td>相关操作</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="num">1</td>
+              <td class="upload-img">
+                <a href="#" class="thumbnail">
+                    <img src="../img/test-images1.jpg" alt="" class="banner-img">
+                </a>
+              </td>
+              <td class="failed-review">审核未通过</td>
+              <td><button class="btn btn-danger">删除</button></td>
+            </tr>
+            <tr>
+              <td class="num">2</td>
+              <td class="upload-img">上传图片</td>
+              <td class="reviewing">审核中</td>
+              <td><button class="btn btn-danger">删除</button></td>
+            </tr>
+            <tr>
+              <td class="num">3</td>
+              <td class="upload-img">上传图片</td>
+              <td class="success-review">审核已通过</td>
+              <td><button class="btn btn-danger">删除</button></td>
+            </tr>
+            <tr>
+              <td class="num">3</td>
+              <td class="upload-img">上传图片</td>
+              <td class="exhibiting">展示中</td>
+              <td><button class="btn btn-danger">删除</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="edit-btns">
+          <!-- <label for="upload-banner-img"></label> -->
+          <button class="btn" title="添加轮播图申请"><i class="iconfont">&#xe625;</i>申请轮播图</button>
+          <!-- <input type="file" id="upload-banner-img" style="display: none"> -->
+        </div>
+      </section>
+    </section>
+    <!-- 弹框 -->
+    <div id="tip_block">
+      <img src="../img/tip-right.png" alt="">
+      <span></span>
+    </div>
+    <!-- 注册部门窗口 -->
+    <section class="department-registere-container">
+      <section class="department-registere">
+        <header class="header">注册部门<i class="iconfont" title="关闭">&#xe610;</i></header>
+        <form class="form-horizontal">
+          <div class="form-group student-name">
+            <label for="student-name">管理员姓名</label>
+            <input type="text" class="form-control" id="student-name" placeholder="请输入姓名">
+          </div>
+          <div class="form-group department-name">
+            <label for="department-name">部门名字</label>
+            <input type="text" class="form-control" id="department-name" placeholder="请输入部门名">
+          </div>
+          <div class="form-group student-num">
+            <label for="student-num">学号</label>
+            <input type="text" class="form-control" id="student-num" placeholder="请输入管理员学号">
+          </div>
+          <div class="form-group student-phone">
+            <label for="student-phone">手机号码</label>
+            <input type="tel" class="form-control" id="student-phone" placeholder="请输入管理员手机号码">
+          </div>
+          <div class="form-group password">
+            <label for="password">密码</label>
+            <input type="password" class="form-control" id="password" placeholder="请输入密码">
+          </div>
+          <!-- <div class="form-group">
+                <label for="exampleInputFile">上传文件</label>
+                <input type="file" id="exampleInputFile">
+                <p class="help-block">Example block-level help text here.</p>
+              </div> -->
+          <button type="button" class="btn btn-success">确定添加</button>
+        </form>
+      </section>
+    </section>
+    <!-- 图片预览框 -->
+    <div class="preview-img-container">
+      <img src="../img/风琴图1.jpg" alt="">
+      <i class="iconfont" title="关闭预览">&#xe610;</i>
+    </div>
+  </div>
+  <!-- <script src="../src/jquery-1.12.4.js"></script> -->
+  <!-- 可公用API -->
+  <!-- <script src="../js/globalApis.js"></script> -->
+  <!-- 查看报名人员信息 -->
+  <!-- <script src="../js/applicantInformation.js"></script> -->
+  <!-- 编辑我的部门 -->
+  <!-- <script src="../js/editDepartment.js"></script> -->
+  <!-- 自定义社团详情页 -->
+  <!-- <script src="../js/customizeDetailPage.js"></script> -->
+  <!-- 申请轮播图 -->
+  <!-- <script src="../js/bannerApply.js"></script> -->
+  <!-- index -->
+  <!-- <script src="../js/index.js"></script>
+   -->
+   <script src="./bundle.js"></script>
+</body>
+
+</html>

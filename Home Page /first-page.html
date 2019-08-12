@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>社团招新系统</title>
+    <link rel="stylesheet" href="css/less.css">
+    <link rel="stylesheet" href="src/bootstrap-3.3.7-dist copy/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/Inquire.css">
+    <link rel="stylesheet" href="css/communityRegister.css">
+    <link rel="stylesheet" href="css/Login.css">
+    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="src/webuploader-0.1.5/webuploader.css">
+    <script src="src/jquery-1.12.4.min.js"></script><!-- 先引入jq，因为bootsrap的js依赖jq -->
+    <script src="src/webuploader-0.1.5/webuploader.js"></script>
+    <script src="src/bootstrap-3.3.7-dist copy/js/bootstrap.min.js"></script>
+
+
+</head>
+
+<body>
+    <!-- 导航栏 -->
+    <nav id="top-line" class="navbar navbar-dafault navbar-fixed-top ">
+        <p>社团招新系统</p>
+        <!-- 搜索框 -->
+        <div class="search">
+            <form class="form-inline" role="form">
+
+                <!-- method="POST" -->
+                <div class="form-group">
+                    <!-- 框 -->
+                    <input type="text" class="form-control" placeholder="搜索社团">
+                </div>
+                <div class="search-result">
+                    <ul>
+                    </ul>
+                </div>
+                <div class="form-group">
+                    <!-- 按钮 -->
+                    <button class="btn btn-info" data-toggle="modal" data-target="#myModal">
+                        <span class=" glyphicon glyphicon-search">
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="btns">
+            <!-- <div class="btn btn-default" data-toggle="modal" data-target="#myModal">查询状态</div> -->
+            <a href="#">
+                <div class="btn btn-default" id="inquireEntry">查询状态</div>
+            </a>
+            <a href="#">
+                <div class="btn btn-default" id="registerEntry">注册社团</div>
+            </a>
+            <a href="#">
+                <div class="btn btn-default" id="loginEntry">登录</div>
+            </a>
+        </div>
+
+    </nav>
+    <!--查询、注册、登录入口-->
+    <div class="container-fluid container1" id="outerBox" style="display: none;">
+        <div class="innerContainer">
+            <div class="bgImg2" id="close"><img src="images/lvcha.svg" alt=""></div>
+            <div class="form-group has-success has-feedback bg">
+                <label class="sr-only" for="inputGroupSuccess1">user</label>
+                <div class="input-group">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+
+                    <input type="text" class="form-control form" id="studentNumber"
+                        aria-describedby="inputGroupSuccess1Status" placeholder="学号"><span id="studentNumberSpan"
+                        class="formSpan"></span>
+                </div>
+
+                <!-- <span class="glyphicon glyphicon-eye-close form-control-feedback" aria-hidden="true"></span>
+                    <span id="inputGroupSuccess1Status" class="sr-only">(success)</span> -->
+            </div>
+            <div class="form-group has-success has-feedback">
+                <label class="sr-only" for="inputGroupSuccess1">phone</label>
+                <div class="input-group">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-phone"></span></span>
+
+                    <input type="text" class="form-control form" id="phone" aria-describedby="inputGroupSuccess1Status"
+                        placeholder="手机号"><span id="phoneSpan" class="formSpan"></span>
+
+                </div>
+
+                <!-- <span class="glyphicon glyphicon-eye-close form-control-feedback" aria-hidden="true"></span>
+                    <span id="inputGroupSuccess1Status" class="sr-only">(success)</span> -->
+            </div>
+            <div class="form-group has-success has-feedback">
+                <label class="sr-only" for="inputGroupSuccess1">checkCode</label>
+                <button type="button" class="btn btn-info btn-add" id="checkBtn">免费获取验证码</button>
+                <div class="input-group">
+
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-ok"></span></span>
+
+                    <input type="text" class="form-control form" id="checkCode"
+                        aria-describedby="inputGroupSuccess1Status" placeholder="验证码"><span id="checkCodeSpan"
+                        class="formSpan"></span>
+
+                </div>
+
+                <!-- <span class="glyphicon glyphicon-eye-close form-control-feedback" aria-hidden="true"></span>
+                    <span id="inputGroupSuccess1Status" class="sr-only">(success)</span> -->
+            </div>
+            <div class="superLogin">
+                <button type="button" class="btn btn-success btn-primary active" id="btn">查询结果</button>
+            </div>
+        </div>
+        <div class="innerContainer">
+            <div class="inquire">
+                <p>恭喜！您已通过<span id="recruit"></span></p>
+            </div>
+            <div class="inquire">
+                <p>该用户不存在</p>
+            </div>
+            <div class="inquire">
+                <p>恭喜！社团申请<span id="department"></span>部门已通过审核 </p>
+            </div>
+            <div class="inquire">
+                <p>还在审核中，请等待片刻</p>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid Registercontainer1" id="outerBox1" style="display: none;">
+        <div class="formBox">
+            <form>
+                <div class="bgImg2" id="close1"><img src="images/lvcha.svg" alt=""></div>
+                <!--上传图片-->
+                <div id="uploader-demo">
+                    <!--用来存放item-->
+                    <div id="fileList" class="uploader-list"></div>
+                    <div id="filePicker">选择社团宣传图片</div>
+                </div>
+                <ul class="list">
+
+                </ul>
+                <div class="form-group">
+                    <label>社团名字</label>
+                    <input type="text" class="form-control form" id="communityName"><span id="communityNameSpan"
+                        class="numberSpan formSpan"></span>
+                </div>
+                <div class="form-group">
+                    <label>管理员名字</label>
+                    <input type="text" class="form-control form" id="userName"><span id="userNameSpan"
+                        class="numberSpan formSpan"></span>
+                </div>
+                <div class="form-group">
+                    <label>级别</label>
+                    <select class="form-control" id="level">
+                        <option>院级</option>
+                        <option>校级</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>所属院名称</label>
+                    <input type="text" class="form-control form" id="academicInstitution"><span
+                        id="academicInstitutionSpan" class="numberSpan formSpan"></span>
+                </div>
+                <div class="form-group">
+                    <label>学号</label>
+                    <input type="text" class="form-control form" id="studentNumber1"><span id="studentNumber1Span"
+                        class="numberSpan formSpan"></span>
+                </div>
+                <div class="form-group">
+                    <label>手机号</label>
+                    <input type="text" class="form-control form" id="Number1"><span id="Number1Span"
+                        class="numberSpan formSpan"></span>
+                </div>
+                <div class="form-group">
+                    <label>密码</label>
+
+                    <span id="indicate">采用数字、字母、特殊字符且长度为8-20位</span>
+                    <i class="fa fa-eye" onclick="showhide()" id="eye"></i>
+                    <input type="password" class="form-control form" id="passWord"><span id="passWordSpan"
+                        class="numberSpan formSpan"></span>
+                </div>
+
+                <div class="form-group bg">
+                    <button type="button" class="btn btn-default btn1" id="btn1">注册</button>
+                </div>
+            </form>
+        </div>
+        <div id="innerImg">
+            <div class="innerImg">
+                <div class="innerImg1"><img src="images/check.svg" alt=""><span>您已填写好信息</span></div>
+                <div class="innerImg1"><img src="images/jiantou.svg" alt=""></div>
+                <div class="innerImg1"><img src="images/check.svg" alt=""><span>请等待审核结果</span></div>
+
+            </div>
+        </div>
+
+    </div>
+    <div class="container-fluid Logincontainer1" id="outerBox2" style="display: none;">
+        <div class="innerContainer" id="innerBox">
+            <div class="bgImg"><img src="images/wakai.jpg" alt="" id="bgImg"></div>
+            <div class="bgImg1"><img src="images/heye.svg" alt=""></div>
+            <div class="bgImg2" id="close2"><img src="images/lvcha.svg" alt=""></div>
+            <div class="form-group has-success has-feedback bg">
+                <label class="sr-only" for="inputGroupSuccess1">user</label>
+                <div class="input-group">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+
+                    <input type="text" class="form-control form" aria-describedby="inputGroupSuccess1Status"
+                        placeholder="账号（手机号或者学号）" id="Number"><span id="NumberSpan" class="numberSpan formSpan"></span>
+                </div>
+
+                <!-- <span class="glyphicon glyphicon-eye-close form-control-feedback" aria-hidden="true"></span>
+            <span id="inputGroupSuccess1Status" class="sr-only">(success)</span> -->
+            </div>
+            <div class="form-group has-success has-feedback">
+                <label class="sr-only" for="inputGroupSuccess1">user</label>
+                <i class="fa fa-eye" onclick="showhide()" id="eye2"></i>
+                <div class="input-group">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                    <span id="indicate2">采用数字、字母、特殊字符且长度为8-20位</span>
+
+                    <input type="password" class="form-control form" id="passWord2"
+                        aria-describedby="inputGroupSuccess1Status" placeholder="密码">
+                    <span id="passWord2Span" class="numberSpan formSpan"></span>
+
+                </div>
+
+                <!-- <span class="glyphicon glyphicon-eye-close form-control-feedback" aria-hidden="true"></span>
+            <span id="inputGroupSuccess1Status" class="sr-only">(success)</span> -->
+            </div>
+            <div class="superLogin">
+                <button type="button" class="btn btn-success btn-primary active" id="btn2">登录</button>
+            </div>
+        </div>
+    </div>
+    <!-- id设为myCarousel -->
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+        <!-- 轮播（Carousel）指标 -->
+        <ol class="carousel-indicators">
+            <!-- <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li> -->
+        </ol>
+        <!-- 轮播（Carousel）项目 -->
+        <div class="carousel-inner">
+            <!-- 水平居中 -->
+            <!-- <div class="item active">
+                <img src="images/slide1.png" alt="First slide" class="center-block">
+            </div> -->
+        </div>
+        <!-- 轮播（Carousel）导航 -->
+        <!-- data-slide:接收关键字prev/next改变幻灯片相对于当前地址 -->
+        <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+    <!-- 分类标签 -->
+    <div id="classify">
+        <ul class="nav nav-pills">
+            <li class="active"><a href="#">全部</a></li>
+            <li><a href="#">校级</a></li>
+            <li><a href="#">院级</a></li>
+            <li><a href="#">兴趣</a></li>
+        </ul>
+    </div>
+    <!-- 分页展示 -->
+    <div id="paging" class="text-center">
+        <img src="images/0012.jpg">
+        <img src="images/0012.jpg">
+        <img src="images/0012.jpg">
+        <img src="images/0012.jpg">
+        <ul class="pagination pagination">
+            <li><a href="#">&laquo;</a></li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li><a href="#">&raquo;</a></li>
+        </ul>
+    </div>
+    <!-- 模态框 -->
+    <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <!-- 居中 -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        搜索结果
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <!-- 为模态窗口的主体设置样式。 -->
+                    <ul>
+                        <li>hahaha</li>
+                        <li>hahaha</li>
+                        <li>hahaha</li>
+                        <li>hahaha</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <!-- 为模态窗口的底部设置样式 -->
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        <!-- 是一个自定义的 HTML5 data 属性。在这里它被用于关闭模态窗口 -->
+                        关闭
+                    </button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal -->
+    </div>
+    <script src="js/index.js"></script>
+    <script src="js/Inquire.js"></script>
+    <script src="js/communityRegister.js"></script>
+    <script src="js/Login.js"></script>
+</body>
+
+</html>

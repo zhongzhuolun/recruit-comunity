@@ -1,123 +1,123 @@
-#zzl-page {
+.my-body > #zzl-page {
   transition: color 1s, background-color 1s;
 }
-#zzl-page .container-fluid {
+.my-body > #zzl-page .container-fluid {
   background: linear-gradient(45deg, #69667d, #938693, #4d4365);
   transition: color 1s, background-color 1s;
 }
-#zzl-page .container-fluid #zzl-head .my-head {
+.my-body > #zzl-page .container-fluid #zzl-head .my-head {
   color: #449D88;
   font-size: 20px;
   margin-top: 31px;
 }
-#zzl-page .container-fluid #zzl-head .menu {
+.my-body > #zzl-page .container-fluid #zzl-head .menu {
   font-size: 26px;
   padding-top: 15px;
 }
-#zzl-page .container-fluid #zzl-head .menu .menu-btn {
+.my-body > #zzl-page .container-fluid #zzl-head .menu .menu-btn {
   float: left;
   margin-top: 10px;
   margin-right: 10px;
 }
-#zzl-page .container-fluid #zzl-head .menu .breadcrumb li {
+.my-body > #zzl-page .container-fluid #zzl-head .menu .breadcrumb li {
   font-size: 16px;
 }
-#zzl-page .container-fluid #zzl-head .admin-img img {
+.my-body > #zzl-page .container-fluid #zzl-head .admin-img img {
   width: 15%;
   float: left;
   padding-top: 13px;
   padding-bottom: 8px;
 }
-#zzl-page .container-fluid #zzl-head .dropdown {
+.my-body > #zzl-page .container-fluid #zzl-head .dropdown {
   float: left;
   padding-top: 12px;
   padding-left: 2px;
 }
-#zzl-page .container-fluid #zzl-head .dropdown .btn {
+.my-body > #zzl-page .container-fluid #zzl-head .dropdown .btn {
   border: none;
   font-size: 16px;
 }
-#zzl-page .container-fluid #zzl-head .skin {
+.my-body > #zzl-page .container-fluid #zzl-head .skin {
   margin: 10px 6px;
   float: right;
 }
-#zzl-page .container-fluid #zzl-head .skin .btn {
+.my-body > #zzl-page .container-fluid #zzl-head .skin .btn {
   padding: 6px 1px;
 }
-#zzl-page .container-fluid #zzl-head .breadcrumb {
+.my-body > #zzl-page .container-fluid #zzl-head .breadcrumb {
   padding: 0;
   margin-bottom: 0;
   list-style: none;
   background-color: transparent;
   border-radius: 4px;
 }
-#zzl-page .container-fluid #zzl-head.row [class*="same-height"] {
+.my-body > #zzl-page .container-fluid #zzl-head.row [class*="same-height"] {
   margin-bottom: -899px;
   padding-bottom: 899px;
 }
-#zzl-page .container-fluid #zzl-head.row {
+.my-body > #zzl-page .container-fluid #zzl-head.row {
   overflow: hidden;
 }
-#zzl-page .container-fluid #zzl-body .manage {
+.my-body > #zzl-page .container-fluid #zzl-body .manage {
   background: linear-gradient(45deg, #69667d, #938693, #4d4365);
   transition: color 1s, background-color 1s;
 }
-#zzl-page .container-fluid #zzl-body .manage .check-all label {
+.my-body > #zzl-page .container-fluid #zzl-body .manage .check-all label {
   margin-left: 24px;
 }
-#zzl-page .container-fluid #zzl-body .my-list-wrap {
+.my-body > #zzl-page .container-fluid #zzl-body .my-list-wrap {
   background: #1A2531;
 }
-#zzl-page .container-fluid #zzl-body .my-list-wrap a {
+.my-body > #zzl-page .container-fluid #zzl-body .my-list-wrap a {
   border: none;
 }
-#zzl-page .container-fluid #zzl-body .my-list-wrap .list-group .list-group-item {
+.my-body > #zzl-page .container-fluid #zzl-body .my-list-wrap .list-group .list-group-item {
   background: transparent;
   color: #787575;
   padding: 10px 10px 10px 12px;
   transition: color 1s, background-color 1s;
 }
-#zzl-page .container-fluid #zzl-body .my-list-wrap .list-group .list-group-item:first-child {
+.my-body > #zzl-page .container-fluid #zzl-body .my-list-wrap .list-group .list-group-item:first-child {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
-#zzl-page .container-fluid #zzl-body .my-list-wrap .list-group .list-group-item .badge {
+.my-body > #zzl-page .container-fluid #zzl-body .my-list-wrap .list-group .list-group-item .badge {
   position: relative;
   background: rgba(225, 0, 0, 0.7);
   transition: color 1s, background-color 1s;
 }
-#zzl-page .container-fluid #zzl-body .my-list-wrap .list-group .list-group-item.active {
+.my-body > #zzl-page .container-fluid #zzl-body .my-list-wrap .list-group .list-group-item.active {
   color: white;
   background: #449D88;
   transition: color 1s, background-color 1s;
 }
-#zzl-page .container-fluid #zzl-body .my-list-wrap .list-group .list-group-item.active .glyphicon {
+.my-body > #zzl-page .container-fluid #zzl-body .my-list-wrap .list-group .list-group-item.active .glyphicon {
   color: white;
 }
-#zzl-page .container-fluid #zzl-body .my-list-wrap .list-group .list-group-item.active .badge {
+.my-body > #zzl-page .container-fluid #zzl-body .my-list-wrap .list-group .list-group-item.active .badge {
   display: none;
 }
-#zzl-page .container-fluid #zzl-body.row [class*="same-height"] {
+.my-body > #zzl-page .container-fluid #zzl-body.row [class*="same-height"] {
   margin-bottom: -1899px;
   padding-bottom: 1899px;
 }
-#zzl-page .container-fluid #zzl-body.row {
+.my-body > #zzl-page .container-fluid #zzl-body.row {
   overflow: hidden;
 }
-#zzl-page .container-fluid #zzl-body td {
+.my-body > #zzl-page .container-fluid #zzl-body td {
   vertical-align: middle;
   text-align: center;
   color: #fff;
 }
-#zzl-page .container-fluid #zzl-body #my-home {
+.my-body > #zzl-page .container-fluid #zzl-body #my-home {
   background: linear-gradient(45deg, #69667d, #938693, #4d4365);
   transition: color 1s, background-color 1s;
   background-size: cover;
 }
-#zzl-page .container-fluid #zzl-body #my-home .home-datas {
+.my-body > #zzl-page .container-fluid #zzl-body #my-home .home-datas {
   margin-top: 100px;
 }
-#zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data {
+.my-body > #zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data {
   position: relative;
   float: left;
   width: 11.2vw;
@@ -131,50 +131,50 @@
   box-shadow: #1A2531 0 0 2px;
   transition: color 1s, background-color 1s;
 }
-#zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data:nth-child(1) {
+.my-body > #zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data:nth-child(1) {
   background: #449D88;
   transition: color 1s, background-color 1s;
 }
-#zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data:nth-child(2) {
+.my-body > #zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data:nth-child(2) {
   background: #406cb8;
   transition: color 1s, background-color 1s;
 }
-#zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data:nth-child(3) {
+.my-body > #zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data:nth-child(3) {
   background: #c0444c;
   transition: color 1s, background-color 1s;
 }
-#zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data:nth-child(4) {
+.my-body > #zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data:nth-child(4) {
   background: #4c4c4c;
   transition: color 1s, background-color 1s;
 }
-#zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data:hover {
+.my-body > #zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data:hover {
   box-shadow: #1A2531 1px 1px 5px;
 }
-#zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data .total {
+.my-body > #zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data .total {
   margin: 20px 0 0 45px;
   font-size: 16px;
 }
-#zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data .total p {
+.my-body > #zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data .total p {
   text-align: center;
 }
-#zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data .glyphicon {
+.my-body > #zzl-page .container-fluid #zzl-body #my-home .home-datas .home-data .glyphicon {
   position: absolute;
   top: 35%;
   left: 10%;
   font-size: 32px;
 }
-#zzl-page .container-fluid #zzl-body #my-home .sector {
+.my-body > #zzl-page .container-fluid #zzl-body #my-home .sector {
   background: url(https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565434857944&di=930881eb5496c19ed0cfdb427ed71e9c&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F03871d8582407ada84a0d304f71746f.jpg);
   transition: color 1s, background-color 1s;
   margin-top: 50px;
   margin-bottom: 50px;
 }
-#zzl-page .container-fluid #zzl-body #banner-manage .img-zoom {
+.my-body > #zzl-page .container-fluid #zzl-body #banner-manage .img-zoom {
   position: fixed;
   z-index: 6;
   display: none;
 }
-#zzl-page .container-fluid #zzl-body #banner-manage .img-container {
+.my-body > #zzl-page .container-fluid #zzl-body #banner-manage .img-container {
   position: absolute;
   background: #cecbcb;
   top: 1vh;
@@ -186,13 +186,13 @@
   overflow-x: hidden;
   transition: color 1s, background-color 1s;
 }
-#zzl-page .container-fluid #zzl-body #banner-manage .img-container .close-img-container {
+.my-body > #zzl-page .container-fluid #zzl-body #banner-manage .img-container .close-img-container {
   opacity: .8;
   z-index: 2;
   position: fixed;
   right: 200px;
 }
-#zzl-page .container-fluid #zzl-body #banner-manage .mybtn {
+.my-body > #zzl-page .container-fluid #zzl-body #banner-manage .mybtn {
   width: 50px;
   height: 50px;
   line-height: 50px;
@@ -208,7 +208,7 @@
   cursor: pointer;
   transition: color 1s, background-color 1s;
 }
-#zzl-page .container-fluid #zzl-body #banner-manage .mybtn .box {
+.my-body > #zzl-page .container-fluid #zzl-body #banner-manage .mybtn .box {
   width: 4px;
   height: 4px;
   background: radial-gradient(red, black);
@@ -229,67 +229,67 @@
     transform: scale(100);
   }
 }
-#zzl-page .container-fluid #zzl-body #banner-manage .hide {
+.my-body > #zzl-page .container-fluid #zzl-body #banner-manage .hide {
   display: none;
 }
-#zzl-page .container-fluid #zzl-body .table .btn {
+.my-body > #zzl-page .container-fluid #zzl-body .table .btn {
   margin-left: 10px;
 }
-#zzl-page button {
+.my-body > #zzl-page button {
   outline: 0;
 }
-#zzl-page .table-hover > tbody > tr:hover {
+.my-body > #zzl-page .table-hover > tbody > tr:hover {
   background-color: #595cc3;
   transition: color 1s, background-color 1s;
 }
-.normal .container-fluid {
+.my-body > .normal .container-fluid {
   background: white !important;
   transition: color 1s, background-color 1s;
 }
-.normal .container-fluid #zzl-head {
+.my-body > .normal .container-fluid #zzl-head {
   border-bottom: 1px solid #00a164;
   transition: color 1s, background-color 1s;
 }
-.normal .container-fluid #zzl-head .head-1 {
+.my-body > .normal .container-fluid #zzl-head .head-1 {
   background: #00a164 !important;
   transition: color 1s, background-color 1s;
 }
-.normal .container-fluid #zzl-head .head-1 .my-head {
+.my-body > .normal .container-fluid #zzl-head .head-1 .my-head {
   color: white !important;
   transition: color 1s, background-color 1s;
 }
-.normal .container-fluid #zzl-head .head-2 {
+.my-body > .normal .container-fluid #zzl-head .head-2 {
   background: white !important;
   transition: color 1s, background-color 1s;
 }
-.normal .container-fluid #zzl-head .head-3 {
+.my-body > .normal .container-fluid #zzl-head .head-3 {
   background: white !important;
   transition: color 1s, background-color 1s;
 }
-.normal .container-fluid #zzl-body .same-height {
+.my-body > .normal .container-fluid #zzl-body .same-height {
   background: white !important;
   transition: color 1s, background-color 1s;
 }
-.normal .container-fluid #zzl-body .same-height:nth-child(1) {
+.my-body > .normal .container-fluid #zzl-body .same-height:nth-child(1) {
   border-right: 1px solid #00a164 !important;
   transition: color 1s, background-color 1s;
 }
-.normal .container-fluid #zzl-body .same-height .pager p {
+.my-body > .normal .container-fluid #zzl-body .same-height .pager p {
   color: #1A2531 !important;
 }
-.normal .container-fluid #zzl-body .my-list-wrap {
+.my-body > .normal .container-fluid #zzl-body .my-list-wrap {
   background: white !important;
   transition: color 1s, background-color 1s;
 }
-.normal .container-fluid #zzl-body td {
+.my-body > .normal .container-fluid #zzl-body td {
   color: black !important;
   transition: color 1s, background-color 1s;
 }
-.normal .container-fluid #zzl-body .table-hover > tbody > tr:hover {
+.my-body > .normal .container-fluid #zzl-body .table-hover > tbody > tr:hover {
   background-color: #e7ffe2 !important;
   transition: color 1s, background-color 1s;
 }
-.loading {
+.my-body > .loading {
   width: 100%;
   height: 100%;
   position: fixed;
@@ -298,7 +298,7 @@
   z-index: 100;
   background: #ffffff;
 }
-.loading .pic {
+.my-body > .loading .pic {
   width: 100px;
   height: 100px;
   position: absolute;
@@ -311,7 +311,7 @@
   text-align: center;
   line-height: 100px;
 }
-.loading span {
+.my-body > .loading span {
   display: block;
   width: 80px;
   height: 80px;
@@ -329,4 +329,11 @@
   100% {
     transform: rotate(360deg);
   }
+}
+.my-body > .alert {
+  position: absolute;
+  display: none;
+  z-index: 3;
+  left: 50%;
+  top: 50%;
 }

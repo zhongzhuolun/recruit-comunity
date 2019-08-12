@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import exitComunityData from '../../lib/data';
 const echarts = require('echarts');
+import {comfirmFlag, $comfirmFrame} from './comfirm';
 // 定义全局变量
 const $myPage = $('#zzl-page'); // 页面包裹元素
 const $breadcrumb = $('.breadcrumb li') // 路径导航条
@@ -10,10 +11,14 @@ const $bannerApply = $('.banner-apply') // 侧边栏轮播图审核管理
 const $bannerManagePage = $('#banner-manage'); // 轮播图信息管理界面
 const $skinBtn = $('.skin .btn'); // 获取换肤按钮
 const $pageBtns = $('.home-data'); // 获取主页的四个按钮
+const $comfirmBtn = $('.alert .comfirm');
+const $tempImgContainer = $('.img-container');
+const $container = $tempImgContainer.find('.container');
 let userInformationPageIndex = 0;
 let bannerManagePageIndex = 0;
 let userApplyPageIndex = 0;
 let bannerApplyPageIndex = 0;
+
 // 定义一个对象，专门用于存储处理数据的函数
 const handleData = {
     // 序列化函数
@@ -298,8 +303,8 @@ const handleData = {
     },
     // 点击删除单个元素
     deleteOneItem: ($obj, $delegate) => {
-        $obj.parents('tr').remove();
-        handleData.serial($delegate);
+            $obj.parents('tr').remove();
+            handleData.serial($delegate);
     },
     // 改变单选框的状态及全选框的状态
     changeItemState: ($obj, $checkAll, $delegate) => {
@@ -345,12 +350,26 @@ const handleData = {
             $labels.removeClass('active');
         }
     },
+    // 确认删除一个元素
+    handleComfirm: ($obj,$delegate) => {
+        $comfirmBtn.one('click',  () => {
+           $comfirmFrame.hide();
+           handleData.deleteOneItem($obj, $delegate);
+        });
+   },
+   // 确认多个删除
+   handleComfirmAll: (arr, $checkAll, $delegate) => {
+        $comfirmBtn.one('click',  () => {
+            $comfirmFrame.hide();
+            handleData.deleteAllCheckedItems(arr, $checkAll, $delegate);
+        });
+    },
     // 侧边栏管理(切换页面)
     sideControl: ($obj, $page) => {
         handleData.resetColor($obj)
         $page.siblings('.manage').fadeOut();
         $page.fadeIn();
-        $breadcrumb.eq(1).removeClass('active').html('<a href="javascript:;">' + $obj.parents('.side').find('.active').find('.text').text() + '</a>');
+        $breadcrumb.eq(1).removeClass('active').show().html('<a href="javascript:;">' + $obj.parents('.side').find('.active').find('.text').text() + '</a>');
         $breadcrumb.eq(2).addClass('active').show().html($obj.find('.text').text());
     },
     // 侧边栏主管理(不切换界面)
@@ -471,13 +490,8 @@ const handleData = {
                 '<button type="button" class="btn btn-danger delete-showing">删除</button>' +
                 '</td>' +
                 '</tr>';
-            if (showingSerialNum <= 8) {
                 $tbody.append($item);
                 $tempItem.remove();
-
-            } else {
-                alert('不能再添加啦，轮播图数目最多为8！')
-            }
         } else {
             //代表替换
             let showingCommuityName = $current.find('.showing-commuity-name'),
@@ -507,8 +521,16 @@ const handleData = {
             showingId.text(tempBannerData.comunityId);
             showingUrl.text('src', tempBannerData.url);
         }
-
     },
+    // 确认轮播图控制函数
+    comfirmBannerControl: ($obj,$current,tempBannerData,showingBannerData,bool, $tbody) => {
+        $comfirmBtn.one('click',  () => {
+           $comfirmFrame.hide();
+           handleData.bannerControl($obj, $current, tempBannerData, showingBannerData, bool, $tbody);
+           $tempImgContainer.fadeOut();
+           $container.html("");
+        });
+   },
     // 初始化用户审核界面数据
     initUserApply: (url, $tbody) => {
         $.ajax({
@@ -549,8 +571,14 @@ const handleData = {
             type: 'get',
             url,
             dataType: "json",
+            data: {
+                page: 1,
+                status: 3
+            },
+            headers: {Authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJTdXBlckFkbWluIl0sImFkbWluSWQiOjEsImV4cCI6MTU2NTg2NjE0Mn0.WvkZiABjSqvqioFH9Xr3_DuBh5HykJY1tPHb0ohzBks'},
             success: function (result) {
                 $(result.object).each((key, item) => {
+                    console.log(item)
                     let $item = '<tr class="auditing">' +
                         '<td>' +
                         '<div class="checkbox radio">' +
@@ -566,7 +594,7 @@ const handleData = {
                         '<td class="auditing-userphone">' + item.phoneNum + '</td>' +
                         '<td class="auditing-id">' + item['comunity-id'] + '</td>' +
                         '<td><a href="javascript:;" class="thumbnail">' +
-                        '<img class="img-scale auditing" style="width: 8vw;" src="' + item.src + '" alt="...">' +
+                        '<img class="img-scale auditing" style="width: 8vw;" src="' + item.fileName + '" alt="...">' +
                         '</a></td>' +
                         '<td>' +
                         '<button type="button" class="btn btn-info preview">预览</button>' +

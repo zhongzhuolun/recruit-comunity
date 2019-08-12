@@ -1,4 +1,4 @@
-#zzl-page {
+.my-body > #zzl-page {
     transition: color 1s, background-color 1s;
     .container-fluid {
         background: linear-gradient(45deg, #69667d, #938693, #4d4365);
@@ -265,7 +265,7 @@
         transition: color 1s, background-color 1s;
     }
 }
-.normal {
+.my-body > .normal {
     .container-fluid {
         background: white !important;
         transition: color 1s, background-color 1s;
@@ -318,7 +318,7 @@
         }
     }
 }
-.loading {
+.my-body >.loading {
     width: 100%;
     height: 100%;
     position: fixed;
@@ -354,4 +354,11 @@
 @keyframes rotate{
     0%{transform: rotate(0deg);}
     100%{transform: rotate(360deg);}
+}
+.my-body > .alert {
+    position: absolute;
+    display: none;
+    z-index: 3;
+    left: 50%;
+    top: 50%;
 }
