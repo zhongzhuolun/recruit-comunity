@@ -111,6 +111,7 @@ const handleData = {
             return new Promise((resolve, reject) => {
                 $.ajax({
                     type: 'get',
+                    headers: {Authorization},
                     url,
                     dataType: "json",
                     success: function (result) {
@@ -133,6 +134,7 @@ const handleData = {
                 $.ajax({
                     type: 'get',
                     url: "./showing-banner.json",
+                    headers: {Authorization},
                     dataType: "json",
                     success: function (result) {
 
@@ -153,6 +155,7 @@ const handleData = {
                 $.ajax({
                     type: 'get',
                     url: "./register.json",
+                    headers: {Authorization},
                     dataType: "json",
                     success: function (result) {
                         let registerLen = result.object.length;
@@ -179,6 +182,7 @@ const handleData = {
                 $.ajax({
                     type: 'get',
                     url: "./temp-banners.json",
+                    headers: {Authorization},
                     dataType: "json",
                     success: function (result) {
                         let tempBannersLen = result.object.length;
@@ -566,6 +570,7 @@ const handleData = {
             }
         });
     },
+    
     // 初始化轮播图审核界面数据
     initBannerApply: (url, $tbody) => {
         $.ajax({
@@ -574,12 +579,13 @@ const handleData = {
             dataType: "json",
             data: {
                 page: 1,
-                status: 1
+                status: 3
             },
             headers: {Authorization},
             success: function (result) {
+                console.log(result)
+
                 $(result.object).each((key, item) => {
-                    console.log(item)
                     let $item = '<tr class="auditing">' +
                         '<td>' +
                         '<div class="checkbox radio">' +
