@@ -18,6 +18,7 @@ let userInformationPageIndex = 0;
 let bannerManagePageIndex = 0;
 let userApplyPageIndex = 0;
 let bannerApplyPageIndex = 0;
+const Authorization = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJTdXBlckFkbWluIl0sImFkbWluSWQiOjEsImV4cCI6MTU2NTg3MTc5MH0.2vfsIxE6BMs95Ru4tMttia-9ev8Ns6WWb_YWhylcF8k';
 
 // 定义一个对象，专门用于存储处理数据的函数
 const handleData = {
@@ -573,9 +574,9 @@ const handleData = {
             dataType: "json",
             data: {
                 page: 1,
-                status: 3
+                status: 1
             },
-            headers: {Authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJTdXBlckFkbWluIl0sImFkbWluSWQiOjEsImV4cCI6MTU2NTg2NjE0Mn0.WvkZiABjSqvqioFH9Xr3_DuBh5HykJY1tPHb0ohzBks'},
+            headers: {Authorization},
             success: function (result) {
                 $(result.object).each((key, item) => {
                     console.log(item)
@@ -588,11 +589,11 @@ const handleData = {
                         '</div>' +
                         '</td>' +
                         '<td class="serial-num">' + (key + 1) + '</td>' +
-                        '<td class="auditing-commuity-name">' + item.comunity + '</td>' +
-                        '<td class="auditing-username">' + item.manage + '</td>' +
+                        '<td class="auditing-commuity-name">' + item.communityName + '</td>' +
+                        '<td class="auditing-username">' + item.communityAdminName + '</td>' +
                         '<td class="auditing-student-num">' + item.studentNum + '</td>' +
                         '<td class="auditing-userphone">' + item.phoneNum + '</td>' +
-                        '<td class="auditing-id">' + item['comunity-id'] + '</td>' +
+                        '<td class="auditing-id">' + item.communityId + '</td>' +
                         '<td><a href="javascript:;" class="thumbnail">' +
                         '<img class="img-scale auditing" style="width: 8vw;" src="' + item.fileName + '" alt="...">' +
                         '</a></td>' +
