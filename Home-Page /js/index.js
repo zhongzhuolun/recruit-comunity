@@ -63,7 +63,7 @@ $(document).ready(function () {
                     '</a></li>'
             }
             page += '<li><a href="#">&raquo;</a></li>';
-            (".pagination").html(page);
+            $(".pagination").html(page);
         }
     });
     //先获取到[全部]标签的第一页数据
