@@ -134,10 +134,10 @@ $checkCode.on("blur", () => {
     let $innerContainer = $(".innerContainer");
     let $inquire = $('.inquire');
     let $btn = $("#btn");
-    let $form = $(".form");
+    let $form = $(".container1 .form");
     $btn.on("click", () => {
 
-        let $formSpan = $(".formSpan");
+        let $formSpan = $(".container1 .formSpan");
 
         $form.each((i) => {
             if ($form.eq(i).val() == "") {
@@ -161,40 +161,46 @@ $checkCode.on("blur", () => {
         //发出Ajax请求
         let $studentNumberval = $("#studentNumber").val();
         let $phoneval = $("#phone").val();
-        let usersData = [{
-            studentNumber: $studentNumberval
-        }, {
+        // let usersData = [{
+        //     studentNumber: $studentNumberval
+        // }, {
+        //     phone: $phoneval
+        // }];
+        let usersData = {
+            studentNumber: $studentNumberval,
             phone: $phoneval
-        }];
+        };
+        console.log(usersData)
 
         $.ajax({
             type: 'POST',
 
             data: JSON.stringify(usersData),
 
-            contentType: 'application/json',
+            contentType: 'application/json',                                                                                                                      
+                           
+            dataType: 'json',                     
 
-            dataType: 'json',
-
-            url: 'user/saveJsonUser.do',
+            url: 'http://10.21.23.158:8888/home/studentEntry',
 
             success: function (data) {
 
-                var datas = JSON.parse(data);
+                var datas = data;
                 console.log("成功了");
 
 
                 switch (datas.code) {
                     case 0:
-                        alert("登陆成功");
+                        alert(datas.msg);
                         setTimeout(() => {
-                            window.location.href = "url"; //3秒后跳转页面，需要有管理员id来跳转页面
+                            // window.location.href = "url"; //3秒后跳转页面，需要有管理员id来跳转页面
                         }, 3000);
                         break;
                     case 1:
-                        alert("用户名或密码不正确");
+                        alert(datas.msg);
+                        break;
                     default:
-                        alert("确保全部填写完成");
+                        alert(datas.msg);
                         break;
                 }
 

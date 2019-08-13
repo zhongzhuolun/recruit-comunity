@@ -78,7 +78,7 @@ $(document).ready(function () {
                     data[i].src +
                     '">'
             }
-            ("#paging").html(cards);
+            $("#paging").html($cards);
         }
     });
     //标签切换改变class并且传值、再获取分页数据. √

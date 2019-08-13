@@ -84,10 +84,10 @@ $passWord.on("blur", () => {
     const $innerImg = $("#innerImg");
     const $formBox = $(".formBox");
     let $btn1 = $("#btn1");
-    let $form = $(".form");
+    let $form = $(".Registercontainer1 .form");
     $btn1.on("click", () => {
 
-        let $formSpan = $(".formSpan");
+        let $formSpan = $(".Registercontainer1 .formSpan");
 
         $form.each((i) => {
             if ($form.eq(i).val() == "") {
@@ -114,57 +114,56 @@ $passWord.on("blur", () => {
         let $phoneval = $("#phone").val();
         let $passwordval = $("#passWord").val();
         let $communityNameval = $("#communityName").val();
-        let $communityLabelIdval = id; //社团标签id
+        let $communityLabelIdval = $("#level option:selected").selectedIndex; //社团级别
         let $academyNameval = $("#academicInstitution").val();
         let $srcval = $("img").attr("src"); //要上传整个图片的文件，不只是url
-        let $labelval = $("#level option:selected").text();
-        let usersData = [{
+        let usersData = {
             adminName: $adminNameval
-        }, {
+        ,
             studentNumber: $studentNumberval
-        }, {
+        ,
             phone: $phoneval
-        }, {
+        ,
             password: $passwordval
-        }, {
+        ,
             communityName: $communityNameval
-        }, {
+        ,
             communityLabelId: $communityLabelIdval
-        }, {
+        ,
             academyName: $academyNameval
-        }, {
+        ,
             src: $srcval
-        }, {
-            label: $labelval
-        }];
+        };
+        console.log(usersData)
         $.ajax({
         
             type: 'POST',
         
-            data: JSON.stringify(usersData),
+            data: usersData,
         
             contentType: 'application/json',
         
             dataType: 'json',
         
-            url: 'user/saveJsonUser.do',
+            url: 'http://10.21.23.158:8888/register/registerCommunity',
         
             success: function (data) {
+                console.log(data)
         
-                var datas = JSON.parse(data);
-                console.log("成功了");
+                var datas = data;
+                // console.log("成功了");
         
         
                 switch (datas.code) {
                     case 0:
-                        alert("填写信息成功");
+                        alert(datas.msg);
                         setTimeout(() => {
-                            window.location.href = "url"; //3秒后跳转页面，需要有社团id来跳转页面
+                            // window.location.reload(); //3秒后重新刷新一下页面
                         }, 3000);
                         break;
                     
                     default:
-                        alert("确保全部填写完成");
+                        alert(datas.msg);
                         break;
                 }
         
@@ -194,7 +193,7 @@ $passWord.on("blur", () => {
 var eye = document.getElementById("eye");
 var pwd = document.getElementById("passWord");
 
-function showhide() {
+function showhide1() {
 
     if (pwd.type == "password") {
         pwd.type = "text";
@@ -204,6 +203,7 @@ function showhide() {
         eye.className = 'fa fa-eye'
     }
 }
+
 /*创建Web Uploader实例 */
 // 初始化Web Uploader
 var $list = $('.list');

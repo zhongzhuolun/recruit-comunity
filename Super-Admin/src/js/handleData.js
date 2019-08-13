@@ -11,6 +11,10 @@ const $bannerApply = $('.banner-apply') // 侧边栏轮播图审核管理
 const $bannerManagePage = $('#banner-manage'); // 轮播图信息管理界面
 const $skinBtn = $('.skin .btn'); // 获取换肤按钮
 const $pageBtns = $('.home-data'); // 获取主页的四个按钮
+const $myHomePage = $('#my-home'); // 超级管理员首页
+const $userInformationPage = $('#user-information'); // 用户信息管理界面
+const $userApplyPage = $('#user-apply'); // 审核社团管理员注册管理界面
+const $bannerApplyPage = $('#banner-apply'); // 轮播图审核管理界面
 const $comfirmBtn = $('.alert .comfirm');
 const $tempImgContainer = $('.img-container');
 const $container = $tempImgContainer.find('.container');
@@ -18,7 +22,10 @@ let userInformationPageIndex = 0;
 let bannerManagePageIndex = 0;
 let userApplyPageIndex = 0;
 let bannerApplyPageIndex = 0;
-const Authorization = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJTdXBlckFkbWluIl0sImFkbWluSWQiOjEsImV4cCI6MTU2NTg3MTc5MH0.2vfsIxE6BMs95Ru4tMttia-9ev8Ns6WWb_YWhylcF8k';
+const Authorization = localStorage.getItem('Authorization');
+const superAdminId = localStorage.getItem('superAdminId');
+console.log(Authorization)
+console.log(superAdminId)
 
 // 定义一个对象，专门用于存储处理数据的函数
 const handleData = {
@@ -98,6 +105,17 @@ const handleData = {
         $obj.css({
             color: "#25a7ab"
         });
+    },
+    // 主页切换页面
+    changePage: ($nav, $pageBtn, $page) => {
+        $nav.slideDown().siblings('.row').slideUp();
+        $nav.prev().siblings('.list-group-item').find('.toggle').removeClass('glyphicon-minus');
+        $nav.prev().find('.toggle').addClass('glyphicon-minus');
+        handleData.sideControl($pageBtn, $page);
+        $pageBtn.trigger('click');
+        $pageBtn.parents('.row').eq(0).prev().addClass('active').siblings().removeClass('active');
+        $breadcrumb.eq(1).removeClass('active').html('<a href="javascript:;">' + $pageBtn.parents('.side').find('.active').find('.text').text() + '</a>').show();
+        $breadcrumb.eq(2).addClass('active').show().html($pageBtn.find('.text').text());
     },
     // 生成首页图表数据
     sector: () => {
@@ -210,78 +228,190 @@ const handleData = {
                 });
             }, () => {});
     },
-    // 主页切换页面
-    changePage: ($nav, $pageBtn, $page) => {
-        $nav.slideDown().siblings('.row').slideUp();
-        $nav.prev().siblings('.list-group-item').find('.toggle').removeClass('glyphicon-minus');
-        $nav.prev().find('.toggle').addClass('glyphicon-minus');
-        handleData.sideControl($pageBtn, $page);
-        $pageBtn.trigger('click');
-        $pageBtn.parents('.row').eq(0).prev().addClass('active').siblings().removeClass('active');
-        $breadcrumb.eq(1).removeClass('active').html('<a href="javascript:;">' + $pageBtn.parents('.side').find('.active').find('.text').text() + '</a>').show();
-        $breadcrumb.eq(2).addClass('active').show().html($pageBtn.find('.text').text());
-    },
     // 生成用户管理界面初始化数据
-    // initUserInformation: ($tbody, url) => {
-    //     $.ajax({
-    //         type: 'get',
-    //         url,
-    //         dataType: "json",
-    //         success: function (result) {
-    //             $(result.object).each((key, item) => {
-    //                 let $item = '<tr>' +
-    //                     '<td>' +
-    //                     '<div class="checkbox radio">' +
-    //                     '<label>' +
-    //                     '<input type="checkbox">' +
-    //                     '</label>' +
-    //                     '</div>' +
-    //                     '</td>' +
-    //                     '<td class="serial-num">' + (key + 1) + '</td>' +
-    //                     '<td>' + item.comunity + '</td>' +
-    //                     '<td>' + item.manage + '</td>' +
-    //                     '<td>' + item.studentNum + '</td>' +
-    //                     '<td>' + item.phoneNum + '</td>' +
-    //                     '<td>' + item["comunity-id"] + '</td>' +
-    //                     '<td><button type="button" class="btn btn-danger ">删除</button></td>' +
-    //                     '</tr>';
-    //                 $tbody.append($item);
-    //             })
-    //         },
-    //         error: function (errorMsg) {
-    //             alert('请求数据失败，请检查网络情况');
-    //         }
-    //     });
+    initUserInformation: ($tbody, url, data) => {
+        $.ajax({
+            type: 'get',
+            url,
+            data,
+            dataType: "json",
+            headers: {
+                Authorization
+            },
+            success: function (result) {
+                $tbody.html("");
+                $(result.object).each((key, item) => {
+                    let $item = '<tr>' +
+                        '<td>' +
+                        '<div class="checkbox radio">' +
+                        '<label>' +
+                        '<input type="checkbox">' +
+                        '</label>' +
+                        '</div>' +
+                        '</td>' +
+                        '<td class="serial-num">' + (key + 1) + '</td>' +
+                        '<td class="community-name">' + item.communityName + '</td>' +
+                        '<td class="admin-name">' + item.adminName + '</td>' +
+                        '<td class="student-number">' + item.adminStudentNumber + '</td>' +
+                        '<td class="student-phone">' + item.adminStudentPhone + '</td>' +
+                        '<td class="community-id">' + item.communityId + '</td>' +
+                        '<td><button type="button" class="btn btn-danger ">删除</button></td>' +
+                        '</tr>';
+                    $tbody.append($item);
+                })
+            },
+            error: function (errorMsg) {
+                alert('请求数据失败，请检查网络情况');
+            }
+        });
 
-    // },
-
-    initUserInformation: ($tbody, url, index) => {
-        // 另一种方法实现数据初始化包括分页
-        $tbody.html("");
-        const datas = exitComunityData[index].object;
-        $(datas).each((key, item) => {
-            let $item = '<tr>' +
-                '<td>' +
-                '<div class="checkbox radio">' +
-                '<label>' +
-                '<input type="checkbox">' +
-                '</label>' +
-                '</div>' +
-                '</td>' +
-                '<td class="serial-num">' + (key + 1) + '</td>' +
-                '<td>' + item.comunity + '</td>' +
-                '<td>' + item.manage + '</td>' +
-                '<td>' + item.studentNum + '</td>' +
-                '<td>' + item.phoneNum + '</td>' +
-                '<td>' + item["comunity-id"] + '</td>' +
-                '<td><button type="button" class="btn btn-danger ">删除</button></td>' +
-                '</tr>';
-            $tbody.append($item);
-        })
     },
+    // 生成轮播图管理界面的初始化数据
+    initBannerManagePage: (url, $tbody, data) => {
+        $.ajax({
+            type: 'get',
+            url,
+            data,
+            headers: {Authorization},
+            dataType: "json",
+            success: function (result) {
+                $tbody.html("");
+                $(result.object).each((key, item) => {
+                    let $item = '<tr class="showing">' +
+                        '<td class="serial-num">' + (key + 1) + '</td>' +
+                        '<td class="showing-commuity-name">' + item.communityName + '</td>' +
+                        '<td class="showing-username">' + item.communityAdminName + '</td>' +
+                        '<td class="banner-id">' + item.bannerId + '</td>' +
+                        // '<td class="showing-userphone">' + item.phoneNum + '</td>' +
+                        '<td class="showing-id">' + item.communityId + '</td>' +
+                        '<td><a href="javascript:;" class="thumbnail">' +
+                        '<img class="img-scale displaying" style="width: 8vw;" src="' + item.fileName + '" alt="...">' +
+                        '</a></td>' +
+                        '<td>' +
+                        '<button type="button" class="btn btn-info preview">预览</button>' +
+                        '<button type="button" class="btn btn-primary replace">替换</button>' +
+                        '<button type="button" class="btn btn-danger delete-showing">删除</button>' +
+                        '</td>' +
+                        '</tr>';
+                    $tbody.append($item);
+                });
+            },
+            error: function (errorMsg) {
+                alert("请求数据失败!");
+            }
+        });
+    },
+    // 初始化用户审核界面数据
+    initUserApply: (url, $tbody, data) => {
+        $.ajax({
+            type: 'get',
+            url,
+            dataType: "json",
+            data,
+            headers: {
+                Authorization
+            },
+            success: function (result) {
+                $tbody.html("");
+                $(result.object).each((key, item) => {
+                    let $item = '<tr>' +
+                        '<td>' +
+                        '<div class="checkbox radio">' +
+                        '<label>' +
+                        '<input type="checkbox">' +
+                        '</label>' +
+                        '</div>' +
+                        '</td>' +
+                        '<td class="serial-num">' + (key + 1) + '</td>' +
+                        '<td class="comunity-name">' + item.communityName + '</td>' +
+                        '<td class="username">' + item.adminName + '</td>' +
+                        '<td class="userphone">' + item.adminStudentPhone + '</td>' +
+                        '<td class="student-num">' + item.adminStudentNumber + '</td>' +
+                        '<td class="community-id">' + item.communityId + '</td>' +
+                        '<td><button type="button" class="btn btn-success ">通过</button>&nbsp;&nbsp;&nbsp;<button type="button"' +
+                        'class="btn btn-danger ">删除</button></td>' +
+                        '</tr>';
+                    $tbody.append($item);
+                    $navApply.find('.badge').html('');
+                })
+            },
+            error: function (errorMsg) {
+                alert('请求数据失败，请检查网络情况');
+            }
+        });
+    },
+    
+    // 初始化轮播图审核界面数据
+    initBannerApply: (url, $tbody, data) => {
+        $.ajax({
+            type: 'get',
+            url,
+            dataType: "json",
+            data,
+            headers: {Authorization},
+            success: function (result) {
+                $tbody.html("");
+                $(result.object).each((key, item) => {
+                    let $item = '<tr class="auditing">' +
+                        '<td>' +
+                        '<div class="checkbox radio">' +
+                        '<label>' +
+                        '<input type="checkbox">' +
+                        '</label>' +
+                        '</div>' +
+                        '</td>' +
+                        '<td class="serial-num">' + (key + 1) + '</td>' +
+                        '<td class="auditing-commuity-name">' + item.communityName + '</td>' +
+                        '<td class="auditing-username">' + item.communityAdminName + '</td>' +
+                        '<td class="auditing-banner-id" style="display:none">' + item.bannerId + '</td>' +
+                        // '<td class="auditing-userphone">' + item.phoneNum + '</td>' +
+                        '<td class="auditing-id">' + item.communityId + '</td>' +
+                        '<td><a href="javascript:;" class="thumbnail">' +
+                        '<img class="img-scale auditing" style="width: 8vw;" src="' + item.fileName + '" alt="...">' +
+                        '</a></td>' +
+                        '<td>' +
+                        '<button type="button" class="btn btn-info preview">预览</button>' +
+                        '<button type="button" class="btn btn-primary success">通过</button>' +
+                        '<button type="button" class="btn btn-danger delete">删除</button>' +
+                        '</td>' +
+                        '</tr>';
+                    $tbody.append($item);
+                    $navApply.find('.badge').html('');
+
+                });
+            },
+            error: function (errorMsg) {
+                alert("请求数据失败!");
+            }
+        });
+    },
+    // initUserInformation: ($tbody, url, index) => {
+    //     // 另一种方法实现数据初始化包括分页
+    //     $tbody.html("");
+    //     const datas = exitComunityData[index].object;
+    //     $(datas).each((key, item) => {
+    //         let $item = '<tr>' +
+    //             '<td>' +
+    //             '<div class="checkbox radio">' +
+    //             '<label>' +
+    //             '<input type="checkbox">' +
+    //             '</label>' +
+    //             '</div>' +
+    //             '</td>' +
+    //             '<td class="serial-num">' + (key + 1) + '</td>' +
+    //             '<td>' + item.comunity + '</td>' +
+    //             '<td>' + item.manage + '</td>' +
+    //             '<td>' + item.studentNum + '</td>' +
+    //             '<td>' + item.phoneNum + '</td>' +
+    //             '<td>' + item["comunity-id"] + '</td>' +
+    //             '<td><button type="button" class="btn btn-danger ">删除</button></td>' +
+    //             '</tr>';
+    //         $tbody.append($item);
+    //     })
+    // },
     // 用户管理界面分页功能
     // 下一页
-    handleNextPage($obj, totalPage, $tbody, $currentPage, url) {
+    handleNextPage($obj, totalPage, $tbody, $currentPage, url, data) {
         $obj.siblings('li').removeClass('disabled');
         if (userInformationPageIndex >= totalPage - 1) {
             userInformationPageIndex = totalPage - 1;
@@ -294,7 +424,7 @@ const handleData = {
         }
     },
     // 上一页
-    handlePrePage($obj, $tbody, $currentPage, url) {
+    handlePrePage($obj, $tbody, $currentPage, url, data) {
         $obj.siblings('li').removeClass('disabled');
         if (userInformationPageIndex <= 0) {
             userInformationPageIndex = 0;
@@ -306,10 +436,88 @@ const handleData = {
             handleData.initUserInformation($tbody, url, userInformationPageIndex);
         }
     },
-    // 点击删除单个元素
-    deleteOneItem: ($obj, $delegate) => {
-            $obj.parents('tr').remove();
-            handleData.serial($delegate);
+    // 点击删除单个元素, 删除后应该重新获取数据
+    deleteOneItem: ($obj, $delegate, url, data, $tbody, page) => {
+            $.ajax({
+                type: "get",
+                headers: {
+                    Authorization
+                },
+                url,
+                data,
+                success: function (response) {
+                    console.log(response)
+                    let data = {
+
+                    };
+                    $obj.parents('tr').remove();
+                    handleData.serial($delegate);
+                    switch ($delegate.get(0).id) {
+                        case "user-information":
+                            console.log("user-information")
+                            data = {
+                                page,
+                                status: 1
+                            }
+                            handleData.initUserInformation($tbody, url, data);
+                            break;
+                        case "banner-manage":
+                            console.log("banner-manage")
+                            data = {
+                                page,
+                                status: 3
+                            }
+                            handleData.initBannerManagePage(url, $tbody, data);
+                            break;
+                        case "user-apply":
+                            console.log("user-apply")
+                            data = {
+                                page,
+                                status: 0
+                            }
+                            handleData.initUserApply(url, $tbody, data);
+                            break;
+                        case "banner-apply":
+                            console.log("banner-apply")
+                            data = {
+                                page,
+                                status: 0
+                            }
+                            handleData.initBannerApply(url, $tbody, data);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            });
+           
+    },
+    
+    // 删除已选中的元素
+    deleteAllCheckedItems: (arr, $checkAll, $delegate, url, data) => {
+        if (arr.length > 0) {
+            arr.remove();
+            arr = "";
+        }
+        if ($checkAll.children().prop('checked')) {
+            $checkAll.children().prop('checked', false);
+        }
+        handleData.serial($delegate);
+    },
+    // 确认删除一个元素
+    handleComfirm: ($obj,$delegate, url, data, $tbody, page) => {
+        $comfirmBtn.one('click',  () => {
+           $comfirmFrame.hide();
+           handleData.deleteOneItem($obj, $delegate,url, data, $tbody, page);
+        });
+       
+   },
+   // 确认多个删除
+   handleComfirmAll: (arr, $checkAll, $delegate, url, data) => {
+        $comfirmBtn.one('click',  () => {
+            $comfirmFrame.hide();
+            handleData.deleteAllCheckedItems(arr, $checkAll, $delegate);
+        });
     },
     // 改变单选框的状态及全选框的状态
     changeItemState: ($obj, $checkAll, $delegate) => {
@@ -328,17 +536,6 @@ const handleData = {
         $checkAll.children().prop('checked', flag);
 
     },
-    // 删除已选中的元素
-    deleteAllCheckedItems: (arr, $checkAll, $delegate) => {
-        if (arr.length > 0) {
-            arr.remove();
-            arr = "";
-        }
-        if ($checkAll.children().prop('checked')) {
-            $checkAll.children().prop('checked', false);
-        }
-        handleData.serial($delegate);
-    },
     // 全选
     checkAllItems: ($obj, $delegate) => {
         let $radios = $delegate.find('.radio label input');
@@ -355,20 +552,6 @@ const handleData = {
             $labels.removeClass('active');
         }
     },
-    // 确认删除一个元素
-    handleComfirm: ($obj,$delegate) => {
-        $comfirmBtn.one('click',  () => {
-           $comfirmFrame.hide();
-           handleData.deleteOneItem($obj, $delegate);
-        });
-   },
-   // 确认多个删除
-   handleComfirmAll: (arr, $checkAll, $delegate) => {
-        $comfirmBtn.one('click',  () => {
-            $comfirmFrame.hide();
-            handleData.deleteAllCheckedItems(arr, $checkAll, $delegate);
-        });
-    },
     // 侧边栏管理(切换页面)
     sideControl: ($obj, $page) => {
         handleData.resetColor($obj)
@@ -384,38 +567,6 @@ const handleData = {
         $obj.find('.badge').hide();
         $obj.siblings().removeClass('active');
         $obj.siblings().find('.toggle').removeClass('glyphicon-minus');
-    },
-    // 生成轮播图管理界面的初始化数据
-    initBannerManagePage: (url, $tbody) => {
-        $.ajax({
-            type: 'get',
-            url,
-            dataType: "json",
-            success: function (result) {
-                $(result.object).each((key, item) => {
-                    let $item = '<tr class="showing">' +
-                        '<td class="serial-num">' + (key + 1) + '</td>' +
-                        '<td class="showing-commuity-name">' + item.comunity + '</td>' +
-                        '<td class="showing-username">' + item.manage + '</td>' +
-                        '<td class="showing-student-num">' + item.studentNum + '</td>' +
-                        '<td class="showing-userphone">' + item.phoneNum + '</td>' +
-                        '<td class="showing-id">' + item['comunity-id'] + '</td>' +
-                        '<td><a href="javascript:;" class="thumbnail">' +
-                        '<img class="img-scale displaying" style="width: 8vw;" src="' + item.src + '" alt="...">' +
-                        '</a></td>' +
-                        '<td>' +
-                        '<button type="button" class="btn btn-info preview">预览</button>' +
-                        '<button type="button" class="btn btn-primary replace">替换</button>' +
-                        '<button type="button" class="btn btn-danger delete-showing">删除</button>' +
-                        '</td>' +
-                        '</tr>';
-                    $tbody.append($item);
-                });
-            },
-            error: function (errorMsg) {
-                alert("请求数据失败!");
-            }
-        });
     },
     // 轮播图容器函数：参数一：触发事件的对象；参数二：最外层包裹容器；参数三：内部图片容器；参数四：点击的正在展示的那一张轮播图元素
     showTempBannerWindow: ($obj, $wrapContainer, $rightContainer, $currentItem) => {
@@ -536,89 +687,6 @@ const handleData = {
            $container.html("");
         });
    },
-    // 初始化用户审核界面数据
-    initUserApply: (url, $tbody) => {
-        $.ajax({
-            type: 'get',
-            url,
-            dataType: "json",
-            success: function (result) {
-                $(result.object).each((key, item) => {
-                    let $item = '<tr>' +
-                        '<td>' +
-                        '<div class="checkbox radio">' +
-                        '<label>' +
-                        '<input type="checkbox">' +
-                        '</label>' +
-                        '</div>' +
-                        '</td>' +
-                        '<td class="serial-num">' + (key + 1) + '</td>' +
-                        '<td class="comunity-name">' + item.comunity + '</td>' +
-                        '<td class="username">' + item.manage + '</td>' +
-                        '<td class="userphone">' + item.phoneNum + '</td>' +
-                        '<td class="student-num">' + item.studentNum + '</td>' +
-                        '<td class="student-id">' + item["comunity-id"] + '</td>' +
-                        '<td><button type="button" class="btn btn-success ">通过</button>&nbsp;&nbsp;&nbsp;<button type="button"' +
-                        'class="btn btn-danger ">删除</button></td>' +
-                        '</tr>';
-                    $tbody.append($item);
-                    $navApply.find('.badge').html('');
-                })
-            },
-            error: function (errorMsg) {
-                alert('请求数据失败，请检查网络情况');
-            }
-        });
-    },
-    
-    // 初始化轮播图审核界面数据
-    initBannerApply: (url, $tbody) => {
-        $.ajax({
-            type: 'get',
-            url,
-            dataType: "json",
-            data: {
-                page: 1,
-                status: 3
-            },
-            headers: {Authorization},
-            success: function (result) {
-                console.log(result)
-
-                $(result.object).each((key, item) => {
-                    let $item = '<tr class="auditing">' +
-                        '<td>' +
-                        '<div class="checkbox radio">' +
-                        '<label>' +
-                        '<input type="checkbox">' +
-                        '</label>' +
-                        '</div>' +
-                        '</td>' +
-                        '<td class="serial-num">' + (key + 1) + '</td>' +
-                        '<td class="auditing-commuity-name">' + item.communityName + '</td>' +
-                        '<td class="auditing-username">' + item.communityAdminName + '</td>' +
-                        '<td class="auditing-student-num">' + item.studentNum + '</td>' +
-                        '<td class="auditing-userphone">' + item.phoneNum + '</td>' +
-                        '<td class="auditing-id">' + item.communityId + '</td>' +
-                        '<td><a href="javascript:;" class="thumbnail">' +
-                        '<img class="img-scale auditing" style="width: 8vw;" src="' + item.fileName + '" alt="...">' +
-                        '</a></td>' +
-                        '<td>' +
-                        '<button type="button" class="btn btn-info preview">预览</button>' +
-                        '<button type="button" class="btn btn-primary success">通过</button>' +
-                        '<button type="button" class="btn btn-danger delete">删除</button>' +
-                        '</td>' +
-                        '</tr>';
-                    $tbody.append($item);
-                    $navApply.find('.badge').html('');
-
-                });
-            },
-            error: function (errorMsg) {
-                alert("请求数据失败!");
-            }
-        });
-    },
     // 自定义添加按钮
     customBtn: (e, $obj) => {
         let $ball = $('<span class="box"></span>');
@@ -640,6 +708,43 @@ const handleData = {
         if (!$breadcrumb.eq(2).hasClass('active')) {
             $breadcrumb.eq(1).addClass('active').show().html($obj.find('.text').text());
         }
+    },
+    // 获取不同状态的用户数量，同时进行分页
+    getAllCommunityPageNum: (url, data, $allPage) => {
+        let allCommunityNum;
+        $.ajax({
+            type: "get",
+            url,
+            data,
+            headers: {Authorization},
+            success: function (response) {
+                allCommunityNum = response.object.allCommunityNum
+                if (allCommunityNum <= 0) {
+                    allCommunityNum = 1;
+                }
+                allCommunityNum = Math.ceil(allCommunityNum / 15);
+                $allPage.html(allCommunityNum)
+            }
+        });
+    },
+    // 获取不同状态的轮播图数量，同时进行分页
+    getAllBannnerPageNum: (url, data, $allPage) => {
+        let bannerNum;
+        $.ajax({
+            type: "get",
+            url,
+            data,
+            headers: {Authorization},
+            success: function (response) {
+                console.log(response)
+                bannerNum = response.object.bannerNum
+                if (bannerNum <= 0) {
+                    bannerNum = 1;
+                }
+                bannerNum = Math.ceil(bannerNum / 10);
+                $allPage.html(bannerNum)
+            }
+        });
     }
 };
 export default handleData;

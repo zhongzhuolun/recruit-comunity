@@ -9,9 +9,9 @@ function mythird() {
         var oEvent = ev || event; //事件对象
         disX = oEvent.clientX - Load.get(0).offsetLeft; //鼠标位置减去 LoadBox的位置
         disY = oEvent.clientY - Load.get(0).offsetTop;
-        console.log(1);
+        // console.log(1);
         document.onmousemove = function (ev) {
-            console.log(1)
+            // console.log(1)
             var oEvent = ev || event; //事件对象
             var l = oEvent.clientX - disX;
             var t = oEvent.clientY - disY;
@@ -68,7 +68,8 @@ function commonInfo(reg, id) {
     }
 
 }
-function commonInfo1(reg1,reg2, id) {
+
+function commonInfo1(reg1, reg2, id) {
     var inputText = document.getElementById(id);
     var inputValue = inputText.value;
     var inputSpan = document.getElementById(id + "Span");
@@ -79,7 +80,7 @@ function commonInfo1(reg1,reg2, id) {
         inputSpan.style.background = "none";
         return false;
     } else {
-        var value = reg1.test(inputValue)||reg2.test(inputValue);
+        var value = reg1.test(inputValue) || reg2.test(inputValue);
         if (!value) {
             inputSpan.innerHTML = "格式有误！";
             inputSpan.style.color = "red";
@@ -102,7 +103,7 @@ function checkNumber() {
     var reg1 = /^[1][0-9]{10}$/ig; /* 验证手机号 */
     var reg2 = /^\d{10}$/ig; //验证学号必须为10位数字
     var id = 'Number';
-    return commonInfo1(reg1,reg2, id);
+    return commonInfo1(reg1, reg2, id);
 }
 let $Number = $("#Number");
 $Number.on("blur", () => {
@@ -126,13 +127,35 @@ $passWord2.on("blur", () => {
     $indicate2.hide();
     $bgImg.attr("src", "images/wakai.jpg");
 });
+/*点击关闭按钮会关闭页面 */
+(() => {
+    let $close2 = $("#close2");
+    let $outerBox2 = $("#outerBox2");
+    $close2.on("click", () => {
+        $outerBox2.hide();
+    })
+})();
+//眼睛睁开和闭上
+var eye2 = document.getElementById("eye2");
+var pwd2 = document.getElementById("passWord2");
+
+function showhide() {
+
+    if (pwd2.type == "password") {
+        pwd2.type = "text";
+        eye2.className = 'fa fa-eye-slash'
+    } else {
+        pwd2.type = "password";
+        eye2.className = 'fa fa-eye'
+    }
+}
 /*点登录按钮会先检查是否都已填写*/
 (() => {
     let $btn2 = $("#btn2");
-    let $form = $(".form");
+    let $form = $(".Logincontainer1 .form");
     $btn2.on("click", () => {
 
-        let $formSpan = $(".formSpan");
+        let $formSpan = $(".Logincontainer1 .formSpan");
 
         $form.each((i) => {
             if ($form.eq(i).val() == "") {
@@ -148,42 +171,45 @@ $passWord2.on("blur", () => {
         //把数据传给后台
         let $Numberval = $Number.val();
         let $passWord2val = $passWord2.val();
-        let usersData = [{
-            username: $Numberval
-        }, {
+        let usersData = {
+            account: $Numberval,
             password: $passWord2val
-        }];
+        };
         // let $btn = $("#btn");
 
         $.ajax({
 
             type: 'POST',
 
-            data: JSON.stringify(usersData),
-
             contentType: 'application/json',
 
             dataType: 'json',
 
-            url: 'user/saveJsonUser.do',
+            url: 'http://10.21.23.158:8888/login/adminLogin',
 
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization: 'Barber Token'");
+            }, //这里设置header
+            headers: {
+                'Content-Type': 'application/json;charset=utf8',
+                'Authorization': 'Barber Token'
+            },
+            data: JSON.stringify(usersData),
             success: function (data) {
-
-                var datas = JSON.parse(data);
-                console.log("成功了");
-
-
+                var datas = data;
                 switch (datas.code) {
                     case 0:
-                        alert("登陆成功");
-                        setTimeout(() => {
-                            window.location.href = "url"; //3秒后跳转页面，需要有管理员id来跳转页面
-                        }, 3000);
+                        // setTimeout(() => {
+                            localStorage.setItem("Authorization",datas.object.token);
+                            localStorage.setItem("superAdminId",datas.object.adminId);
+                            window.location.href = "http://127.0.0.1:5500/recruit-community/Super-Admin/dist/index.html"; //3秒后跳转页面，需要有管理员id来跳转页面
+                        // }, 3000);
                         break;
                     case 1:
-                        alert("用户名或密码不正确");
+                        alert(datas.msg);
+                        break;
                     default:
-                        alert("确保全部填写完成");
+                        alert(datas.msg);
                         break;
                 }
 
@@ -201,25 +227,3 @@ $passWord2.on("blur", () => {
         });
     })
 })();
-/*点击关闭按钮会关闭页面 */
-(() => {
-    let $close2 = $("#close2");
-    let $outerBox2 = $("#outerBox2");
-    $close2.on("click", () => {
-        $outerBox2.hide();
-    })
-})();
-//眼睛睁开和闭上
-var eye2 = document.getElementById("eye2");
-var pwd = document.getElementById("passWord");
-
-function showhide() {
-
-    if (pwd.type == "password") {
-        pwd.type = "text";
-        eye.className = 'fa fa-eye-slash'
-    } else {
-        pwd.type = "password";
-        eye.className = 'fa fa-eye'
-    }
-}

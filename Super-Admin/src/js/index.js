@@ -29,20 +29,34 @@ $(function () {
     const $homeBtn = $('.home-btn'); // 获取返回超级管理员首页的按钮
     const $skinBtn = $('.skin .btn'); // 获取换肤按钮
     const $pageBtns = $('.home-data'); // 获取主页的四个按钮
-    let $img = $("img");
-    let num = 0;
-    $img.each(function(i){
-        let oImg = new Image();
-        oImg.οnlοad = function(){
-            oImg.οnlοad = null;
-            num++;
-            $(".loading b").html(parseInt( num/$("img").size()*100)+"%");
-            if(num >= i){
-                $(".loading").fadeOut();
+    const allUrl = {
+        changeCommunityStatusUrl: 'http://10.21.23.158:8888/superAdmin/changeCommunityStatus',
+        bannerItemsUrl: 'http://10.21.23.158:8888/superAdmin/bannerItems',
+        deleteBanner: 'http://10.21.23.158:8888/superAdmin/deleteBanner',
+        changeBannerStatus: 'http://10.21.23.158:8888/superAdmin/changeBannerStatus',
+        replaceDisplayBanner: 'http://10.21.23.158:8888/superAdmin/replaceDisplayBanner',
+        obtainDesignatedItem: 'http://10.21.23.158:8888/superAdmin/obtainDesignatedItem',
+        getBannerNum: 'http://10.21.23.158:8888/superAdmin/getBannerNum',
+        deleteCommunity: 'http://10.21.23.158:8888/superAdmin/deleteCommunity',
+        getAllCommunityNum: 'http://10.21.23.158:8888/superAdmin/getAllCommunityNum',
+    };
+    (() => {
+        let $img = $("img");
+        let num = 0;
+        $img.each(function(i){
+            let oImg = new Image();
+            oImg.οnlοad = function(){
+                oImg.οnlοad = null;
+                num++;
+                $(".loading b").html(parseInt( num/$("img").size()*100)+"%");
+                if(num >= i){
+                    $(".loading").fadeOut();
+                }
             }
-        }
-        oImg.src = $img[i].src;
-    }); 
+            oImg.src = $img[i].src;
+        }); 
+    })();
+   
       
     // 头部
     (() => {
@@ -54,16 +68,25 @@ $(function () {
     })();
     // 侧边栏
     (() => {
+        // 获取总页码
         const {
             sideControl,
             mianControl,
-            controlSlide
+            controlSlide,
+            getAllCommunityPageNum,
+            getAllBannnerPageNum
         } = handleData;
         // 侧边栏用户信息管理
         $userInformation.on('click', function () {
-            const $allPage = $userInformationPage.find('.all-page'); // 获取总页码
+            const $allPage = $userInformationPage.find('.all-page'); 
             sideControl($(this), $userInformationPage);
-            $allPage.html(exitComunityData.length)
+            let url = allUrl.getAllCommunityNum;
+            let data = {
+                status: 1,
+                name: "null" // fixing
+            };
+            getAllCommunityPageNum(url, data, $allPage);
+
         });
         // 侧边栏轮播图信息管理
         $bannerManage.on('click', function () {
@@ -71,11 +94,24 @@ $(function () {
         });
         // 侧边栏轮播图审核管理
         $bannerApply.on('click', function () {
+            const $allPage = $bannerApplyPage.find('.all-page'); 
             sideControl($(this), $bannerApplyPage);
+            let url = allUrl.getBannerNum;
+            let data = {
+                status: 0
+            };
+            getAllBannnerPageNum(url, data, $allPage);
         });
         // 侧边用户审核管理
         $userApply.on('click', function () {
+            const $allPage = $userApplyPage.find('.all-page'); 
             sideControl($(this), $userApplyPage);
+            let url = allUrl.getAllCommunityNum;
+            let data = {
+                status: 0,
+                name: "null" // fixing
+            };
+            getAllCommunityPageNum(url, data, $allPage);
         });
         // 侧边栏主管理按钮
         $listGroup.on('click', '.list-group-item', function () {
@@ -158,15 +194,32 @@ $(function () {
         const pageLength =  exitComunityData.length;
         let value = "";
         // 初始化数据
-        const url = './exist-comunity.json';
+        // const url = './exist-comunity.json';
+        const url = allUrl.obtainDesignatedItem;
+        let data = {
+            status: 1,
+            page: 1
+        };
         const $tbody = $('#user-information tbody');
-        // $userInformation.one('click', initUserInformation($tbody, url));
-        $userInformation.one('click', initUserInformation($tbody, url, 0));
+        $userInformation.one('click', function() {
+            initUserInformation($tbody, url, data)
+        });
         // 删除社团单条信息
+        /*
+            判断删除后此时该页是否已经没有数据了，如果该页没有数据了，则应该请求上一页数据，否则，则请求当页数据
+        */ 
         $userInformationPage.on('click', '.btn-danger', function () {
+            let communityId = parseInt($(this).parents('tr').find('.community-id').html());
+            let page = parseInt($currentPage.html());
+            if ($tbody.children('tr').length == 1 && $allPage.html() > 1) {
+                page -= page;
+            } 
+            let data = {
+                communityId
+            };
             $comfirmFrame.find('p').eq(0).html('确定删除？');
             $comfirmFrame.show();
-            handleComfirm($(this), $userInformationPage);
+            handleComfirm($(this), $userInformationPage, url, data, $tbody, page);
         });
         // 点击选中按钮，改变单选框和全选框的状态，事件委托
         $userInformationPage.on('click', '.radio label', function () {
@@ -242,22 +295,19 @@ $(function () {
         let tempBannerData = {};
         let showingBannerData = {};
         // 初始化数据
-        let url = './showing-banner.json';
-        // let url = 'http://10.21.23.158:8888/superAdmin/bannerItems';
+        let url = allUrl.bannerItemsUrl;
+        let data = {
+            page: 1,
+            status: 3
+        };
         $bannerManage.one('click', function () {
-            initBannerManagePage(url, $tbody);
+            initBannerManagePage(url, $tbody, data);
         })
         // 替换按钮，事件委托，点击跳出替换窗口,此时需要发送请求，得到审核完成的轮播图数据
         $bannerManagePage.on('click', '.replace', function () {
             $container.html("");
             $current = showTempBannerWindow($(this), $tempImgContainer, $container, $current);
         });
-    //     const comfirmBannerControl = ($obj,$current,tempBannerData,showingBannerData,bool) => {
-    //         $comfirmBtn.one('click',  () => {
-    //            $comfirmFrame.hide();
-    //            bannerControl($obj, $current, tempBannerData, showingBannerData, bool);
-    //         });
-    //    }
         // 确定替换按钮，事件委托，需要发送数据给后台，告诉它们我替换的是哪一张
         $bannerManagePage.on('click', '.comfirm-replace', function () {
             $comfirmFrame.find('p').eq(0).html('确定替换？');
@@ -271,9 +321,16 @@ $(function () {
         })
         // 删除按钮，事件委托
         $bannerManagePage.on('click', '.delete-showing', function () {
+            let bannerId = parseInt($(this).parents('tr').find('.banner-id').html());
+            let url = allUrl.deleteBanner;
+            let data = {
+                bannerId
+            };
             $comfirmFrame.find('p').eq(0).html('确定删除？');
             $comfirmFrame.show();
-            handleComfirm($(this), $bannerManagePage);
+            
+            handleComfirm($(this), $bannerManagePage, url, data, $tbody, 1);
+            // handleComfirm($(this), $bannerManagePage);
         })
         // 添加按钮 
         $addBtn.on('click', function () {
@@ -320,20 +377,31 @@ $(function () {
         const $nextPageBtn = $userApplyPage.find('.nextpage');
         const $currentPage = $userApplyPage.find('.current-page');
         const $allPage = $userApplyPage.find('.all-page');
-        // 定义一个用来存储通过的用户的信息
-        let userData = {}
+        
         // 1. 初始化数据，点击该界面时，应该发送请求，获取到状态为正在注册中的社团信息，并且将其渲染出来
-        const url = './register.json';
+        // const url = './register.json';
+        const url = allUrl.obtainDesignatedItem;
+        let data = {
+            status: 0,
+            page: 1
+        };
         const $tbody = $('#user-apply tbody');
         $userApply.one('click', function () {
-            initUserApply(url, $tbody);
+            initUserApply(url, $tbody, data);
         })
         // 2. 点击通过按钮，将该项目的数据储存起来，然后发送请求修改状态，并且添加到后台服务器中，最后再把对应的项目删除掉
         // 事件委托
         $userApplyPage.on('click', '.btn-success', function () {
+            // 定义一个用来存储通过的用户的信息
+            let data = {
+                communityId: null,
+                status: null
+            };
             $comfirmFrame.find('p').eq(0).html('确定通过？');
             $comfirmFrame.show();
-            handleComfirm($(this), $userApplyPage);
+            data.communityId = parseInt($(this).parents('tr').find('.community-id').html())
+            data.status = 2;
+            handleComfirm($(this), $userApplyPage, url, data);
             // deleteOneItem($(this), $userApplyPage);
         })
         // 3. 点击删除单个项目的按钮，发送请求修改状态，将其从后台服务器中删除，最后再把对应的项目删除
@@ -396,12 +464,14 @@ $(function () {
         const $currentPage = $bannerApplyPage.find('.current-page');
         const $allPage = $bannerApplyPage.find('.all-page');
         // 1. 初始化数据，点击该界面时，应该发送请求，获取到状态为正在审核中的轮播图，并且将其渲染出来
-        // const url = './temp-banners.json';
-        let url = 'http://10.21.23.158:8888/superAdmin/bannerItems';
-
+        const url = allUrl.bannerItemsUrl;
         const $tbody = $('#banner-apply tbody');
+        let data = {
+            page: 1,
+            status: 0
+        };
         $bannerApply.one('click', function () {
-            initBannerApply(url, $tbody);
+            initBannerApply(url, $tbody, data);
         });
         // 2. 点击通过按钮，将该项目的数据储存起来，然后发送请求修改状态，并且添加到后台服务器中，最后再把对应的项目删除掉
         // 事件委托
