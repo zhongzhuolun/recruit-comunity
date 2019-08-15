@@ -89,7 +89,7 @@ $phone.on("focus", () => {
         "color": "green"
     }); //增加边框样式
     console.log(1);
-    
+
 })
 //点击获取验证码，会出现一个60秒的定时器
 $checkBtn.on("click", () => {
@@ -133,10 +133,11 @@ $checkCode.on("blur", () => {
 (() => {
     let $innerContainer = $(".innerContainer");
     let $inquire = $('.inquire');
+    let $recruit = $("#recruit");
     let $btn = $("#btn");
     let $form = $(".container1 .form");
     $btn.on("click", () => {
-
+        
         let $formSpan = $(".container1 .formSpan");
 
         $form.each((i) => {
@@ -155,7 +156,7 @@ $checkCode.on("blur", () => {
                 //根据后台请求接口判断要哪句话显示出来  
                 console.log($inquire.eq(0));
 
-                $inquire.eq(1).show();
+                // $inquire.eq(1).show();
             }
         })
         //发出Ajax请求
@@ -177,9 +178,9 @@ $checkCode.on("blur", () => {
 
             data: JSON.stringify(usersData),
 
-            contentType: 'application/json',                                                                                                                      
-                           
-            dataType: 'json',                     
+            contentType: 'application/json',
+
+            dataType: 'json',
 
             url: 'http://10.21.23.158:8888/home/studentEntry',
 
@@ -192,8 +193,22 @@ $checkCode.on("blur", () => {
                 switch (datas.code) {
                     case 0:
                         alert(datas.msg);
+                        console.log(datas.object[0].status);
+                        
+                        if(datas.object[0].status == 0) {
+                            $recruit.text(datas.object[0].communityName+datas.object[0].departmentName);
+                            // $recruit.text(datas.object[0].departmentName);
+                                $inquire.eq(0).show();
+                        } else if (datas.object[0].status == 1) {
+                            $inquire.eq(1).show();
+                        } else if(datas.object[0].status == 2) {
+                            alert("有为空的地方！");
+                        }
+                           
+
+                        
                         setTimeout(() => {
-                            // window.location.href = "url"; //3秒后跳转页面，需要有管理员id来跳转页面
+                            // window.location.reload(); //3秒后刷新页面
                         }, 3000);
                         break;
                     case 1:

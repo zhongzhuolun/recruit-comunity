@@ -55,17 +55,17 @@ $studentNumber1.on("blur", () => {
     checkstudentNumber();
 });
 /*验证手机号 */
-function checkNumber() {
+function checkNumber3() {
     var reg = /^[1][0-9]{10}$/ig; /* 验证手机号 */
     var id = 'Number1';
     return commonInfo(reg, id);
 }
 let $Number1 = $("#Number1");
 $Number1.on("blur", () => {
-    checkNumber();
+    checkNumber3();
 });
 /*验证密码*/
-function checkPwd() {
+function checkPwd3() {
     var reg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,20}$/ig; /*密码采用数字、字母、特殊字符且长度为8-20位*/
     var id = 'passWord';
     return commonInfo(reg, id);
@@ -76,7 +76,7 @@ $passWord.on("focus", () => {
     $indicate.show();
 });
 $passWord.on("blur", () => {
-    checkPwd();
+    checkPwd3();
     $indicate.hide();
 });
 /*点注册按钮会先检查是否都已填写，之后会出现等待审核的图片（再加一些判断*/
@@ -85,6 +85,12 @@ $passWord.on("blur", () => {
     const $formBox = $(".formBox");
     let $btn1 = $("#btn1");
     let $form = $(".Registercontainer1 .form");
+    // let $communityLabelIdval; //社团级别
+
+    // $("#level").on('change', function() {
+    //     // console.log(this.innerHTML)
+    //     $communityLabelIdval =  $("#level").get(0).selectedIndex;
+    // })
     $btn1.on("click", () => {
 
         let $formSpan = $(".Registercontainer1 .formSpan");
@@ -110,74 +116,66 @@ $passWord.on("blur", () => {
         });
         //点击会发出Ajax请求
         let $adminNameval = $("#userName").val();
-        let $studentNumberval = $("#studentNumber").val();
-        let $phoneval = $("#phone").val();
+        let $studentNumberval = $("#studentNumber1").val();
+        let $phoneval = $("#Number1").val();
         let $passwordval = $("#passWord").val();
         let $communityNameval = $("#communityName").val();
-        let $communityLabelIdval = $("#level option:selected").selectedIndex; //社团级别
+        let $communityLabelIdval = $("#level").get(0).selectedIndex; //社团级别
         let $academyNameval = $("#academicInstitution").val();
-        let $srcval = $("img").attr("src"); //要上传整个图片的文件，不只是url
+        let $srcval = $("#prevUpload li img").attr("src"); //要上传整个图片的文件，不只是url
         let usersData = {
-            adminName: $adminNameval
-        ,
-            studentNumber: $studentNumberval
-        ,
-            phone: $phoneval
-        ,
-            password: $passwordval
-        ,
-            communityName: $communityNameval
-        ,
-            communityLabelId: $communityLabelIdval
-        ,
-            academyName: $academyNameval
-        ,
+            adminName: $adminNameval,
+            studentNumber: $studentNumberval,
+            phone: $phoneval,
+            password: $passwordval,
+            communityName: $communityNameval,
+            communityLabelId: $communityLabelIdval,
+            academyName: $academyNameval,
             src: $srcval
         };
         console.log(usersData)
         $.ajax({
-        
+
             type: 'POST',
-        
-            data: usersData,
-        
+
+            data: JSON.stringify(usersData),
+
             contentType: 'application/json',
-        
+
             dataType: 'json',
-        
+
             url: 'http://10.21.23.158:8888/register/registerCommunity',
-        
+
             success: function (data) {
                 console.log(data)
-        
                 var datas = data;
                 // console.log("成功了");
-        
-        
+
+
                 switch (datas.code) {
                     case 0:
                         alert(datas.msg);
-                        setTimeout(() => {
-                            // window.location.reload(); //3秒后重新刷新一下页面
-                        }, 3000);
+                        // setTimeout(() => {
+                            window.location.reload(); //3秒后重新刷新一下页面
+                        // }, 1000);
                         break;
-                    
+
                     default:
                         alert(datas.msg);
                         break;
                 }
-        
-        
-        
-        
+
+
+
+
             },
-        
+
             error: function (e) {
-        
+
                 alert("操作失败请重试");
-        
+
             }
-        
+
         });
     })
 })();
@@ -206,96 +204,153 @@ function showhide1() {
 
 /*创建Web Uploader实例 */
 // 初始化Web Uploader
-var $list = $('.list');
-var uploader = WebUploader.create({
+// var $list = $('.list');
+// var uploader = WebUploader.create({
 
-    // 选完文件后，是否自动上传。
-    auto: true,
+//     // 选完文件后，是否自动上传。
+//     auto: true,
 
-    // swf文件路径
-    swf: '../webuploader-0.1.5/Uploader.swf',
+//     // swf文件路径
+//     swf: '../webuploader-0.1.5/Uploader.swf',
 
-    // 文件接收服务端。
-    server: 'http://webuploader.duapp.com/server/fileupload.php',
+//     // 文件接收服务端。
+//     server: 'http://10.21.23.158:8888/uploadImage',
 
-    // 选择文件的按钮。可选。
-    // 内部根据当前运行是创建，可能是input元素，也可能是flash.
-    pick: '#filePicker',
+//     // 选择文件的按钮。可选。
+//     // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+//     pick: '#filePicker',
 
-    // 只允许选择图片文件。
-    accept: {
-        title: 'Images',
-        extensions: 'gif,jpg,jpeg,bmp,png',
-        mimeTypes: 'image/*'
-    }
-});
+//     // 只允许选择图片文件。
+//     accept: {
+//         title: 'Images',
+//         extensions: 'gif,jpg,jpeg,bmp,png',
+//         mimeTypes: 'image/*'
+//     }
+// });
 /*监听fileQueued事件，通过uploader.makeThumb来创建图片预览图。
 PS: 这里得到的是Data URL数据，IE6、IE7不支持直接预览。可以借助FLASH或者服务端来完成预览。 */
 // 当有文件添加进来的时候
-uploader.on('fileQueued', function (file) {
-    var $li = $(
-            '<div id="' + file.id + '" class="file-item thumbnail">' +
-            '<img>' +
-            '</div>'
-        ),
-        $img = $li.find('img');
+// uploader.on('fileQueued', function (file) {
+//     var $li = $(
+//             '<div id="' + file.id + '" class="file-item thumbnail">' +
+//             '<img>' +
+//             '</div>'
+//         ),
+//         $img = $li.find('img');
 
 
-    // $list为容器jQuery实例
-    $list.append($li);
+//     // $list为容器jQuery实例
+//     $list.append($li);
 
-    // 创建缩略图
-    // 如果为非图片文件，可以不用调用此方法。
-    // thumbnailWidth x thumbnailHeight 为 100 x 100
-    var thumbnailWidth = 50,
-        thumbnailHeight = 50;
-    uploader.makeThumb(file, function (error, src) {
-        if (error) {
-            $img.replaceWith('<span>不能预览</span>');
-            return;
-        }
+//     // 创建缩略图
+//     // 如果为非图片文件，可以不用调用此方法。
+//     // thumbnailWidth x thumbnailHeight 为 100 x 100
+//     var thumbnailWidth = 50,
+//         thumbnailHeight = 50;
+//     uploader.makeThumb(file, function (error, src) {
+//         if (error) {
+//             $img.replaceWith('<span>不能预览</span>');
+//             return;
+//         }
 
-        $img.attr('src', src);
-    }, thumbnailWidth, thumbnailHeight);
-});
-/*当文件上传过程中, 上传成功，上传失败，上传完成都分别对应uploadProgress, uploadSuccess, uploadError, uploadComplete事件。 */
-// 文件上传过程中创建进度条实时显示。
-uploader.on('uploadProgress', function (file, percentage) {
-    var $li = $('#' + file.id),
-        $percent = $li.find('.progress span');
+//         $img.attr('src', src);
+//     }, thumbnailWidth, thumbnailHeight);
+// });
+// /*当文件上传过程中, 上传成功，上传失败，上传完成都分别对应uploadProgress, uploadSuccess, uploadError, uploadComplete事件。 */
+// // 文件上传过程中创建进度条实时显示。
+// uploader.on('uploadProgress', function (file, percentage) {
+//     var $li = $('#' + file.id),
+//         $percent = $li.find('.progress span');
 
-    // 避免重复创建
-    if (!$percent.length) {
-        $percent = $('<p class="progress"><span></span></p>')
-            .appendTo($li)
-            .find('span');
+//     // 避免重复创建
+//     if (!$percent.length) {
+//         $percent = $('<p class="progress"><span></span></p>')
+//             .appendTo($li)
+//             .find('span');
+//     }
+
+//     $percent.css('width', percentage * 100 + '%');
+// });
+
+// // 文件上传成功，给item添加成功class, 用样式标记上传成功。
+// uploader.on('uploadSuccess', function (file) {
+//     $('#' + file.id).addClass('upload-state-done');
+// });
+
+// // 文件上传失败，显示上传出错。
+// uploader.on('uploadError', function (file) {
+//     var $li = $('#' + file.id),
+//         $error = $li.find('div.error');
+
+//     // 避免重复创建
+//     if (!$error.length) {
+//         $error = $('<div class="error"></div>').appendTo($li);
+//     }
+
+//     $error.text('上传失败');
+// });
+
+// // 完成上传完了，成功或者失败，先删除进度条。
+// uploader.on('uploadComplete', function (file) {
+//     $('#' + file.id).find('.progress').remove();
+// });
+
+//上传图片
+
+// function filePrevImg(files) {
+//     //检测浏览器是否支持FileReader对象
+//     if (typeof FileReader == "undefined") {
+//         alert("您的浏览器不支持FileReader对象！");
+//     }
+//     var strHtml = "";
+//     for (var intI = 0; intI < files.length; intI++) {
+//         var tmpFile = files[intI];
+//         var reader = new FileReader(); //每循环一次都要重新new一个FileReader实例
+//         reader.readAsDataURL(tmpFile);
+//         reader.οnlοad = function (e) {
+//             alert(e.target.result);
+//             strHtml += "<span>";
+//             strHtml += "<img src='" + e.target.result + "' alt=''/>";
+//             strHtml += "</span>";
+//             $("#prevUpload").html("<li>" + strHtml + "</li>") ;
+//         };
+//     }
+// }
+$("#fileUpload").on("change", function () {
+    let file = this.files[0];
+    let reader = new FileReader();
+    reader.readAsDataURL(file); //调用自带方法进行转换 
+    
+    reader.onload = function (e) {
+    // this.result 就是base64
+    let finalImage = e.target.result.substring(e.target.result.indexOf(',') + 1);
+    let fileImage = {data:finalImage};
+
+    console.log(fileImage);
+    // $(".global-img").attr("src", this.result);
+    // 存储并获取url生成
+    $.ajax({
+    type: "post",
+    url: 'http://10.21.23.158:8888/apply/uploadImage',
+    // data: fileImage,
+    data:fileImage,
+    
+    
+    dataType: "json",
+    success: function (data) {
+    // 添加到新列表
+    console.log(data);
+    
+    // let datas = data;
+    let str = '';
+    str += "<li><img src="+e.target.result+"></li>";
+    $("#prevUpload").html(str);
+    // createApplyTr(response.object.src, fileName);
     }
-
-    $percent.css('width', percentage * 100 + '%');
-});
-
-// 文件上传成功，给item添加成功class, 用样式标记上传成功。
-uploader.on('uploadSuccess', function (file) {
-    $('#' + file.id).addClass('upload-state-done');
-});
-
-// 文件上传失败，显示上传出错。
-uploader.on('uploadError', function (file) {
-    var $li = $('#' + file.id),
-        $error = $li.find('div.error');
-
-    // 避免重复创建
-    if (!$error.length) {
-        $error = $('<div class="error"></div>').appendTo($li);
+    });
+    
     }
-
-    $error.text('上传失败');
-});
-
-// 完成上传完了，成功或者失败，先删除进度条。
-uploader.on('uploadComplete', function (file) {
-    $('#' + file.id).find('.progress').remove();
-});
+    });
 //选择校级时，所属院名称不可编辑
 let $level = $("#level");
 $level.on("blur", () => {

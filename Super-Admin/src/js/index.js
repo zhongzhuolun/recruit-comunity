@@ -68,7 +68,7 @@ $(function () {
     })();
     // 侧边栏
     (() => {
-        // 获取总页码
+        // 获取处理数据对象中的函数
         const {
             sideControl,
             mianControl,
@@ -82,8 +82,7 @@ $(function () {
             sideControl($(this), $userInformationPage);
             let url = allUrl.getAllCommunityNum;
             let data = {
-                status: 1,
-                name: "null" // fixing
+                status: 1
             };
             getAllCommunityPageNum(url, data, $allPage);
 
@@ -108,8 +107,8 @@ $(function () {
             sideControl($(this), $userApplyPage);
             let url = allUrl.getAllCommunityNum;
             let data = {
-                status: 0,
-                name: "null" // fixing
+                status: 0
+                // name: "信息工程学院学生会"
             };
             getAllCommunityPageNum(url, data, $allPage);
         });
@@ -179,7 +178,9 @@ $(function () {
             handleNextPage,
             handlePrePage,
             handleComfirm,
-            handleComfirmAll
+            handleComfirmAll,
+            serach,
+            handleSearchNextPage
         } = handleData;
         // 获取全选按钮
         const $checkAll = $userInformationPage.find('.check-all label');
@@ -191,8 +192,8 @@ $(function () {
         const $nextPageBtn = $userInformationPage.find('.nextpage');
         const $currentPage = $userInformationPage.find('.current-page');
         const $allPage = $userInformationPage.find('.all-page');
-        const pageLength =  exitComunityData.length;
-        let value = "";
+        let searchName = "";
+        let flag = true;
         // 初始化数据
         // const url = './exist-comunity.json';
         const url = allUrl.obtainDesignatedItem;
@@ -200,9 +201,10 @@ $(function () {
             status: 1,
             page: 1
         };
+        let status = 1;
         const $tbody = $('#user-information tbody');
         $userInformation.one('click', function() {
-            initUserInformation($tbody, url, data)
+            initUserInformation($tbody, url, data, status, $allPage);
         });
         // 删除社团单条信息
         /*
@@ -211,27 +213,35 @@ $(function () {
         $userInformationPage.on('click', '.btn-danger', function () {
             let communityId = parseInt($(this).parents('tr').find('.community-id').html());
             let page = parseInt($currentPage.html());
+            let url = allUrl.deleteCommunity;
             if ($tbody.children('tr').length == 1 && $allPage.html() > 1) {
                 page -= page;
             } 
             let data = {
                 communityId
             };
+            let status = 1;
             $comfirmFrame.find('p').eq(0).html('确定删除？');
             $comfirmFrame.show();
-            handleComfirm($(this), $userInformationPage, url, data, $tbody, page);
+            handleComfirm($(this), $userInformationPage, url, data, $tbody, page, status, $allPage);
         });
         // 点击选中按钮，改变单选框和全选框的状态，事件委托
         $userInformationPage.on('click', '.radio label', function () {
             changeItemState($(this), $checkAll, $userInformationPage);
         });
         // 点击删除多个的按钮，删除已选中的元素，事件委托
+        // 判断删除后此时该页是否已经没有数据了，如果该页没有数据了，则应该请求上一页数据，否则，则请求当页数据
         $userInformationPage.find('.delete-all-checked').click(function () {
             $comfirmFrame.find('p').eq(0).html('确定删除？');
             deleteArr = $userInformationPage.find('table .active').parents('tr');
+            let page = parseInt($currentPage.html());
+            if ($tbody.children('tr').length == 1 && $allPage.html() > 1) {
+                page -= page;
+            } 
+            let url = allUrl.deleteCommunity;
             if (deleteArr.length > 0) {
                 $comfirmFrame.show();
-                handleComfirmAll(deleteArr, $checkAll, $userInformationPage);
+                handleComfirmAll(deleteArr, $checkAll, $userInformationPage, url, page);
             }
         });
         // 点击全选按钮，选中该页所有项
@@ -241,7 +251,12 @@ $(function () {
         // 分页功能     
         // 下一页按钮
         $nextPageBtn.on('click', function() {
-            handleNextPage($(this),pageLength, $tbody, $currentPage, url)
+           
+            if (flag) {
+                handleNextPage($(this),$allPage.html(), $tbody, $currentPage, url)
+            } else {
+                handleSearchNextPage($(this),$allPage.html(),$tbody,$currentPage, url)
+            }
         });
         // 上一页按钮
         $prePageBtn.on('click', function() {
@@ -254,23 +269,18 @@ $(function () {
         }) 
         // 获取输入框中的值
         $input.on('keyup', function() {
-            value = $(this).val();
+            searchName = $(this).val();
         })
         // 点击后开始搜索
         $searchBtn.on('click',function() {
-            const datas = exitComunityData;
-            let itemArray = []; 
-            let searchItems = [];
-            $(datas).each((key, item) => {
-                itemArray.push(item.object);
-                $(itemArray).each((key, item) => {
-                    $(item).each((key, item) => {
-                        if (item.comunity.includes(value)) {
-                            searchItems.push(item);
-                        }
-                    })
-                })
-            });
+            console.log(searchName)
+            if (searchName) {
+                serach(searchName,url,$tbody, $allPage);
+                console.log("有东西")
+            } else {
+                initUserInformation($tbody, url, data, status, $allPage);
+                console.log("没有东西")
+            }
         })
     })();
     // 轮播图管理界面
@@ -464,8 +474,12 @@ $(function () {
         const $currentPage = $bannerApplyPage.find('.current-page');
         const $allPage = $bannerApplyPage.find('.all-page');
         // 1. 初始化数据，点击该界面时，应该发送请求，获取到状态为正在审核中的轮播图，并且将其渲染出来
-        const url = allUrl.bannerItemsUrl;
+        let url = allUrl.bannerItemsUrl;
         const $tbody = $('#banner-apply tbody');
+        let page = parseInt($currentPage.html());
+        if ($tbody.children('tr').length == 1 && $allPage.html() > 1) {
+            page -= page;
+        } 
         let data = {
             page: 1,
             status: 0
@@ -476,9 +490,17 @@ $(function () {
         // 2. 点击通过按钮，将该项目的数据储存起来，然后发送请求修改状态，并且添加到后台服务器中，最后再把对应的项目删除掉
         // 事件委托
         $bannerApplyPage.on('click', '.success', function () {
+            let bannerId = parseInt($(this).parents('tr').find('.auditing-banner-id').html());
+            let status = 0;
             $comfirmFrame.find('p').eq(0).html('确定通过？');
             $comfirmFrame.show();
-            handleComfirm($(this), $bannerApplyPage);
+            url = allUrl.changeBannerStatus;
+            data = {
+                bannerId,
+                status: 1
+            };
+            handleComfirm($(this), $bannerApply, url, data, $tbody, page, status, $allPage)
+            // handleComfirm($(this), $bannerApplyPage);
         });
         // 3. 点击删除单个项目的按钮，发送请求修改状态，将其从后台服务器中删除，最后再把对应的项目删除
         // 点击删除单个的按钮，删除单个元素，事件委托

@@ -9,9 +9,9 @@ function mythird() {
         var oEvent = ev || event; //事件对象
         disX = oEvent.clientX - Load.get(0).offsetLeft; //鼠标位置减去 LoadBox的位置
         disY = oEvent.clientY - Load.get(0).offsetTop;
-        // console.log(1);
+       
         document.onmousemove = function (ev) {
-            // console.log(1)
+        
             var oEvent = ev || event; //事件对象
             var l = oEvent.clientX - disX;
             var t = oEvent.clientY - disY;
@@ -120,12 +120,12 @@ let $indicate2 = $("#indicate2");
 let $bgImg = $("#bgImg");
 $passWord2.on("focus", () => {
     $indicate2.show();
-    $bgImg.attr("src", "images/wabi.jpg");
+    $bgImg.attr("src", "images/wabi.png");
 });
 $passWord2.on("blur", () => {
     checkPwd();
     $indicate2.hide();
-    $bgImg.attr("src", "images/wakai.jpg");
+    $bgImg.attr("src", "images/wakai.png");
 });
 /*点击关闭按钮会关闭页面 */
 (() => {
@@ -196,14 +196,33 @@ function showhide() {
             },
             data: JSON.stringify(usersData),
             success: function (data) {
+
                 var datas = data;
+                console.log(datas);
+
+
                 switch (datas.code) {
                     case 0:
-                        // setTimeout(() => {
-                            localStorage.setItem("Authorization",datas.object.token);
-                            localStorage.setItem("superAdminId",datas.object.adminId);
-                            window.location.href = "http://127.0.0.1:5500/recruit-community/Super-Admin/dist/index.html"; //3秒后跳转页面，需要有管理员id来跳转页面
-                        // }, 3000);
+                        alert(datas.msg);
+                        console.log(datas.object.adminId)
+                        if (datas.object.adminId == 1) {
+                            // setTimeout(() => {
+                                localStorage.setItem("Authorization",datas.object.token)
+                                localStorage.setItem("adminId",datas.object.token)
+                                window.location.href = "http://127.0.0.1:5500/recruit-community/Super-Admin/dist/index.html"; //3秒后跳转页面，需要有管理员id来跳转页面
+                            // }, 3000);
+                        } else if (datas.object.adminId == 2) {
+                            setTimeout(() => {
+                                // window.location.href = "file:///D:/recruit-comunity-master/Community%20Admin/html/CommunityAdministrator.html"; //3秒后跳转页面，需要有管理员id来跳转页面
+                            }, 3000);
+
+                        } else {
+                            setTimeout(() => {
+                                // window.location.href = "file:///D:/recruit-comunity-master/Department%20Admin/dist/index.html"; //3秒后跳转页面，需要有管理员id来跳转页面
+                            }, 3000);
+                            
+                        }
+
                         break;
                     case 1:
                         alert(datas.msg);

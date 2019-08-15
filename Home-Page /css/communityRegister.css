@@ -15,6 +15,36 @@
   width: 600px;
   height: 600px;
   padding: 50px;
+  padding-top: 0;
+}
+.Registercontainer1 .formBox #fileDiv {
+  position: relative;
+  border: 1px solid #12d3cf;
+  display: inline-block;
+  text-align: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: aliceblue;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.Registercontainer1 .formBox #fileDiv #fileUpload {
+  position: absolute;
+  left: 0;
+  display: inline-block;
+  opacity: 0;
+}
+.Registercontainer1 .formBox #prevUpload {
+  display: inline-block;
+}
+.Registercontainer1 .formBox #prevUpload li {
+  width: 50px;
+  height: 50px;
+  list-style: none;
+}
+.Registercontainer1 .formBox #prevUpload li img {
+  width: 100%;
+  height: 100%;
 }
 .Registercontainer1 .formBox #eye {
   z-index: 999;
@@ -45,7 +75,6 @@
 .Registercontainer1 .formBox #indicate {
   display: none;
   position: absolute;
-  top: 80%;
   border: 1px solid #6caf6e;
   color: #6caf6e;
 }

@@ -24,6 +24,17 @@ let userApplyPageIndex = 0;
 let bannerApplyPageIndex = 0;
 const Authorization = localStorage.getItem('Authorization');
 const superAdminId = localStorage.getItem('superAdminId');
+const allUrl = {
+    changeCommunityStatusUrl: 'http://10.21.23.158:8888/superAdmin/changeCommunityStatus',
+    bannerItemsUrl: 'http://10.21.23.158:8888/superAdmin/bannerItems',
+    deleteBanner: 'http://10.21.23.158:8888/superAdmin/deleteBanner',
+    changeBannerStatus: 'http://10.21.23.158:8888/superAdmin/changeBannerStatus',
+    replaceDisplayBanner: 'http://10.21.23.158:8888/superAdmin/replaceDisplayBanner',
+    obtainDesignatedItem: 'http://10.21.23.158:8888/superAdmin/obtainDesignatedItem',
+    getBannerNum: 'http://10.21.23.158:8888/superAdmin/getBannerNum',
+    deleteCommunity: 'http://10.21.23.158:8888/superAdmin/deleteCommunity',
+    getAllCommunityNum: 'http://10.21.23.158:8888/superAdmin/getAllCommunityNum',
+};
 console.log(Authorization)
 console.log(superAdminId)
 
@@ -229,7 +240,7 @@ const handleData = {
             }, () => {});
     },
     // 生成用户管理界面初始化数据
-    initUserInformation: ($tbody, url, data) => {
+    initUserInformation: ($tbody, url, data, status, $allPage) => {
         $.ajax({
             type: 'get',
             url,
@@ -240,6 +251,7 @@ const handleData = {
             },
             success: function (result) {
                 $tbody.html("");
+                console.log(result)
                 $(result.object).each((key, item) => {
                     let $item = '<tr>' +
                         '<td>' +
@@ -258,7 +270,12 @@ const handleData = {
                         '<td><button type="button" class="btn btn-danger ">删除</button></td>' +
                         '</tr>';
                     $tbody.append($item);
-                })
+                });
+                let url = allUrl.getAllCommunityNum;
+                let data = {
+                    status
+                };
+                handleData.getAllCommunityPageNum(url, data, $allPage);
             },
             error: function (errorMsg) {
                 alert('请求数据失败，请检查网络情况');
@@ -276,12 +293,13 @@ const handleData = {
             dataType: "json",
             success: function (result) {
                 $tbody.html("");
+                console.log(result)
                 $(result.object).each((key, item) => {
                     let $item = '<tr class="showing">' +
                         '<td class="serial-num">' + (key + 1) + '</td>' +
                         '<td class="showing-commuity-name">' + item.communityName + '</td>' +
                         '<td class="showing-username">' + item.communityAdminName + '</td>' +
-                        '<td class="banner-id">' + item.bannerId + '</td>' +
+                        '<td class="banner-id" style="display:none;">' + item.bannerId + '</td>' +
                         // '<td class="showing-userphone">' + item.phoneNum + '</td>' +
                         '<td class="showing-id">' + item.communityId + '</td>' +
                         '<td><a href="javascript:;" class="thumbnail">' +
@@ -313,6 +331,7 @@ const handleData = {
             },
             success: function (result) {
                 $tbody.html("");
+                console.log(result)
                 $(result.object).each((key, item) => {
                     let $item = '<tr>' +
                         '<td>' +
@@ -385,30 +404,6 @@ const handleData = {
             }
         });
     },
-    // initUserInformation: ($tbody, url, index) => {
-    //     // 另一种方法实现数据初始化包括分页
-    //     $tbody.html("");
-    //     const datas = exitComunityData[index].object;
-    //     $(datas).each((key, item) => {
-    //         let $item = '<tr>' +
-    //             '<td>' +
-    //             '<div class="checkbox radio">' +
-    //             '<label>' +
-    //             '<input type="checkbox">' +
-    //             '</label>' +
-    //             '</div>' +
-    //             '</td>' +
-    //             '<td class="serial-num">' + (key + 1) + '</td>' +
-    //             '<td>' + item.comunity + '</td>' +
-    //             '<td>' + item.manage + '</td>' +
-    //             '<td>' + item.studentNum + '</td>' +
-    //             '<td>' + item.phoneNum + '</td>' +
-    //             '<td>' + item["comunity-id"] + '</td>' +
-    //             '<td><button type="button" class="btn btn-danger ">删除</button></td>' +
-    //             '</tr>';
-    //         $tbody.append($item);
-    //     })
-    // },
     // 用户管理界面分页功能
     // 下一页
     handleNextPage($obj, totalPage, $tbody, $currentPage, url, data) {
@@ -420,7 +415,11 @@ const handleData = {
             userInformationPageIndex++;
             $currentPage.html(userInformationPageIndex + 1);
             $obj.removeClass('disabled');
-            handleData.initUserInformation($tbody, url, userInformationPageIndex);
+            let data = {
+                status: 1,
+                page: userInformationPageIndex
+            }
+            handleData.initUserInformation($tbody, url, data);
         }
     },
     // 上一页
@@ -437,7 +436,7 @@ const handleData = {
         }
     },
     // 点击删除单个元素, 删除后应该重新获取数据
-    deleteOneItem: ($obj, $delegate, url, data, $tbody, page) => {
+    deleteOneItem: ($obj, $delegate, url, data, $tbody, page, status, $allPage) => {
             $.ajax({
                 type: "get",
                 headers: {
@@ -448,42 +447,53 @@ const handleData = {
                 success: function (response) {
                     console.log(response)
                     let data = {
-
                     };
+                    let url;
                     $obj.parents('tr').remove();
-                    handleData.serial($delegate);
                     switch ($delegate.get(0).id) {
                         case "user-information":
                             console.log("user-information")
                             data = {
                                 page,
                                 status: 1
-                            }
-                            handleData.initUserInformation($tbody, url, data);
+                            };
+                            url = allUrl.obtainDesignatedItem;
+                            handleData.initUserInformation($tbody, url, data, status, $allPage);
+                            handleData.serial($delegate);
+
                             break;
                         case "banner-manage":
                             console.log("banner-manage")
                             data = {
                                 page,
                                 status: 3
-                            }
+                            };
+                            url = allUrl.bannerItemsUrl;
                             handleData.initBannerManagePage(url, $tbody, data);
+                            handleData.serial($delegate);
+
                             break;
                         case "user-apply":
                             console.log("user-apply")
                             data = {
                                 page,
                                 status: 0
-                            }
-                            handleData.initUserApply(url, $tbody, data);
+                            };
+                            url = allUrl.obtainDesignatedItem;
+                            handleData.initUserApply(url, $tbody, data, status, $allPage);
+                            handleData.serial($delegate);
+
                             break;
                         case "banner-apply":
                             console.log("banner-apply")
                             data = {
                                 page,
                                 status: 0
-                            }
-                            handleData.initBannerApply(url, $tbody, data);
+                            };
+                            url = allUrl.bannerItemsUrl;
+                            handleData.initBannerApply(url, $tbody, data, status, $allPage);
+                            handleData.serial($delegate);
+
                             break;
                         default:
                             break;
@@ -492,31 +502,90 @@ const handleData = {
             });
            
     },
-    
     // 删除已选中的元素
-    deleteAllCheckedItems: (arr, $checkAll, $delegate, url, data) => {
-        if (arr.length > 0) {
+    deleteAllCheckedItems: (arr, $checkAll, $delegate, url, page, status, $allPage) => {
+        // if (arr.length > 0) {
+            let $tbody = arr[i].parents('tbody');
+            for(var i = 0; i < arr.length; i++) {
+                data = {
+                    communityId: parseInt(arr[i].find('.community-id').html())
+                };
+                $.ajax({
+                    type: "get",
+                    url,
+                    data,
+                    headers:{Authorization},
+                    success: function (response) {
+                        console.log(response)
+                    }
+                });
+                num++;
+            }
+            data = {
+                page,
+                status:1
+            };
+            switch ($delegate.get(0).id) {
+                case "user-information":
+                    console.log("user-information")
+                    data = {
+                        page,
+                        status: 1
+                    };
+                    url = allUrl.obtainDesignatedItem;
+                    handleData.initUserInformation($tbody, url, data, status, $allPage);
+                    break;
+                case "banner-manage":
+                    console.log("banner-manage")
+                    data = {
+                        page,
+                        status: 3
+                    };
+                    url = allUrl.bannerItemsUrl;
+                    handleData.initBannerManagePage(url, $tbody, data);
+                    break;
+                case "user-apply":
+                    console.log("user-apply")
+                    data = {
+                        page,
+                        status: 0
+                    };
+                    url = allUrl.obtainDesignatedItem;
+                    handleData.initUserApply(url, $tbody, data, status, $allPage);
+                    break;
+                case "banner-apply":
+                    console.log("banner-apply")
+                    data = {
+                        page,
+                        status: 0
+                    };
+                    url = allUrl.bannerItemsUrl;
+                    handleData.initBannerApply(url, $tbody, data, status, $allPage);
+                    break;
+                default:
+                    break;
+            }
             arr.remove();
             arr = "";
-        }
+        // }
         if ($checkAll.children().prop('checked')) {
             $checkAll.children().prop('checked', false);
         }
         handleData.serial($delegate);
     },
     // 确认删除一个元素
-    handleComfirm: ($obj,$delegate, url, data, $tbody, page) => {
+    handleComfirm: ($obj,$delegate, url, data, $tbody, page, status, $allPage) => {
         $comfirmBtn.one('click',  () => {
            $comfirmFrame.hide();
-           handleData.deleteOneItem($obj, $delegate,url, data, $tbody, page);
+           handleData.deleteOneItem($obj, $delegate,url, data, $tbody, page, status, $allPage);
         });
        
    },
    // 确认多个删除
-   handleComfirmAll: (arr, $checkAll, $delegate, url, data) => {
+   handleComfirmAll: (arr, $checkAll, $delegate, url, page, status, $allPage) => {
         $comfirmBtn.one('click',  () => {
             $comfirmFrame.hide();
-            handleData.deleteAllCheckedItems(arr, $checkAll, $delegate);
+            handleData.deleteAllCheckedItems(arr, $checkAll, $delegate, url, page, status, $allPage);
         });
     },
     // 改变单选框的状态及全选框的状态
@@ -712,18 +781,20 @@ const handleData = {
     // 获取不同状态的用户数量，同时进行分页
     getAllCommunityPageNum: (url, data, $allPage) => {
         let allCommunityNum;
+
         $.ajax({
             type: "get",
             url,
             data,
             headers: {Authorization},
             success: function (response) {
-                allCommunityNum = response.object.allCommunityNum
-                if (allCommunityNum <= 0) {
-                    allCommunityNum = 1;
-                }
-                allCommunityNum = Math.ceil(allCommunityNum / 15);
-                $allPage.html(allCommunityNum)
+                console.log(response)
+                // allCommunityNum = response.object.allCommunityNum
+                // if (allCommunityNum <= 0) {
+                //     allCommunityNum = 1;
+                // }
+                // allCommunityNum = Math.ceil(allCommunityNum / 15);
+                // $allPage.html(allCommunityNum)
             }
         });
     },
@@ -745,6 +816,100 @@ const handleData = {
                 $allPage.html(bannerNum)
             }
         });
-    }
+    },
+    // 用户信息管理模糊搜索
+    serach: (searchName,url,$tbody,$allPage) => {
+        const data = {
+            searchName,
+            status: 1,
+            page:1
+          };
+        userInformationPageIndex = 0;
+        $.ajax({
+            type: "get",
+            url,
+            data,
+            headers:{Authorization},
+            success: function (result) {
+                $tbody.html("");
+                if (result.object.length > 0) {
+                    $(result.object).each((key, item) => {
+                        let $item = '<tr>' +
+                            '<td>' +
+                            '<div class="checkbox radio">' +
+                            '<label>' +
+                            '<input type="checkbox">' +
+                            '</label>' +
+                            '</div>' +
+                            '</td>' +
+                            '<td class="serial-num">' + (key + 1) + '</td>' +
+                            '<td class="community-name">' + item.communityName + '</td>' +
+                            '<td class="admin-name">' + item.adminName + '</td>' +
+                            '<td class="student-number">' + item.adminStudentNumber + '</td>' +
+                            '<td class="student-phone">' + item.adminStudentPhone + '</td>' +
+                            '<td class="community-id">' + item.communityId + '</td>' +
+                            '<td><button type="button" class="btn btn-danger ">删除</button></td>' +
+                            '</tr>';
+                        $tbody.append($item);
+                    });
+                } else {
+                    $tbody.html("<p style='color:red;'>搜索不到结果，请换一个名字搜索吧!</p>");
+                }
+               
+                let url = allUrl.getAllCommunityNum;
+                let data = {
+                    status: 1
+                };
+                handleData.getAllCommunityPageNum(url, data, $allPage);
+            }
+        });
+    },
+    // 搜索的分页
+    handleSearchNextPage($obj, totalPage, $tbody, $currentPage, url ) {
+        $obj.siblings('li').removeClass('disabled');
+        if (userInformationPageIndex >= totalPage - 1) {
+            userInformationPageIndex = totalPage - 1;
+            $obj.addClass('disabled');
+        } else {
+            userInformationPageIndex++;
+            let data = {
+                status: 1,
+                page: userInformationPageIndex
+            };
+            $currentPage.html(userInformationPageIndex + 1);
+            $obj.removeClass('disabled');
+            $.ajax({
+                type: "get",
+                url,
+                data,
+                headers:{Authorization},
+                success: function (result) {
+                    $tbody.html("");
+                    if (result.object.length > 0) {
+                        $(result.object).each((key, item) => {
+                            let $item = '<tr>' +
+                                '<td>' +
+                                '<div class="checkbox radio">' +
+                                '<label>' +
+                                '<input type="checkbox">' +
+                                '</label>' +
+                                '</div>' +
+                                '</td>' +
+                                '<td class="serial-num">' + (key + 1) + '</td>' +
+                                '<td class="community-name">' + item.communityName + '</td>' +
+                                '<td class="admin-name">' + item.adminName + '</td>' +
+                                '<td class="student-number">' + item.adminStudentNumber + '</td>' +
+                                '<td class="student-phone">' + item.adminStudentPhone + '</td>' +
+                                '<td class="community-id">' + item.communityId + '</td>' +
+                                '<td><button type="button" class="btn btn-danger ">删除</button></td>' +
+                                '</tr>';
+                            $tbody.append($item);
+                        });
+                    }                        
+                }
+            });
+            // handleData.initUserInformation($tbody, url, userInformationPageIndex);
+        }
+    },
 };
 export default handleData;

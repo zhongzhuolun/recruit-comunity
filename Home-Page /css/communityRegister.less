@@ -15,6 +15,42 @@
         width: 600px;
         height: 600px;
         padding: 50px;
+        padding-top: 0;
+
+        #fileDiv {
+            position: relative;
+            border: 1px solid #12d3cf;
+            display: inline-block;
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: aliceblue;
+            border-radius: 10px;
+            cursor: pointer;
+
+            #fileUpload {
+                position: absolute;
+                left: 0;
+                display: inline-block;
+                opacity: 0;
+            }
+        }
+
+
+        #prevUpload {
+            display: inline-block;
+
+            li {
+                width: 50px;
+                height: 50px;
+                list-style: none;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+        }
 
         #eye {
 
@@ -52,7 +88,7 @@
         #indicate {
             display: none;
             position: absolute;
-            top: 80%;
+            // top: 80%;
             border: 1px solid #6caf6e;
             color: #6caf6e;
         }

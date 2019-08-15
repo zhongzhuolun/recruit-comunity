@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="src/webuploader-0.1.5/webuploader.css">
     <script src="src/jquery-1.12.4.min.js"></script><!-- 先引入jq，因为bootsrap的js依赖jq -->
     <script src="src/webuploader-0.1.5/webuploader.js"></script>
-    <script src="src/bootstrap-3.3.7-dist copy/js/bootstrap.min.js"></script>
+    <!-- <script src="src/bootstrap-3.3.7-dist copy/js/bootstrap.min.js"></script> -->
 
 
 </head>
@@ -59,7 +59,7 @@
 
     </nav>
     <!--查询、注册、登录入口-->
-    <div class="container-fluid container1" id="outerBox" style="display: none;">
+    <div class="container-fluid container1 entryBtn" id="outerBox" style="display: none;">
         <div class="innerContainer">
             <div class="bgImg2" id="close"><img src="images/lvcha.svg" alt=""></div>
             <div class="form-group has-success has-feedback bg">
@@ -115,27 +115,23 @@
             <div class="inquire">
                 <p>该用户不存在</p>
             </div>
-            <div class="inquire">
-                <p>恭喜！社团申请<span id="department"></span>部门已通过审核 </p>
-            </div>
-            <div class="inquire">
-                <p>还在审核中，请等待片刻</p>
-            </div>
         </div>
     </div>
-    <div class="container-fluid Registercontainer1" id="outerBox1" style="display: none;">
+    <div class="container-fluid Registercontainer1 entryBtn" id="outerBox1" style="display: none;">
         <div class="formBox">
             <form>
                 <div class="bgImg2" id="close1"><img src="images/lvcha.svg" alt=""></div>
                 <!--上传图片-->
-                <div id="uploader-demo">
-                    <!--用来存放item-->
-                    <div id="fileList" class="uploader-list"></div>
+                <!-- <div id="uploader-demo"> -->
+                <!--用来存放item-->
+                <!-- <div id="fileList" class="uploader-list"></div>
                     <div id="filePicker">选择社团宣传图片</div>
-                </div>
-                <ul class="list">
+                </div> -->
+                <div id="fileDiv">选择社团宣传图片<input type="file" name="fileUpload" id="fileUpload"
+                    multiple="false" /></div>
+                
+                                <ul id="prevUpload"></ul>
 
-                </ul>
                 <div class="form-group">
                     <label>社团名字</label>
                     <input type="text" class="form-control form" id="communityName"><span id="communityNameSpan"
@@ -172,7 +168,7 @@
                     <label>密码</label>
 
                     <span id="indicate">采用数字、字母、特殊字符且长度为8-20位</span>
-                    <i class="fa fa-eye" onclick="showhide()" id="eye"></i>
+                    <i class="fa fa-eye" onclick="showhide1()" id="eye"></i>
                     <input type="password" class="form-control form" id="passWord"><span id="passWordSpan"
                         class="numberSpan formSpan"></span>
                 </div>
@@ -192,9 +188,9 @@
         </div>
 
     </div>
-    <div class="container-fluid Logincontainer1" id="outerBox2" style="display: none;">
+    <div class="container-fluid Logincontainer1 entryBtn" id="outerBox2" style="display: none;">
         <div class="innerContainer" id="innerBox">
-            <div class="bgImg"><img src="images/wakai.jpg" alt="" id="bgImg"></div>
+            <div class="bgImg"><img src="images/wakai.png" alt="" id="bgImg"></div>
             <div class="bgImg1"><img src="images/heye.svg" alt=""></div>
             <div class="bgImg2" id="close2"><img src="images/lvcha.svg" alt=""></div>
             <div class="form-group has-success has-feedback bg">

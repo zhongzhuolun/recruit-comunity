@@ -67,20 +67,20 @@ $(document).ready(function () {
         }
     });
     //先获取到[全部]标签的第一页数据
-    $.ajax({
-        type: 'get',
-        url: '', //Classify?id=0&page=0;
-        success: function (data) {
-            //动态生成
-            let $cards = '';
-            for (var i = 0; i < data.length; i++) {
-                $cards += '<img src = "' +
-                    data[i].src +
-                    '">'
-            }
-            $("#paging").html($cards);
-        }
-    });
+    // $.ajax({
+    //     type: 'get',
+    //     url: '', //Classify?id=0&page=0;
+    //     success: function (data) {
+    //         //动态生成
+    //     //     let $cards = '';
+    //     //     for (var i = 0; i < data.length; i++) {
+    //     //         $cards += '<img src = "' +
+    //     //             data[i].src +
+    //     //             '">'
+    //     //     }
+    //     //     $("#paging").html($cards);
+    //     // }
+    // });
     //标签切换改变class并且传值、再获取分页数据. √
     $(".nav-pills li").on("click", function () {
         $(".nav-pills .active").removeClass("active");
@@ -185,27 +185,36 @@ $(document).ready(function () {
         })
     });
     //点击查询状态的按钮，会出现查询入口
+    let $inquireEntry = $("#inquireEntry");
+    let $registerEntry = $("#registerEntry");
+    let $loginEntry = $("#loginEntry");
+    let $entryBtn = $(".entryBtn");
     (() => {
-        let $inquireEntry = $("#inquireEntry");
+        
         let $outerBox = $("#outerBox");
         $inquireEntry.on("click", () => {
         $outerBox.show();
+        $outerBox.siblings(".entryBtn").hide();
         })
     })();
    //点击注册社团的按钮，会出现注册入口
    (()=>{
-   let $registerEntry = $("#registerEntry");
+   
    let $outerBox1 = $("#outerBox1");
    $registerEntry.on("click",()=>{
        $outerBox1.show();
+       $outerBox1.siblings(".entryBtn").hide();
    })
    })();
    //点击登陆的按钮，会出现登录入口
    (()=>{
-   let $loginEntry = $("#loginEntry");
+   
    let $outerBox2 = $("#outerBox2");
    $loginEntry.on("click",()=>{
        $outerBox2.show();
+       $outerBox2.css({"left":"50%","top":"50%"});
+       $outerBox2.siblings(".entryBtn").hide();
    })
    })();
+ 
 });
