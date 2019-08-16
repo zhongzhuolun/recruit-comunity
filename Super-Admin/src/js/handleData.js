@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import exitComunityData from '../../lib/data';
 const echarts = require('echarts');
 import {comfirmFlag, $comfirmFrame} from './comfirm';
 // 定义全局变量
@@ -24,16 +23,17 @@ let userApplyPageIndex = 0;
 let bannerApplyPageIndex = 0;
 const Authorization = localStorage.getItem('Authorization');
 const superAdminId = localStorage.getItem('superAdminId');
+const domainName= "http://10.21.23.177:8080/";
 const allUrl = {
-    changeCommunityStatusUrl: 'http://10.21.23.158:8888/superAdmin/changeCommunityStatus',
-    bannerItemsUrl: 'http://10.21.23.158:8888/superAdmin/bannerItems',
-    deleteBanner: 'http://10.21.23.158:8888/superAdmin/deleteBanner',
-    changeBannerStatus: 'http://10.21.23.158:8888/superAdmin/changeBannerStatus',
-    replaceDisplayBanner: 'http://10.21.23.158:8888/superAdmin/replaceDisplayBanner',
-    obtainDesignatedItem: 'http://10.21.23.158:8888/superAdmin/obtainDesignatedItem',
-    getBannerNum: 'http://10.21.23.158:8888/superAdmin/getBannerNum',
-    deleteCommunity: 'http://10.21.23.158:8888/superAdmin/deleteCommunity',
-    getAllCommunityNum: 'http://10.21.23.158:8888/superAdmin/getAllCommunityNum',
+    changeCommunityStatusUrl: domainName + 'superAdmin/changeCommunityStatus',
+    bannerItemsUrl: domainName + 'superAdmin/bannerItems',
+    deleteBanner: domainName + 'superAdmin/deleteBanner',
+    changeBannerStatus: domainName + 'superAdmin/changeBannerStatus',
+    replaceDisplayBanner: domainName + 'superAdmin/replaceDisplayBanner',
+    obtainDesignatedItem: domainName + 'superAdmin/obtainDesignatedItem',
+    getBannerNum: domainName + 'superAdmin/getBannerNum',
+    deleteCommunity: domainName + 'superAdmin/deleteCommunity',
+    getAllCommunityNum: domainName + 'superAdmin/getAllCommunityNum',
 };
 console.log(Authorization)
 console.log(superAdminId)
@@ -142,12 +142,14 @@ const handleData = {
                     type: 'get',
                     headers: {Authorization},
                     url,
-                    dataType: "json",
+                    data: {
+                        status: 1 
+                    },
                     success: function (result) {
-                        $pageBtns.eq(0).find('.num').html(result.object.length);
+                        $pageBtns.eq(0).find('.num').html(result.object.allCommunityNum);
                         brower.push({
                             name: names[0],
-                            value: result.object.length
+                            value: result.object.allCommunityNum
                         });
                         resolve();
                     },
@@ -158,19 +160,21 @@ const handleData = {
                 });
             })
         };
-        loadData("./exist-comunity.json")
+        loadData(allUrl.getAllCommunityNum)
             .then(() => {
+                let data = {
+                    status: 3
+                };
                 $.ajax({
                     type: 'get',
-                    url: "./showing-banner.json",
+                    url: allUrl.getBannerNum,
                     headers: {Authorization},
-                    dataType: "json",
+                    data,
                     success: function (result) {
-
-                        $pageBtns.eq(1).find('.banner-num').html(result.object.length);
+                        $pageBtns.eq(1).find('.banner-num').html(result.object.bannerNum);
                         brower.push({
                             name: names[1],
-                            value: result.object.length
+                            value: result.object.bannerNum
                         });
                     },
                     error: function (errorMsg) {
@@ -181,13 +185,16 @@ const handleData = {
 
             })
             .then(() => {
+                let data = {
+                    status: 0
+                };
                 $.ajax({
                     type: 'get',
-                    url: "./register.json",
+                    url: allUrl.getAllCommunityNum,
                     headers: {Authorization},
-                    dataType: "json",
+                    data,
                     success: function (result) {
-                        let registerLen = result.object.length;
+                        let registerLen = result.object.allCommunityNum;
                         applyNum = registerLen;
                         if (registerLen > 0) {
                             $userApply.find('.badge').html(registerLen)
@@ -208,13 +215,17 @@ const handleData = {
 
             })
             .then(() => {
+                let data = {
+                    status: 0
+                };
+                
                 $.ajax({
                     type: 'get',
-                    url: "./temp-banners.json",
+                    url: allUrl.getBannerNum,
                     headers: {Authorization},
-                    dataType: "json",
+                    data,
                     success: function (result) {
-                        let tempBannersLen = result.object.length;
+                        let tempBannersLen = result.object.bannerNum;
                         applyNum += tempBannersLen;
                         if (tempBannersLen > 0) {
                             $bannerApply.find('.badge').html(tempBannersLen);
@@ -241,6 +252,8 @@ const handleData = {
     },
     // 生成用户管理界面初始化数据
     initUserInformation: ($tbody, url, data, status, $allPage) => {
+        console.log(data)
+        console.log(url)
         $.ajax({
             type: 'get',
             url,
@@ -271,11 +284,11 @@ const handleData = {
                         '</tr>';
                     $tbody.append($item);
                 });
-                let url = allUrl.getAllCommunityNum;
-                let data = {
-                    status
-                };
-                handleData.getAllCommunityPageNum(url, data, $allPage);
+                // let url = allUrl.getAllCommunityNum;
+                // let data = {
+                //     status
+                // };
+                // handleData.getAllCommunityPageNum(url, data, $allPage);
             },
             error: function (errorMsg) {
                 alert('请求数据失败，请检查网络情况');
@@ -299,9 +312,8 @@ const handleData = {
                         '<td class="serial-num">' + (key + 1) + '</td>' +
                         '<td class="showing-commuity-name">' + item.communityName + '</td>' +
                         '<td class="showing-username">' + item.communityAdminName + '</td>' +
-                        '<td class="banner-id" style="display:none;">' + item.bannerId + '</td>' +
-                        // '<td class="showing-userphone">' + item.phoneNum + '</td>' +
-                        '<td class="showing-id">' + item.communityId + '</td>' +
+                        '<td class="showing-banner-id" style="display:none;">' + item.bannerId + '</td>' +
+                        '<td class="showing-id" style="display:none;">' + item.communityId + '</td>' +
                         '<td><a href="javascript:;" class="thumbnail">' +
                         '<img class="img-scale displaying" style="width: 8vw;" src="' + item.fileName + '" alt="...">' +
                         '</a></td>' +
@@ -313,6 +325,7 @@ const handleData = {
                         '</tr>';
                     $tbody.append($item);
                 });
+                
             },
             error: function (errorMsg) {
                 alert("请求数据失败!");
@@ -320,7 +333,7 @@ const handleData = {
         });
     },
     // 初始化用户审核界面数据
-    initUserApply: (url, $tbody, data) => {
+    initUserApply: (url, $tbody, data, status, $allPage) => {
         $.ajax({
             type: 'get',
             url,
@@ -346,13 +359,21 @@ const handleData = {
                         '<td class="username">' + item.adminName + '</td>' +
                         '<td class="userphone">' + item.adminStudentPhone + '</td>' +
                         '<td class="student-num">' + item.adminStudentNumber + '</td>' +
-                        '<td class="community-id">' + item.communityId + '</td>' +
-                        '<td><button type="button" class="btn btn-success ">通过</button>&nbsp;&nbsp;&nbsp;<button type="button"' +
-                        'class="btn btn-danger ">删除</button></td>' +
+                        '<td class="community-id" style="display:none;">' + item.communityId + '</td>' +
+                        '<td><a href="javascript:;" class="thumbnail">' +
+                        '<img class="img-scale community-src" style="width: 8vw;" src="' + item.src + '" alt="...">' +
+                        '</a></td>' +
+                        '<td><button type="button" class="btn btn-success success ">通过</button>&nbsp;&nbsp;&nbsp;<button type="button"' +
+                        'class="btn btn-danger delete">删除</button></td>' +
                         '</tr>';
                     $tbody.append($item);
                     $navApply.find('.badge').html('');
                 })
+                let url = allUrl.getAllCommunityNum;
+                let data = {
+                    status
+                };
+                handleData.getAllCommunityPageNum(url, data, $allPage);
             },
             error: function (errorMsg) {
                 alert('请求数据失败，请检查网络情况');
@@ -361,7 +382,7 @@ const handleData = {
     },
     
     // 初始化轮播图审核界面数据
-    initBannerApply: (url, $tbody, data) => {
+    initBannerApply: (url, $tbody, data, status, $allPage) => {
         $.ajax({
             type: 'get',
             url,
@@ -369,6 +390,7 @@ const handleData = {
             data,
             headers: {Authorization},
             success: function (result) {
+                console.log(result)
                 $tbody.html("");
                 $(result.object).each((key, item) => {
                     let $item = '<tr class="auditing">' +
@@ -384,7 +406,7 @@ const handleData = {
                         '<td class="auditing-username">' + item.communityAdminName + '</td>' +
                         '<td class="auditing-banner-id" style="display:none">' + item.bannerId + '</td>' +
                         // '<td class="auditing-userphone">' + item.phoneNum + '</td>' +
-                        '<td class="auditing-id">' + item.communityId + '</td>' +
+                        '<td class="auditing-id" style="display: none;">' + item.communityId + '</td>' +
                         '<td><a href="javascript:;" class="thumbnail">' +
                         '<img class="img-scale auditing" style="width: 8vw;" src="' + item.fileName + '" alt="...">' +
                         '</a></td>' +
@@ -398,6 +420,11 @@ const handleData = {
                     $navApply.find('.badge').html('');
 
                 });
+                let url = allUrl.getBannerNum;
+                let data = {
+                    status
+                };
+                handleData.getAllBannnerPageNum(url, data, $allPage);
             },
             error: function (errorMsg) {
                 alert("请求数据失败!");
@@ -406,7 +433,7 @@ const handleData = {
     },
     // 用户管理界面分页功能
     // 下一页
-    handleNextPage($obj, totalPage, $tbody, $currentPage, url, data) {
+    handleNextPage($obj, totalPage, $tbody, $currentPage, url, status, $allPage) {
         $obj.siblings('li').removeClass('disabled');
         if (userInformationPageIndex >= totalPage - 1) {
             userInformationPageIndex = totalPage - 1;
@@ -417,13 +444,13 @@ const handleData = {
             $obj.removeClass('disabled');
             let data = {
                 status: 1,
-                page: userInformationPageIndex
+                page: userInformationPageIndex + 1
             }
-            handleData.initUserInformation($tbody, url, data);
+            handleData.initUserInformation($tbody, url, data, status, $allPage);
         }
     },
     // 上一页
-    handlePrePage($obj, $tbody, $currentPage, url, data) {
+    handlePrePage($obj, $tbody, $currentPage, url, status, $allPage) {
         $obj.siblings('li').removeClass('disabled');
         if (userInformationPageIndex <= 0) {
             userInformationPageIndex = 0;
@@ -432,7 +459,11 @@ const handleData = {
             userInformationPageIndex--;
             $currentPage.html(userInformationPageIndex + 1);
             $obj.removeClass('disabled');
-            handleData.initUserInformation($tbody, url, userInformationPageIndex);
+            let data = {
+                status: 1,
+                page: userInformationPageIndex + 1
+            }
+            handleData.initUserInformation($tbody, url, data, status, $allPage);
         }
     },
     // 点击删除单个元素, 删除后应该重新获取数据
@@ -460,7 +491,6 @@ const handleData = {
                             url = allUrl.obtainDesignatedItem;
                             handleData.initUserInformation($tbody, url, data, status, $allPage);
                             handleData.serial($delegate);
-
                             break;
                         case "banner-manage":
                             console.log("banner-manage")
@@ -505,10 +535,12 @@ const handleData = {
     // 删除已选中的元素
     deleteAllCheckedItems: (arr, $checkAll, $delegate, url, page, status, $allPage) => {
         // if (arr.length > 0) {
-            let $tbody = arr[i].parents('tbody');
-            for(var i = 0; i < arr.length; i++) {
+            let $tbody = $(arr[0]).parents('tbody');
+            let data;
+
+            for(var i = 0; i < arr.length - 1; i++) {
                 data = {
-                    communityId: parseInt(arr[i].find('.community-id').html())
+                    communityId: parseInt($(arr[i]).find('.community-id').html())
                 };
                 $.ajax({
                     type: "get",
@@ -516,17 +548,12 @@ const handleData = {
                     data,
                     headers:{Authorization},
                     success: function (response) {
-                        console.log(response)
                     }
                 });
-                num++;
             }
-            data = {
-                page,
-                status:1
-            };
             switch ($delegate.get(0).id) {
                 case "user-information":
+                    
                     console.log("user-information")
                     data = {
                         page,
@@ -545,6 +572,7 @@ const handleData = {
                     handleData.initBannerManagePage(url, $tbody, data);
                     break;
                 case "user-apply":
+                   
                     console.log("user-apply")
                     data = {
                         page,
@@ -573,19 +601,93 @@ const handleData = {
         }
         handleData.serial($delegate);
     },
+    // 通过已选中的元素
+    passAllCheckedItems: (arr, $checkAll, $delegate, url, page, status, $allPage) => {
+            let idArr = [];
+            for(let i = 0; i < arr.length; i++) {
+                idArr.push(parseInt($(arr[i]).find('.community-id').html()))
+            }
+            let $tbody = $(arr[0]).parents('tbody');
+            let data;
+            console.log(idArr)
+            switch ($delegate.get(0).id) {
+                case "user-apply":
+                        for(var i = 0; i < arr.length - 1; i++) {
+                            data = {
+                                communityId: idArr[i],
+                                status:1
+                            };
+                            console.log(data)
+                            $.ajax({
+                                type: "get",
+                                url,
+                                data,
+                                headers:{Authorization},
+                                success: function (response) {
+                                    console.log(response)
+                                }
+                            });
+                        }
+                    console.log("user-apply")
+                    data = {
+                        page,
+                        status: 0
+                    };
+                    url = allUrl.obtainDesignatedItem;
+                    handleData.initUserApply(url, $tbody, data, status, $allPage);
+                    break;
+                case "banner-apply":
+                    console.log("banner-apply")
+                    for(var i = 0; i < arr.length - 1; i++) {
+                        data = {
+                            bannerId: parseInt($(arr[i]).find('.auditing-banner-id').html()),
+                            status:1
+                        };
+                        $.ajax({
+                            type: "get",
+                            url,
+                            data,
+                            headers:{Authorization},
+                            success: function (response) {
+                            }
+                        });
+                    }
+                    data = {
+                        page,
+                        status: 0
+                    };
+                    url = allUrl.bannerItemsUrl;
+                    handleData.initBannerApply(url, $tbody, data, status, $allPage);
+                    break;
+                default:
+                    break;
+            }
+            arr.remove();
+            arr = "";
+        // }
+        if ($checkAll.children().prop('checked')) {
+            $checkAll.children().prop('checked', false);
+        }
+        handleData.serial($delegate);
+    },
     // 确认删除一个元素
     handleComfirm: ($obj,$delegate, url, data, $tbody, page, status, $allPage) => {
         $comfirmBtn.one('click',  () => {
            $comfirmFrame.hide();
            handleData.deleteOneItem($obj, $delegate,url, data, $tbody, page, status, $allPage);
         });
-       
    },
    // 确认多个删除
-   handleComfirmAll: (arr, $checkAll, $delegate, url, page, status, $allPage) => {
+   handleComfirmAll: (arr, $checkAll, $delegate, url, page, status, $allPage, flag) => {
         $comfirmBtn.one('click',  () => {
             $comfirmFrame.hide();
-            handleData.deleteAllCheckedItems(arr, $checkAll, $delegate, url, page, status, $allPage);
+            if (flag) {
+                // 表示删除
+                handleData.deleteAllCheckedItems(arr, $checkAll, $delegate, url, page, status, $allPage);
+
+            } else {
+                handleData.passAllCheckedItems(arr, $checkAll, $delegate, url, page, status, $allPage)
+            }
         });
     },
     // 改变单选框的状态及全选框的状态
@@ -638,24 +740,26 @@ const handleData = {
         $obj.siblings().find('.toggle').removeClass('glyphicon-minus');
     },
     // 轮播图容器函数：参数一：触发事件的对象；参数二：最外层包裹容器；参数三：内部图片容器；参数四：点击的正在展示的那一张轮播图元素
-    showTempBannerWindow: ($obj, $wrapContainer, $rightContainer, $currentItem) => {
+    showTempBannerWindow: ($obj, url, data, $wrapContainer, $rightContainer, $currentItem) => {
         $wrapContainer.fadeIn();
         $currentItem = $obj.parents('tr');
+        console.log(url, data)
         $.ajax({
             type: 'get',
-            url: './checking-banners.json',
-            dataType: "json",
+            url,
+            data,
+            headers:{Authorization},
             success: function (result) {
+                console.log(result)
                 $(result.object).each((key, item) => {
                     let $item = '<div class="col-sm-6 col-md-4 temp">' +
                         '<div class="thumbnail">' +
-                        '<img src="' + item.src + '" alt="...">' +
+                        '<img src="' + item.fileName + '" alt="...">' +
                         '<div class="caption">' +
-                        '<h3 class="commuity-name">' + item.comunity + '</h3>' +
-                        '<p class="username">' + item.manage + '</p>' +
-                        '<p class="student-num hide">' + item.studentNum + '</p>' +
-                        '<p class="phone-num hide">' + item.phoneNum + '</p>' +
-                        '<p class="comunity-id hide">' + item["comunity-id"] + '</p>' +
+                        '<h3 class="commuity-name">' + item.communityName + '</h3>' +
+                        '<p class="username">' + item.communityAdminName + '</p>' +
+                        '<p class="comunity-id hide">' + item.communityId + '</p>' +
+                        '<p class="banner-id hide">' + item.bannerId + '</p>' +
                         '<p><a href="javascript:;" class="btn btn-primary comfirm-replace" role="button">替换</a>' +
                         '<a href="javascript:;" class="btn btn-success comfirm-add" role="button">添加</a></p>' +
                         '</div>' +
@@ -678,80 +782,91 @@ const handleData = {
         return $currentItem;
     },
     // 轮播图控制函数
-    bannerControl: ($tempItem, $current, tempBannerData, showingBannerData, bool, $tbody) => {
+    bannerControl: ($tempItem, $current, tempBannerData, showingBannerData, bool, $tbody, url, data) => {
         // 获取容器中被点击的元素的信息
         let commuityName = $tempItem.find('.commuity-name'),
             username = $tempItem.find('.username'),
-            studentNum = $tempItem.find('.student-num'),
-            phoneNum = $tempItem.find('.phone-num'),
             comunityId = $tempItem.find('.comunity-id'),
-            url = $tempItem.find('img');
+            bannerId = $tempItem.find('.banner-id'),
+            tempUrl = $tempItem.find('img');
         tempBannerData = {
             commuityName: commuityName.text(),
             username: username.text(),
-            studentNum: studentNum.text(),
-            phoneNum: phoneNum.text(),
             comunityId: comunityId.text(),
-            url: url.attr('src')
+            bannerId: bannerId.text(),
+            tempUrl: tempUrl.attr('src')
         };
+        data.bannerId = parseInt(tempBannerData.bannerId);
         // 获取展示中的轮播图的信息
-        const showingSerialNum = $bannerManagePage.find('tr').length;
         // 代表添加
         if (bool) {
-            // 动态添加数据
-            let $item = '<tr class="showing">' +
-                '<td class="serial-num">' + (showingSerialNum) + '</td>' +
-                '<td class="showing-commuity-name">' + tempBannerData.commuityName + '</td>' +
-                '<td class="showing-username">' + tempBannerData.username + '</td>' +
-                '<td class="showing-student-num">' + tempBannerData.studentNum + '</td>' +
-                '<td class="showing-userphone">' + tempBannerData.phoneNum + '</td>' +
-                '<td class="showing-id">' + tempBannerData.comunityId + '</td>' +
-                '<td><a href="javascript:;" class="thumbnail">' +
-                '<img class="img-scale displaying" style="width: 8vw;" src="' + tempBannerData.url + '" alt="...">' +
-                '</a></td>' +
-                '<td>' +
-                '<button type="button" class="btn btn-info preview">预览</button>' +
-                '<button type="button" class="btn btn-primary replace">替换</button>' +
-                '<button type="button" class="btn btn-danger delete-showing">删除</button>' +
-                '</td>' +
-                '</tr>';
-                $tbody.append($item);
-                $tempItem.remove();
+            $.ajax({
+                type: "get",
+                url,
+                data,
+                headers: {Authorization},
+                success: function (response) {
+                    console.log(response)
+                    let data = {
+                        page: 1,
+                        status: 3
+                    };
+                    let url = allUrl.bannerItemsUrl;
+                    handleData.initBannerManagePage(url, $tbody, data)
+                // $tempItem.remove();
+                }
+            });
         } else {
             //代表替换
             let showingCommuityName = $current.find('.showing-commuity-name'),
                 showingUsername = $current.find('.showing-username'),
-                showingStudentNum = $current.find('.showing-student-num'),
-                showingUserphone = $current.find('.showing-userphone'),
                 showingId = $current.find('.showing-id'),
+                showingBannerId = $current.find('.showing-banner-id'),
                 showingUrl = $current.find('img');
             showingBannerData = {
                 showingCommuityName: showingCommuityName.text(),
                 showingUsername: showingUsername.text(),
-                showingStudentNum: showingStudentNum.text(),
-                showingUserphone: showingUserphone.text(),
                 showingId: showingId.text(),
+                showingBannerId: showingBannerId.text(),
                 showingUrl: showingUrl.attr('src')
             };
-            commuityName.text(showingBannerData.showingCommuityName);
-            username.text(showingBannerData.showingUsername);
-            studentNum.text(showingBannerData.showingStudentNum);
-            phoneNum.text(showingBannerData.showingUserphone);
-            comunityId.text(showingBannerData.showingId);
-            url.attr('src', showingBannerData.showingUrl);
-            showingCommuityName.text(tempBannerData.commuityName);
-            showingUsername.text(tempBannerData.username);
-            showingStudentNum.text(tempBannerData.studentNum);
-            showingUserphone.text(tempBannerData.phoneNum);
-            showingId.text(tempBannerData.comunityId);
-            showingUrl.text('src', tempBannerData.url);
+            // commuityName.text(showingBannerData.showingCommuityName);
+            // username.text(showingBannerData.showingUsername);
+            // comunityId.text(showingBannerData.showingId);
+            // bannerId.text(showingBannerData.showingBannerId);
+            // tempUrl.attr('src', showingBannerData.showingUrl);
+            // showingCommuityName.text(tempBannerData.commuityName);
+            // showingUsername.text(tempBannerData.username);
+            // showingId.text(tempBannerData.comunityId);
+            // showingBannerId.text(tempBannerData.bannerId);
+            // showingUrl.text('src', tempBannerData.url);
+            data = {
+                replacedBannerId: parseInt(showingBannerData.showingBannerId),
+                replaceBannerId: parseInt(tempBannerData.bannerId)
+            };
+            $.ajax({
+                type: "get",
+                url,
+                data,
+                headers: {Authorization},
+                success: function (response) {
+                    console.log(response)
+                    let data = {
+                        page: 1,
+                        status: 3
+                    };
+                    let url = allUrl.bannerItemsUrl;
+                    handleData.initBannerManagePage(url, $tbody, data)
+                // $tempItem.remove();
+                }
+            });
         }
     },
     // 确认轮播图控制函数
-    comfirmBannerControl: ($obj,$current,tempBannerData,showingBannerData,bool, $tbody) => {
+    comfirmBannerControl: ($obj,$current,tempBannerData,showingBannerData,bool, $tbody, url, data, status) => {
         $comfirmBtn.one('click',  () => {
            $comfirmFrame.hide();
-           handleData.bannerControl($obj, $current, tempBannerData, showingBannerData, bool, $tbody);
+           handleData.bannerControl($obj, $current, tempBannerData, showingBannerData, bool, $tbody, url, data, status);
            $tempImgContainer.fadeOut();
            $container.html("");
         });
@@ -781,7 +896,7 @@ const handleData = {
     // 获取不同状态的用户数量，同时进行分页
     getAllCommunityPageNum: (url, data, $allPage) => {
         let allCommunityNum;
-
+        console.log(data)
         $.ajax({
             type: "get",
             url,
@@ -789,12 +904,12 @@ const handleData = {
             headers: {Authorization},
             success: function (response) {
                 console.log(response)
-                // allCommunityNum = response.object.allCommunityNum
-                // if (allCommunityNum <= 0) {
-                //     allCommunityNum = 1;
-                // }
-                // allCommunityNum = Math.ceil(allCommunityNum / 15);
-                // $allPage.html(allCommunityNum)
+                allCommunityNum = response.object.allCommunityNum
+                if (allCommunityNum <= 0) {
+                    allCommunityNum = 1;
+                }
+                allCommunityNum = Math.ceil(allCommunityNum / 12);
+                $allPage.html(allCommunityNum)
             }
         });
     },
@@ -855,61 +970,170 @@ const handleData = {
                 } else {
                     $tbody.html("<p style='color:red;'>搜索不到结果，请换一个名字搜索吧!</p>");
                 }
-               
                 let url = allUrl.getAllCommunityNum;
                 let data = {
-                    status: 1
+                    status: 1,
+                    searchName
                 };
                 handleData.getAllCommunityPageNum(url, data, $allPage);
             }
         });
     },
     // 搜索的分页
-    handleSearchNextPage($obj, totalPage, $tbody, $currentPage, url ) {
+    // handleSearchNextPage($obj, totalPage, $tbody, $currentPage, url ) {
+    //     $obj.siblings('li').removeClass('disabled');
+    //     if (userInformationPageIndex >= totalPage - 1) {
+    //         userInformationPageIndex = totalPage - 1;
+    //         $obj.addClass('disabled');
+    //     } else {
+    //         userInformationPageIndex++;
+    //         let data = {
+    //             status: 1,
+    //             page: userInformationPageIndex,
+    //         };
+    //         $currentPage.html(userInformationPageIndex + 1);
+    //         $obj.removeClass('disabled');
+    //         $.ajax({
+    //             type: "get",
+    //             url,
+    //             data,
+    //             headers:{Authorization},
+    //             success: function (result) {
+    //                 $tbody.html("");
+    //                 if (result.object.length > 0) {
+    //                     $(result.object).each((key, item) => {
+    //                         let $item = '<tr>' +
+    //                             '<td>' +
+    //                             '<div class="checkbox radio">' +
+    //                             '<label>' +
+    //                             '<input type="checkbox">' +
+    //                             '</label>' +
+    //                             '</div>' +
+    //                             '</td>' +
+    //                             '<td class="serial-num">' + (key + 1) + '</td>' +
+    //                             '<td class="community-name">' + item.communityName + '</td>' +
+    //                             '<td class="admin-name">' + item.adminName + '</td>' +
+    //                             '<td class="student-number">' + item.adminStudentNumber + '</td>' +
+    //                             '<td class="student-phone">' + item.adminStudentPhone + '</td>' +
+    //                             '<td class="community-id">' + item.communityId + '</td>' +
+    //                             '<td><button type="button" class="btn btn-danger ">删除</button></td>' +
+    //                             '</tr>';
+    //                         $tbody.append($item);
+    //                     });
+    //                 }                        
+    //             }
+    //         });
+    //         // handleData.initUserInformation($tbody, url, userInformationPageIndex);
+    //     }
+    // },
+    // 用户审核分页功能
+    // 下一页
+    handleApplyNextPage($obj, totalPage, $tbody, $currentPage, url) {
+        $obj.siblings('li').removeClass('disabled');
+        if (userApplyPageIndex >= totalPage - 1) {
+            userApplyPageIndex = totalPage - 1;
+            $obj.addClass('disabled');
+        } else {
+            userApplyPageIndex++;
+            $currentPage.html(userApplyPageIndex + 1);
+            $obj.removeClass('disabled');
+            let data = {
+                status: 0,
+                page: userApplyPageIndex + 1
+            }
+            handleData.initUserApply(url, $tbody, data);
+        }
+    },
+    // 上一页
+    handleApplyPrePage($obj, $tbody, $currentPage, url) {
+        $obj.siblings('li').removeClass('disabled');
+        if (userApplyPageIndex <= 0) {
+            userApplyPageIndex = 0;
+            $obj.addClass('disabled');
+        } else {
+            userApplyPageIndex--;
+            $currentPage.html(userApplyPageIndex + 1);
+            $obj.removeClass('disabled');
+            let data = {
+                status: 0,
+                page: userApplyPageIndex + 1
+            }
+            handleData.initUserApply(url, $tbody, data);
+        }
+    },
+     // 轮播图审核分页功能
+    // 下一页
+    handleBannerApplyNextPage($obj, totalPage, $tbody, $currentPage, url) {
+        $obj.siblings('li').removeClass('disabled');
+        if (bannerApplyPageIndex >= totalPage - 1) {
+            bannerApplyPageIndex = totalPage - 1;
+            $obj.addClass('disabled');
+        } else {
+            bannerApplyPageIndex++;
+            $currentPage.html(bannerApplyPageIndex + 1);
+            $obj.removeClass('disabled');
+            let data = {
+                status: 0,
+                page: bannerApplyPageIndex + 1
+            }
+            handleData.initBannerApply(url, $tbody, data);
+        }
+    },
+    // 上一页
+    handleBannerApplyPrePage($obj, $tbody, $currentPage, url) {
+        $obj.siblings('li').removeClass('disabled');
+        if (bannerApplyPageIndex <= 0) {
+            bannerApplyPageIndex = 0;
+            $obj.addClass('disabled');
+        } else {
+            bannerApplyPageIndex--;
+            $currentPage.html(bannerApplyPageIndex + 1);
+            $obj.removeClass('disabled');
+            let data = {
+                status: 0,
+                page: bannerApplyPageIndex + 1
+            }
+            handleData.initBannerApply(url, $tbody, data);
+        }
+    },
+    // 搜索的分页功能
+    // 下一页
+    handleSearchNextPage($obj, totalPage, $tbody, $currentPage, url, status, $allPage, searchName) {
+        // userInformationPageIndex = 0;
         $obj.siblings('li').removeClass('disabled');
         if (userInformationPageIndex >= totalPage - 1) {
             userInformationPageIndex = totalPage - 1;
             $obj.addClass('disabled');
         } else {
             userInformationPageIndex++;
-            let data = {
-                status: 1,
-                page: userInformationPageIndex
-            };
             $currentPage.html(userInformationPageIndex + 1);
             $obj.removeClass('disabled');
-            $.ajax({
-                type: "get",
-                url,
-                data,
-                headers:{Authorization},
-                success: function (result) {
-                    $tbody.html("");
-                    if (result.object.length > 0) {
-                        $(result.object).each((key, item) => {
-                            let $item = '<tr>' +
-                                '<td>' +
-                                '<div class="checkbox radio">' +
-                                '<label>' +
-                                '<input type="checkbox">' +
-                                '</label>' +
-                                '</div>' +
-                                '</td>' +
-                                '<td class="serial-num">' + (key + 1) + '</td>' +
-                                '<td class="community-name">' + item.communityName + '</td>' +
-                                '<td class="admin-name">' + item.adminName + '</td>' +
-                                '<td class="student-number">' + item.adminStudentNumber + '</td>' +
-                                '<td class="student-phone">' + item.adminStudentPhone + '</td>' +
-                                '<td class="community-id">' + item.communityId + '</td>' +
-                                '<td><button type="button" class="btn btn-danger ">删除</button></td>' +
-                                '</tr>';
-                            $tbody.append($item);
-                        });
-                    }                        
-                }
-            });
-            // handleData.initUserInformation($tbody, url, userInformationPageIndex);
+            let data = {
+                status: 1,
+                page: userInformationPageIndex + 1,
+                searchName
+            }
+            console.log(data)
+            handleData.initUserInformation($tbody, url, data, status, $allPage);
         }
     },
+    // 上一页
+    handleSearchPrePage($obj, $tbody, $currentPage, url, status, $allPage, searchName) {
+        $obj.siblings('li').removeClass('disabled');
+        if (userInformationPageIndex <= 0) {
+            userInformationPageIndex = 0;
+            $obj.addClass('disabled');
+        } else {
+            userInformationPageIndex--;
+            $currentPage.html(userInformationPageIndex + 1);
+            $obj.removeClass('disabled');
+            let data = {
+                status: 1,
+                page: userInformationPageIndex + 1,
+                searchName
+            }
+            handleData.initUserInformation($tbody, url, data, status, $allPage);
+        }
+    }
 };
 export default handleData;

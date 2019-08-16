@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import handleData from './handleData';
 import '../../bootstrap-3.3.7-dist/css/bootstrap.min.css';
-import exitComunityData from '../../lib/data';
 import {$comfirmFrame} from './comfirm';
 // 加载动画
 document.onreadystatechange=function(){
@@ -29,16 +28,17 @@ $(function () {
     const $homeBtn = $('.home-btn'); // 获取返回超级管理员首页的按钮
     const $skinBtn = $('.skin .btn'); // 获取换肤按钮
     const $pageBtns = $('.home-data'); // 获取主页的四个按钮
+    const domainName= "http://10.21.23.177:8080/";
     const allUrl = {
-        changeCommunityStatusUrl: 'http://10.21.23.158:8888/superAdmin/changeCommunityStatus',
-        bannerItemsUrl: 'http://10.21.23.158:8888/superAdmin/bannerItems',
-        deleteBanner: 'http://10.21.23.158:8888/superAdmin/deleteBanner',
-        changeBannerStatus: 'http://10.21.23.158:8888/superAdmin/changeBannerStatus',
-        replaceDisplayBanner: 'http://10.21.23.158:8888/superAdmin/replaceDisplayBanner',
-        obtainDesignatedItem: 'http://10.21.23.158:8888/superAdmin/obtainDesignatedItem',
-        getBannerNum: 'http://10.21.23.158:8888/superAdmin/getBannerNum',
-        deleteCommunity: 'http://10.21.23.158:8888/superAdmin/deleteCommunity',
-        getAllCommunityNum: 'http://10.21.23.158:8888/superAdmin/getAllCommunityNum',
+        changeCommunityStatusUrl: domainName + 'superAdmin/changeCommunityStatus',
+        bannerItemsUrl: domainName + 'superAdmin/bannerItems',
+        deleteBanner: domainName + 'superAdmin/deleteBanner',
+        changeBannerStatus: domainName + 'superAdmin/changeBannerStatus',
+        replaceDisplayBanner: domainName + 'superAdmin/replaceDisplayBanner',
+        obtainDesignatedItem: domainName + 'superAdmin/obtainDesignatedItem',
+        getBannerNum: domainName + 'superAdmin/getBannerNum',
+        deleteCommunity: domainName + 'superAdmin/deleteCommunity',
+        getAllCommunityNum: domainName + 'superAdmin/getAllCommunityNum',
     };
     (() => {
         let $img = $("img");
@@ -79,11 +79,11 @@ $(function () {
         // 侧边栏用户信息管理
         $userInformation.on('click', function () {
             const $allPage = $userInformationPage.find('.all-page'); 
-            sideControl($(this), $userInformationPage);
             let url = allUrl.getAllCommunityNum;
             let data = {
                 status: 1
             };
+            sideControl($(this), $userInformationPage);
             getAllCommunityPageNum(url, data, $allPage);
 
         });
@@ -108,7 +108,6 @@ $(function () {
             let url = allUrl.getAllCommunityNum;
             let data = {
                 status: 0
-                // name: "信息工程学院学生会"
             };
             getAllCommunityPageNum(url, data, $allPage);
         });
@@ -159,6 +158,7 @@ $(function () {
             $myHomePage.fadeIn();
             $breadcrumb.eq(1).fadeOut();
             $breadcrumb.eq(2).fadeOut();
+            // sector('#sector')
         });
         // 扇形图
         sector('#sector');
@@ -180,7 +180,8 @@ $(function () {
             handleComfirm,
             handleComfirmAll,
             serach,
-            handleSearchNextPage
+            handleSearchNextPage,
+            handleSearchPrePage
         } = handleData;
         // 获取全选按钮
         const $checkAll = $userInformationPage.find('.check-all label');
@@ -196,15 +197,18 @@ $(function () {
         let flag = true;
         // 初始化数据
         // const url = './exist-comunity.json';
-        const url = allUrl.obtainDesignatedItem;
-        let data = {
-            status: 1,
-            page: 1
-        };
+        let url = allUrl.obtainDesignatedItem;
+        let data = {};
         let status = 1;
         const $tbody = $('#user-information tbody');
-        $userInformation.one('click', function() {
+        $userInformation.on('click', function() {
+            url = allUrl.obtainDesignatedItem;
+            data = {
+                status: 1,
+                page: 1
+            };
             initUserInformation($tbody, url, data, status, $allPage);
+            flag = true;
         });
         // 删除社团单条信息
         /*
@@ -232,13 +236,13 @@ $(function () {
         // 点击删除多个的按钮，删除已选中的元素，事件委托
         // 判断删除后此时该页是否已经没有数据了，如果该页没有数据了，则应该请求上一页数据，否则，则请求当页数据
         $userInformationPage.find('.delete-all-checked').click(function () {
+            let url = allUrl.deleteCommunity;
+            let page = parseInt($currentPage.html());
             $comfirmFrame.find('p').eq(0).html('确定删除？');
             deleteArr = $userInformationPage.find('table .active').parents('tr');
-            let page = parseInt($currentPage.html());
             if ($tbody.children('tr').length == 1 && $allPage.html() > 1) {
                 page -= page;
             } 
-            let url = allUrl.deleteCommunity;
             if (deleteArr.length > 0) {
                 $comfirmFrame.show();
                 handleComfirmAll(deleteArr, $checkAll, $userInformationPage, url, page);
@@ -251,16 +255,25 @@ $(function () {
         // 分页功能     
         // 下一页按钮
         $nextPageBtn.on('click', function() {
-           
+           let status = 1;
+           let url = allUrl.obtainDesignatedItem;
             if (flag) {
-                handleNextPage($(this),$allPage.html(), $tbody, $currentPage, url)
+                handleNextPage($(this), $allPage.html(), $tbody, $currentPage, url, status, $allPage);
             } else {
-                handleSearchNextPage($(this),$allPage.html(),$tbody,$currentPage, url)
+                console.log(1)
+                handleSearchNextPage($(this), $allPage.html(),$tbody,$currentPage, url, status, $allPage, searchName);
             }
         });
         // 上一页按钮
         $prePageBtn.on('click', function() {
-            handlePrePage($(this),$tbody, $currentPage, url)
+            let status = 1;
+            let url = allUrl.obtainDesignatedItem;
+            if (flag) {
+                handlePrePage($(this), $tbody, $currentPage, url, status, $allPage);
+            } else {
+                handleSearchPrePage($(this), $tbody,$currentPage, url, status, $allPage, searchName);
+            }
+            // handleSearchPrePage($(this),$tbody, $currentPage, url, status, $allPage);
         });
         // 模糊搜索功能, 搜索后也需要分页
         // 禁止表单默认行为
@@ -275,11 +288,15 @@ $(function () {
         $searchBtn.on('click',function() {
             console.log(searchName)
             if (searchName) {
+                flag = false;
+            } else {
+                flag = true;
+            }
+            console.log(flag)
+            if (searchName) {
                 serach(searchName,url,$tbody, $allPage);
-                console.log("有东西")
             } else {
                 initUserInformation($tbody, url, data, status, $allPage);
-                console.log("没有东西")
             }
         })
     })();
@@ -305,25 +322,33 @@ $(function () {
         let tempBannerData = {};
         let showingBannerData = {};
         // 初始化数据
-        let url = allUrl.bannerItemsUrl;
-        let data = {
-            page: 1,
-            status: 3
-        };
-        $bannerManage.one('click', function () {
+        let url;
+        let data = {};
+        $bannerManage.on('click', function () {
+            url = allUrl.bannerItemsUrl;
+            data = {
+                page: 1,
+                status: 3
+            };
+            console.log(url, data)
             initBannerManagePage(url, $tbody, data);
         })
         // 替换按钮，事件委托，点击跳出替换窗口,此时需要发送请求，得到审核完成的轮播图数据
         $bannerManagePage.on('click', '.replace', function () {
+            url = allUrl.bannerItemsUrl;
+            data = {
+                page:1,
+                status:1
+            };
             $container.html("");
-            $current = showTempBannerWindow($(this), $tempImgContainer, $container, $current);
+            $current = showTempBannerWindow($(this), url, data,$tempImgContainer, $container, $current);
         });
         // 确定替换按钮，事件委托，需要发送数据给后台，告诉它们我替换的是哪一张
         $bannerManagePage.on('click', '.comfirm-replace', function () {
-            $comfirmFrame.find('p').eq(0).html('确定替换？');
+            url = allUrl.replaceDisplayBanner;
+            $comfirmFrame.find('p').eq(0).html('确定添加？');
             $comfirmFrame.show();
-            comfirmBannerControl($(this).parents('.temp'), $current, tempBannerData, showingBannerData, false);
-            // bannerControl($(this).parents('.temp'), $current, tempBannerData, showingBannerData, false);
+            comfirmBannerControl($(this).parents('.temp'), $current, tempBannerData, showingBannerData, false, $tbody, url, data);
         })
         // 关闭按钮
         $('.close-img-container').click(function () {
@@ -331,33 +356,41 @@ $(function () {
         })
         // 删除按钮，事件委托
         $bannerManagePage.on('click', '.delete-showing', function () {
-            let bannerId = parseInt($(this).parents('tr').find('.banner-id').html());
+            let bannerId = parseInt($(this).parents('tr').find('.showing-banner-id').html());
             let url = allUrl.deleteBanner;
             let data = {
                 bannerId
             };
             $comfirmFrame.find('p').eq(0).html('确定删除？');
             $comfirmFrame.show();
-            
             handleComfirm($(this), $bannerManagePage, url, data, $tbody, 1);
-            // handleComfirm($(this), $bannerManagePage);
         })
         // 添加按钮 
         $addBtn.on('click', function () {
             const showingSerialNum = $bannerManagePage.find('tr').length;
+            url = allUrl.bannerItemsUrl;
+            data = {
+                page:1,
+                status:1
+            };
             if (showingSerialNum > 8) {
                 alert('不能再添加啦，轮播图数目最多为8！');
             } else {
                 $container.html("");
-                $current = showTempBannerWindow($(this), $tempImgContainer, $container, $current);
+                $current = showTempBannerWindow($(this), url, data, $tempImgContainer, $container, $current);
             }
         });
         // 确定添加按钮 事件委托
         $bannerManagePage.on('click', '.comfirm-add', function () {
+            let status = 3;
+            url = allUrl.changeBannerStatus;
+            let data = {
+                bannerId: null,
+                status
+            };
             $comfirmFrame.find('p').eq(0).html('确定添加？');
             $comfirmFrame.show();
-            comfirmBannerControl($(this).parents('.temp'), $current, tempBannerData, showingBannerData, true, $tbody);
-            // bannerControl($(this).parents('.temp'), $current, tempBannerData, showingBannerData, true, $tbody);
+            comfirmBannerControl($(this).parents('.temp'), $current, tempBannerData, showingBannerData, true, $tbody, url, data);
             // 隐藏轮播图容器，同时清空里面的内容
         })
         // 自定义添加按钮
@@ -375,12 +408,12 @@ $(function () {
         // 获取处理数据对象中的函数
         const {
             initUserApply,
-            deleteOneItem,
             changeItemState,
-            deleteAllCheckedItems,
             checkAllItems,
             handleComfirm,
-            handleComfirmAll
+            handleComfirmAll,
+            handleApplyNextPage,
+            handleApplyPrePage,
         } = handleData;
         // 获取上下页分页按钮，上下页数
         const $prePageBtn = $userApplyPage.find('.prepage');
@@ -390,36 +423,52 @@ $(function () {
         
         // 1. 初始化数据，点击该界面时，应该发送请求，获取到状态为正在注册中的社团信息，并且将其渲染出来
         // const url = './register.json';
-        const url = allUrl.obtainDesignatedItem;
-        let data = {
-            status: 0,
-            page: 1
-        };
+        let url;
+        let page = parseInt($currentPage.html());
+        let data = {};
+        let status = 0;
         const $tbody = $('#user-apply tbody');
-        $userApply.one('click', function () {
-            initUserApply(url, $tbody, data);
+        $userApply.on('click', function () {
+            data = {
+                status: 0,
+                page
+            };
+            url = allUrl.obtainDesignatedItem;
+            initUserApply(url, $tbody, data, status, $allPage);
         })
         // 2. 点击通过按钮，将该项目的数据储存起来，然后发送请求修改状态，并且添加到后台服务器中，最后再把对应的项目删除掉
         // 事件委托
-        $userApplyPage.on('click', '.btn-success', function () {
+        $userApplyPage.on('click', '.success', function () {
             // 定义一个用来存储通过的用户的信息
             let data = {
-                communityId: null,
-                status: null
+                communityId: parseInt($(this).parents('tr').find('.community-id').html()),
+                status: 1
             };
+            url = allUrl.changeCommunityStatusUrl;
+            if ($tbody.children('tr').length == 1 && $allPage.html() > 1) {
+                page -= page;
+            };
+            let status = 0;
             $comfirmFrame.find('p').eq(0).html('确定通过？');
             $comfirmFrame.show();
-            data.communityId = parseInt($(this).parents('tr').find('.community-id').html())
-            data.status = 2;
-            handleComfirm($(this), $userApplyPage, url, data);
-            // deleteOneItem($(this), $userApplyPage);
+            handleComfirm($(this), $userApplyPage, url, data, $tbody, page, status, $allPage, false);
         })
         // 3. 点击删除单个项目的按钮，发送请求修改状态，将其从后台服务器中删除，最后再把对应的项目删除
         // 点击删除单个的按钮，删除单个元素，事件委托
-        $userApplyPage.on('click', 'tbody .btn-danger', function () {
+        $userApplyPage.on('click', '.delete', function () {
+            let communityId = parseInt($(this).parents('tr').find('.community-id').html());
+            let page = parseInt($currentPage.html());
+            let url = allUrl.deleteCommunity;
+            if ($tbody.children('tr').length == 1 && $allPage.html() > 1) {
+                page -= page;
+            } 
+            let data = {
+                communityId
+            };
+            let status = 2;
             $comfirmFrame.find('p').eq(0).html('确定删除？');
             $comfirmFrame.show();
-            handleComfirm($(this), $userApplyPage);
+            handleComfirm($(this), $userApplyPage, url, data, $tbody, page, status, $allPage, true);
         });
         // 4. 单选按钮，全选按钮，选中时，点击表格最底下的删除按钮，即可删除所有被选项，同时循环触发流程3
         // 点击选中按钮，改变单选框的其状态，事件委托
@@ -428,11 +477,17 @@ $(function () {
         });
         // 点击删除已选按钮，删除已选项
         $userApplyPage.find('.delete-all-checked').click(function () {
+            let url = allUrl.deleteCommunity;
+            let page = parseInt($currentPage.html());
+            let status = 0;
             $comfirmFrame.find('p').eq(0).html('确定删除？');
             deleteArr = $userApplyPage.find('table .active').parents('tr');
+            if ($tbody.children('tr').length == 1 && $allPage.html() > 1) {
+                page -= page;
+            } 
             if (deleteArr.length > 0) {
                 $comfirmFrame.show();
-                handleComfirmAll(deleteArr, $checkAll, $userApplyPage);
+                handleComfirmAll(deleteArr, $checkAll, $userApplyPage, url, page, status, $allPage, true);
             }
         })
         // 点击全选按钮，选中该页所有项
@@ -441,16 +496,30 @@ $(function () {
         })
         // 5. 单选按钮，全选按钮，选中时，点击表格最底下的通过按钮，即可通过所有被选项，同时循环触发流程2
         $userApplyPage.find('.pass-all-checked').click(function () {
+            let url = allUrl.changeCommunityStatusUrl;
+            let page = parseInt($currentPage.html());
+            let status = 0;
             $comfirmFrame.find('p').eq(0).html('确定通过？');
             deleteArr = $userApplyPage.find('table .active').parents('tr');
+            if ($tbody.children('tr').length == 1 && $allPage.html() > 1) {
+                page -= page;
+            } 
             if (deleteArr.length > 0) {
                 $comfirmFrame.show();
-                handleComfirmAll(deleteArr, $checkAll, $userApplyPage);
+                handleComfirmAll(deleteArr, $checkAll, $userApplyPage, url, page, status, $allPage, false);
             }
-            // deleteAllCheckedItems(deleteArr, $checkAll, $userApplyPage);
         })
         // 6. 分页按钮，点击上一页或者下一页的时候，会发送请求，每次请求一页数据，重新渲染界面
-
+        // 下一页按钮
+        $nextPageBtn.on('click', function() {
+            let url = allUrl.obtainDesignatedItem;
+            handleApplyNextPage($(this), $allPage.html(), $tbody, $currentPage, url);
+        });
+        // 上一页按钮
+        $prePageBtn.on('click', function() {
+            let url = allUrl.obtainDesignatedItem;
+            handleApplyPrePage($(this),$tbody, $currentPage, url);
+        });
 
 
     })();
@@ -474,18 +543,21 @@ $(function () {
         const $currentPage = $bannerApplyPage.find('.current-page');
         const $allPage = $bannerApplyPage.find('.all-page');
         // 1. 初始化数据，点击该界面时，应该发送请求，获取到状态为正在审核中的轮播图，并且将其渲染出来
-        let url = allUrl.bannerItemsUrl;
+        let url;
         const $tbody = $('#banner-apply tbody');
+        let data = {};
         let page = parseInt($currentPage.html());
         if ($tbody.children('tr').length == 1 && $allPage.html() > 1) {
             page -= page;
         } 
-        let data = {
-            page: 1,
-            status: 0
-        };
-        $bannerApply.one('click', function () {
-            initBannerApply(url, $tbody, data);
+        $bannerApply.on('click', function () {
+            data = {
+                page: 1,
+                status: 0
+            };
+            let status = 0
+            url = allUrl.bannerItemsUrl;
+            initBannerApply(url, $tbody, data, status, $allPage);
         });
         // 2. 点击通过按钮，将该项目的数据储存起来，然后发送请求修改状态，并且添加到后台服务器中，最后再把对应的项目删除掉
         // 事件委托
@@ -505,9 +577,23 @@ $(function () {
         // 3. 点击删除单个项目的按钮，发送请求修改状态，将其从后台服务器中删除，最后再把对应的项目删除
         // 点击删除单个的按钮，删除单个元素，事件委托
         $bannerApplyPage.on('click', '.delete', function () {
+            let bannerId = parseInt($(this).parents('tr').find('.auditing-banner-id').html());
+            let page = parseInt($currentPage.html());
+            let url = allUrl.deleteBanner;
+            if ($tbody.children('tr').length == 1 && $allPage.html() > 1) {
+                page -= page;
+            } 
+            let data = {
+                bannerId
+            };
+            let status = 0;
             $comfirmFrame.find('p').eq(0).html('确定删除？');
             $comfirmFrame.show();
-            handleComfirm($(this), $bannerApplyPage);
+            handleComfirm($(this), $bannerApplyPage, url, data, $tbody, page, status, $allPage);
+
+            // $comfirmFrame.find('p').eq(0).html('确定删除？');
+            // $comfirmFrame.show();
+            // handleComfirm($(this), $bannerApplyPage);
         });
         // 4. 单选按钮，全选按钮，选中时，点击表格最底下的删除按钮，即可删除所有被选项，同时循环触发流程3
         // 点击选中按钮，改变单选框的其状态，事件委托
